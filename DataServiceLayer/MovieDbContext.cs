@@ -45,8 +45,8 @@ namespace DataServiceLayer
             modelBuilder.Entity<Casting>().Property(c => c.Ordering).HasColumnName("ordering");
             modelBuilder.Entity<Casting>().HasKey(c => new { c.TitleId, c.PersonId, c.Ordering });// composite PK
 
-            // map Casting to Title
-            modelBuilder.Entity<Casting>().HasOne(c => c.Category) //map category to Profession
+            //map category to Profession
+            modelBuilder.Entity<Casting>().HasOne(c => c.Category) 
                                           .WithMany()
                                           .HasForeignKey("profession_id");
 
@@ -88,6 +88,8 @@ namespace DataServiceLayer
             modelBuilder.Entity<Rating>().Property(r => r.Id).HasColumnName("ratingid");
             modelBuilder.Entity<Rating>().Property(r => r.RatingValue).HasColumnName("rating");
             modelBuilder.Entity<Rating>().Property(r => r.RatingDate).HasColumnName("ratetime");
+
+            // map Rating to Title and User
             modelBuilder.Entity<Rating>()
                                 .HasOne(r => r.Title)
                                 .WithMany(t => t.Ratings)
