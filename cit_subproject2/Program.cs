@@ -9,6 +9,6 @@ var titleService = new TitleService();
 
 Console.WriteLine(titleService.GetTitleNameById("tt10691922"));
 
-Console.WriteLine(titleService.GetTitleNameByName("Potter"));
+Console.WriteLine(titleService.GetTitlesByName("Potter")[1].PrimaryTitle);
 
 
