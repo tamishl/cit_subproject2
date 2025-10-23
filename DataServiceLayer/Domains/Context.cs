@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataServiceLayer.Domains
+namespace DataServiceLayer.Domains;
+
+public class Context
 {
-    public class Context
-    {
-        string Id { get; set; }
-    }
+    public string Id { get; set; }
 }

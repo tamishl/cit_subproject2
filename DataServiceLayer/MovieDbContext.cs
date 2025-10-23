@@ -10,7 +10,6 @@ namespace DataServiceLayer;
 
 public class MovieDbContext : DbContext
 {
-    public DbSet<User> Users { get; set; }
     public DbSet<Title> Titles { get; set; }
     public DbSet<Person> Persons { get; set; }
     public DbSet<Rating> Ratings { get; set; }
@@ -18,7 +17,11 @@ public class MovieDbContext : DbContext
     public DbSet<Genre> Genres { get; set; }
     public DbSet<Profession> Professions { get; set; }
     public DbSet<TitleType> TitleTypes { get; set; }
+    public DbSet<TitleAka> TitleAkas { get; set; }
+    public DbSet<Episode> Episodes { get; set; }
+    public DbSet<User> Users { get; set; }
     public DbSet<Search> Searches { get; set; }
+
 
     // connect to db
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -83,28 +86,6 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Profession>().ToTable("profession");
         modelBuilder.Entity<Profession>().Property(pr => pr.Id).HasColumnName("profession_id");
 
-        // map Rating to rating_history
-        modelBuilder.Entity<Rating>().ToTable("rating_history");
-        modelBuilder.Entity<Rating>().Property(r => r.Id).HasColumnName("ratingid");
-        modelBuilder.Entity<Rating>().Property(r => r.RatingValue).HasColumnName("rating");
-        modelBuilder.Entity<Rating>().Property(r => r.RatingDate).HasColumnName("ratetime");
-
-        // map Rating to Title and User
-        modelBuilder.Entity<Rating>()
-                            .HasOne(r => r.Title)
-                            .WithMany(t => t.Ratings)
-                            .HasForeignKey("title_id");
-        modelBuilder.Entity<Rating>()
-                            .HasOne(r => r.User)
-                            .WithMany(u => u.RatedTitles)
-                            .HasForeignKey("username");
-
-        // map Search to search_history
-        modelBuilder.Entity<Search>().ToTable("search_history");
-        modelBuilder.Entity<Search>().Property(s => s.Id).HasColumnName("search_id");
-        modelBuilder.Entity<Search>().Property(s => s.SearchTime).HasColumnName("timestamp");
-        modelBuilder.Entity<Search>().Property(s => s.Query).HasColumnName("query");
-
 
         //map Title to title
         modelBuilder.Entity<Title>().ToTable("title");
@@ -154,6 +135,74 @@ public class MovieDbContext : DbContext
         //map TitleType to title_type
         modelBuilder.Entity<TitleType>().ToTable("title_type");
         modelBuilder.Entity<TitleType>().Property(tt => tt.Id).HasColumnName("title_type_id");
+
+
+        // map TitleAka to title_akas
+        modelBuilder.Entity<TitleAka>().ToTable("title_aka");
+        modelBuilder.Entity<TitleAka>().Property(ta => ta.TitleId).HasColumnName("title_id");
+        modelBuilder.Entity<TitleAka>().Property(ta => ta.Ordering).HasColumnName("ordering");
+        modelBuilder.Entity<TitleAka>().Property(ta => ta.Region).HasColumnName("region");
+        modelBuilder.Entity<TitleAka>().Property(ta => ta.Language).HasColumnName("language");
+        modelBuilder.Entity<TitleAka>().Property(ta => ta.Description).HasColumnName("description");
+        modelBuilder.Entity<TitleAka>().Property(ta => ta.IsOriginalTitle).HasColumnName("is_original_title");
+        modelBuilder.Entity<TitleAka>().HasKey(ta => new { ta.TitleId, ta.Ordering });// composite PK
+
+        // map TitleAka to Context
+        modelBuilder.Entity<TitleAka>()
+                            .HasOne(ta => ta.Context)
+                            .WithMany()
+                            .HasForeignKey("context");
+
+
+
+        // map TitleAka to Title
+        modelBuilder.Entity<TitleAka>()
+                            .HasOne(ta => ta.Title)
+                            .WithMany()
+                            .HasForeignKey("title_id");
+
+
+        // map Episode to episode
+        modelBuilder.Entity<Episode>().ToTable("title_episode");
+        modelBuilder.Entity<Episode>().Property(e => e.EpisodeId).HasColumnName("tconst");
+        modelBuilder.Entity<Episode>().Property(e => e.SeasonNumber).HasColumnName("seasonnumber");
+        modelBuilder.Entity<Episode>().Property(e => e.EpisodeNumber).HasColumnName("episodenumber");
+
+        // map Episode to Title
+        modelBuilder.Entity<Episode>()
+                            .HasOne(e => e.Title)
+                            .WithMany()
+                            .HasForeignKey("parenttconst");
+
+        // map Context to context
+        modelBuilder.Entity<Context>().ToTable("context");
+        modelBuilder.Entity<Context>().Property(c => c.Id).HasColumnName("context_id");
+
+
+
+        // map Rating to rating_history
+        modelBuilder.Entity<Rating>().ToTable("rating_history");
+        modelBuilder.Entity<Rating>().Property(r => r.Id).HasColumnName("ratingid");
+        modelBuilder.Entity<Rating>().Property(r => r.RatingValue).HasColumnName("rating");
+        modelBuilder.Entity<Rating>().Property(r => r.RatingDate).HasColumnName("ratetime");
+
+        // map Rating to Title and User
+        modelBuilder.Entity<Rating>()
+                            .HasOne(r => r.Title)
+                            .WithMany(t => t.Ratings)
+                            .HasForeignKey("title_id");
+        modelBuilder.Entity<Rating>()
+                            .HasOne(r => r.User)
+                            .WithMany(u => u.RatedTitles)
+                            .HasForeignKey("username");
+
+        // map Search to search_history
+        modelBuilder.Entity<Search>().ToTable("search_history");
+        modelBuilder.Entity<Search>().Property(s => s.Id).HasColumnName("search_id");
+        modelBuilder.Entity<Search>().Property(s => s.SearchTime).HasColumnName("timestamp");
+        modelBuilder.Entity<Search>().Property(s => s.Query).HasColumnName("query");
+
+
 
         // map User to user
         modelBuilder.Entity<User>().ToTable("user");
