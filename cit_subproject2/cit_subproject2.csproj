@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\DataServiceLayer\DataServiceLayer.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -14,7 +14,7 @@ namespace DataServiceLayer.Domains
         public bool IsAdult { get; set; }
         public string? StartYear { get; set; }
         public string? EndYear { get; set; }
-        public int RuntimeMinutes { get; set; }
+        public int? RuntimeMinutes { get; set; }
         public string? Plot { get; set; }
         public string? Poster { get; set; }
         public ICollection<Rating>? Ratings { get; set; }
