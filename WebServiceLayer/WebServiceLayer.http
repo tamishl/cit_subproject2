@@ -1,6 +1,6 @@
-@WebServiceLayer_HostAddress = http://localhost:5186
+@WebServiceLayer_HostAddress = http://localhost:5555
 
-GET {{WebServiceLayer_HostAddress}}/weatherforecast/
+GET {{WebServiceLayer_HostAddress}}/api/titles/
 Accept: application/json
 
 ###

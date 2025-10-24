@@ -1,23 +1,37 @@
+
+// Starting point for configuring web application
+using DataServiceLayer.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 
+builder.Services.AddScoped<ITitleService, TitleService>();
+
+
+// Create the app
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
-app.UseHttpsRedirection();
-
+// Configure the HTTP request pipeline: sequence of components that each HTTP request passes through
 app.UseAuthorization();
 
+// Map incoming HTTP requests to controller actions through routing/endpoints
 app.MapControllers();
 
+// Start the server to listen for incoming HTTP requests
 app.Run();
+
+
+
+
+// optional code that was added automatically
+//// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+//builder.Services.AddOpenApi();
+
+//if (app.Environment.IsDevelopment())
+//{
+//    app.MapOpenApi();
+//}
+
+//app.UseHttpsRedirection();

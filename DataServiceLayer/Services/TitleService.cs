@@ -18,11 +18,31 @@ namespace DataServiceLayer.Services;
     }
 
 
-    public IList<TitleSummaryDto> GetTitlesByName(string search)
+
+    public IList<TitleSummaryDto> GetTitles(int max = 5)
     {
-        return _dbContext.Titles.Where(t => t.PrimaryTitle.Contains(search))
-                                .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle, StartYear = t.StartYear, Poster = t.Poster, Type=t.Type})
+        return _dbContext.Titles.Take(max)
+                                .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle, StartYear = t.StartYear, Poster = t.Poster, Type = t.Type })
                                 .ToList();
+    }
+
+
+    public IList<TitleSummaryDto> GetTitlesByName(string search, bool ordered=false)
+    {
+        if (!ordered)
+        { 
+            return _dbContext.Titles.Where(t => t.PrimaryTitle.Contains(search))
+                                .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle, StartYear = t.StartYear, Poster = t.Poster, Type = t.Type })
+                                .ToList();
+        }
+
+        else
+        {
+            return _dbContext.Titles.Where(t => t.PrimaryTitle.Contains(search))
+                                    .OrderBy(t => t.Id)
+                                    .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle, StartYear = t.StartYear, Poster = t.Poster, Type = t.Type })
+                                    .ToList();
+        }
     }
 
 
@@ -30,11 +50,6 @@ namespace DataServiceLayer.Services;
 
 
     //methods below are just for eplxoration
-    public IList<Title> GetTitles(int max = 10)
-    {
-        return _dbContext.Titles.Take(max) // limit
-                                .ToList();
-    }
     public string? GetTitleNameById(string id) // only for testing
     {
         return _dbContext.Titles.FirstOrDefault(t => t.Id == id)?.PrimaryTitle;
