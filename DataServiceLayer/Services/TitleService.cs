@@ -28,7 +28,7 @@ namespace DataServiceLayer.Services;
 
 
     // NOTE: is case sensitive
-    public IList<TitleSummaryDto> GetTitlesByName(string search, bool ordered)
+    public IList<TitleSummaryDto> GetTitlesByName(string search, bool ordered = false)
     {
         if (!ordered)
         { 
