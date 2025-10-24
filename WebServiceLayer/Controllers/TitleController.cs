@@ -13,7 +13,8 @@ public class TitleController: BaseController
     private ITitleService _titleService;
 
 
-    public TitleController(ITitleService titleService)
+    public TitleController(ITitleService titleService, LinkGenerator linkGenerator)
+        : base(linkGenerator)
     {
         _titleService = titleService;
     }
