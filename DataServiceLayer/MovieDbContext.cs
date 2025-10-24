@@ -32,7 +32,7 @@ public class MovieDbContext : DbContext
 
         // Remember to set the environment variable PG_PASSWORD before running the application
         string password = Environment.GetEnvironmentVariable("PG_PASSWORD");
-        string connectionString = $"host=localhost;db=imdb_new;uid=postgres;pwd={password}"; // changed the db name temporarily
+        string connectionString = $"host=localhost;db=imdb;uid=postgres;pwd={password}";
         optionsBuilder.UseNpgsql(connectionString);
     }
 

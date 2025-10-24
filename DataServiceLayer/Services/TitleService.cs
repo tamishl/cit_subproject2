@@ -19,7 +19,7 @@ namespace DataServiceLayer.Services;
 
 
 
-    public IList<TitleSummaryDto> GetTitles(int max = 5)
+    public IList<TitleSummaryDto> GetTitles(int max)
     {
         return _dbContext.Titles.Take(max)
                                 .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle, StartYear = t.StartYear, Poster = t.Poster, Type = t.Type })
@@ -27,7 +27,8 @@ namespace DataServiceLayer.Services;
     }
 
 
-    public IList<TitleSummaryDto> GetTitlesByName(string search, bool ordered=false)
+    // NOTE: is case sensitive
+    public IList<TitleSummaryDto> GetTitlesByName(string search, bool ordered)
     {
         if (!ordered)
         { 
@@ -55,10 +56,4 @@ namespace DataServiceLayer.Services;
         return _dbContext.Titles.FirstOrDefault(t => t.Id == id)?.PrimaryTitle;
     }
 
-
-    // NOTE: is case sensitive
-    public string? GetTitleNameByName(string search)
-    {
-        return _dbContext.Titles.FirstOrDefault(t => t.PrimaryTitle.Contains(search))?.PrimaryTitle;
-    }
 }
