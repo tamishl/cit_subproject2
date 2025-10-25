@@ -10,8 +10,8 @@ namespace DataServiceLayer.Services;
 
     public interface ITitleService
     {
-    PagedResultDto<TitleSummaryDto> GetTitles(int page = 1, int pageSize = 10, bool includeCount = true);
-    PagedResultDto<TitleSummaryDto> GetTitlesByName(string search, int page = 1 , int pageSize = 10, bool includeCount = true);
+    PagedResultDto<TitleSummaryDto> GetTitles(int page = 0, int pageSize = 10, bool includeCount = true);
+    PagedResultDto<TitleSummaryDto> GetTitlesByName(string search, int page = 0 , int pageSize = 10, bool includeCount = true);
     //PagedResultDto<TitleSummaryDto> GetTitlesByName(string search, int page = 1 , int pageSize = 10, bool includeCount = true);
 
     int GetTitleCount();

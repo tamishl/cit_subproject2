@@ -20,7 +20,7 @@ namespace DataServiceLayer.Services;
 
 
 
-    public PagedResultDto<TitleSummaryDto> GetTitles(int page = 1, int pageSize = 10, bool includeCount = true)
+    public PagedResultDto<TitleSummaryDto> GetTitles(int page = 0, int pageSize = 10, bool includeCount = true)
     {
         var query = _dbContext.Titles;
         var items = query.OrderBy(t => t.Id)
@@ -36,7 +36,7 @@ namespace DataServiceLayer.Services;
             return new PagedResultDto<TitleSummaryDto>
             {
                 Items = items,
-                NumberOfItems = _dbContext.Titles.Count()
+                TotalNumberOfItems = _dbContext.Titles.Count()
             };
         }
 
@@ -45,14 +45,14 @@ namespace DataServiceLayer.Services;
             return new PagedResultDto<TitleSummaryDto>
             {
                 Items = items,
-                NumberOfItems = null
+                TotalNumberOfItems = null
             };
     } 
     }
 
 
     // NOTE: is case sensitive
-    public PagedResultDto<TitleSummaryDto> GetTitlesByName(string search, int page = 1, int pageSize = 10, bool includeCount = true)
+    public PagedResultDto<TitleSummaryDto> GetTitlesByName(string search, int page = 0, int pageSize = 10, bool includeCount = true)
     {
 
         var query = _dbContext.Titles.Where(t => t.PrimaryTitle.Contains(search));
@@ -71,7 +71,7 @@ namespace DataServiceLayer.Services;
                 return new PagedResultDto<TitleSummaryDto>
                 {
                     Items = items,
-                    NumberOfItems = query.Count()
+                    TotalNumberOfItems = query.Count()
                 };
             }
             else
@@ -79,7 +79,7 @@ namespace DataServiceLayer.Services;
                 return new PagedResultDto<TitleSummaryDto>
                 {
                     Items = items,
-                    NumberOfItems = null
+                    TotalNumberOfItems = null
                 };
         }
     }

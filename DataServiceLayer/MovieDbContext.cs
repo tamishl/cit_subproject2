@@ -164,7 +164,7 @@ public class MovieDbContext : DbContext
 
         // map Episode to episode
         modelBuilder.Entity<Episode>().ToTable("title_episode");
-        modelBuilder.Entity<Episode>().Property(e => e.EpisodeId).HasColumnName("tconst");
+        modelBuilder.Entity<Episode>().Property(e => e.EpisodeId).HasColumnName("title_id_episode");
         modelBuilder.Entity<Episode>().Property(e => e.SeasonNumber).HasColumnName("seasonnumber");
         modelBuilder.Entity<Episode>().Property(e => e.EpisodeNumber).HasColumnName("episodenumber");
 
@@ -172,7 +172,7 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Episode>()
                             .HasOne(e => e.Title)
                             .WithMany()
-                            .HasForeignKey("parenttconst");
+                            .HasForeignKey("title_id_parent");
 
         // map Context to context
         modelBuilder.Entity<Context>().ToTable("context");

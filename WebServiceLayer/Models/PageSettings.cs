@@ -1,17 +1,19 @@
 ﻿namespace WebServiceLayer.Models;
 
 public class PageSettings
-{
-    private const int MaxPageSize = 30;
-    public int PageSize { get; set; } = 5;
+{   public int PageSize { get; set; } = 10;
 
-    private int page = 1;
+    private int _page = 0;
     public int Page
     {
-        get { return page; }
+        get { return _page; }
         set
-        { 
-            page = value > MaxPageSize ? MaxPageSize : value; 
+        {
+            _page = value < 0 ? 0 : value;
+
+            // this check can not be done here because NumberOfPages is not known yet
+            // ensure page is at least 1 or maximum MaxPageSize
+            //_page = Math.Clamp(value, 0, NumberOfPages-1);
         }
     }
 }

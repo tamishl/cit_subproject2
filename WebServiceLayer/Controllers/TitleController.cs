@@ -30,7 +30,7 @@ public class TitleController: BaseController
         {
             var pagedResult = _titleService.GetTitles(pageSettings.Page, pageSettings.PageSize);
 
-            var result = CreatePaging(nameof(GetTitlesByName), pagedResult.Items, pagedResult.NumberOfItems.Value, pageSettings);
+            var result = CreatePaging(nameof(GetTitlesByName), pagedResult.Items, pagedResult.TotalNumberOfItems.Value, pageSettings);
 
             return Ok(result);
 
@@ -41,7 +41,7 @@ public class TitleController: BaseController
         {
             var pagedResult = _titleService.GetTitlesByName(search, pageSettings.Page, pageSettings.PageSize);
 
-            var result = CreatePaging(nameof(GetTitlesByName), pagedResult.Items, pagedResult.NumberOfItems.Value, pageSettings);
+            var result = CreatePaging(nameof(GetTitlesByName), pagedResult.Items, pagedResult.TotalNumberOfItems.Value, pageSettings);
 
             return Ok(result);
         }

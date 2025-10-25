@@ -19,9 +19,10 @@ public class BaseController: ControllerBase
     {
         // integer disivion rounding up (possible because numberOfItems and pageSettings.PageSize can not be negative)
         var numberOfPages = (numberOfItems + pageSettings.PageSize - 1) / pageSettings.PageSize;
+        pageSettings.Page = Math.Clamp(pageSettings.Page, 0, Math.Max(0, numberOfPages - 1));
 
         // link to pages or null if there is no page
-        var previous = pageSettings.Page > 1
+        var previous = pageSettings.Page > 0
             ? GetUrl(endpointName, new { page = pageSettings.Page - 1, pageSettings.PageSize })
             : null;
         var next = pageSettings.Page < numberOfPages - 1
@@ -29,9 +30,9 @@ public class BaseController: ControllerBase
             : null;
 
         // links to first, current and last page
-        var first = GetUrl(endpointName, new { page = 1, pageSettings.PageSize });
-        var cur = GetUrl(endpointName, new { pageSettings.Page, pageSettings.PageSize });
-        var last = GetUrl(endpointName, new { page = numberOfPages, pageSettings.PageSize });
+        var first = GetUrl(endpointName, new { page = 0, pageSettings.PageSize });
+        var current = GetUrl(endpointName, new { pageSettings.Page, pageSettings.PageSize });
+        var last = GetUrl(endpointName, new { page = numberOfPages - 1, pageSettings.PageSize });
 
         return new
         {
@@ -39,7 +40,7 @@ public class BaseController: ControllerBase
             Previous = previous,
             Next = next,
             Last = last,
-            Current = cur,
+            Current = current,
             NumberOfPages = numberOfPages,
             NumberOfItems = numberOfItems,
             Items = items
