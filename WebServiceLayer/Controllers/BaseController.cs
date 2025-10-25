@@ -6,6 +6,7 @@ namespace WebServiceLayer.Controllers;
 
 public class BaseController: ControllerBase
 {
+    // protected fields and methods to allow access from derived classes
     protected LinkGenerator _linkGenerator;
 
     public BaseController(LinkGenerator linkGenerator)
@@ -14,22 +15,20 @@ public class BaseController: ControllerBase
     }
 
 
-    public object CreatePaging<T>(string endpointName, IEnumerable<T> items, int numberOfItems, PageSettings pageSettings)
+    protected object CreatePaging<T>(string endpointName, IEnumerable<T> items, int numberOfItems, PageSettings pageSettings)
     {
-
-        //henriks version 
-        //var numberOfPages = (int)Math.Ceiling((double)numberOfItems / pageSettings.PageSize); //conversion to double necesasry because Ceiling doesn't do int division
-        
+        // integer disivion rounding up (possible because numberOfItems and pageSettings.PageSize can not be negative)
         var numberOfPages = (numberOfItems + pageSettings.PageSize - 1) / pageSettings.PageSize;
 
-        var prev = pageSettings.Page > 0
+        // link to pages or null if there is no page
+        var previous = pageSettings.Page > 0
             ? GetUrl(endpointName, new { page = pageSettings.Page - 1, pageSettings.PageSize })
             : null;
-
         var next = pageSettings.Page < numberOfPages - 1
             ? GetUrl(endpointName, new { page = pageSettings.Page + 1, pageSettings.PageSize })
             : null;
 
+        // links to first, current and last page
         var first = GetUrl(endpointName, new { page = 0, pageSettings.PageSize });
         var cur = GetUrl(endpointName, new { pageSettings.Page, pageSettings.PageSize });
         var last = GetUrl(endpointName, new { page = numberOfPages - 1, pageSettings.PageSize });
@@ -37,7 +36,7 @@ public class BaseController: ControllerBase
         return new
         {
             First = first,
-            Prev = prev,
+            Previous = previous,
             Next = next,
             Last = last,
             Current = cur,
@@ -47,9 +46,10 @@ public class BaseController: ControllerBase
         };
     }
 
+
+    // values of type object to allow anonymous types
     protected string? GetUrl(string endpointName, object values)
     {
         return _linkGenerator.GetUriByName(HttpContext, endpointName, values);
     }
-}
 }

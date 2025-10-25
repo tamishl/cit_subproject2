@@ -1,5 +1,6 @@
 ﻿using DataServiceLayer.Services;
 using Microsoft.AspNetCore.Mvc;
+using WebServiceLayer.Models;
 
 namespace WebServiceLayer.Controllers;
 
@@ -21,12 +22,12 @@ public class TitleController: BaseController
 
 
     [HttpGet]
-    public IActionResult GetTitlesByName([FromQuery] string? search = null)
+    public IActionResult GetTitlesByName([FromQuery] PageSettings pageSettings, string? search = null)
     {
         
         if (string.IsNullOrEmpty(search))
         {
-            return Ok(_titleService.GetTitles());
+            return Ok(_titleService.GetTitles(pageSettings.PageSize, pageSettings.Page));
         }
 
         return Ok(_titleService.GetTitlesByName(search, false));

@@ -12,3 +12,10 @@ Console.WriteLine(titleService.GetTitleNameById("tt10691922"));
 Console.WriteLine(titleService.GetTitlesByName("Potter")[1].PrimaryTitle);
 
 
+// test integer division rounding up
+int a = 5;
+int b = 2;
+
+Console.WriteLine((a + b - 1) / b);
+
+

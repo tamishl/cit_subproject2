@@ -19,7 +19,7 @@ namespace DataServiceLayer.Services;
 
 
 
-    public IList<TitleSummaryDto> GetTitles(int max)
+    public IList<TitleSummaryDto> GetTitles(int max, int page, int pageSize)
     {
         return _dbContext.Titles.Take(max)
                                 .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle, StartYear = t.StartYear, Poster = t.Poster, Type = t.Type })
