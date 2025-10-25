@@ -21,7 +21,7 @@ public class BaseController: ControllerBase
         var numberOfPages = (numberOfItems + pageSettings.PageSize - 1) / pageSettings.PageSize;
 
         // link to pages or null if there is no page
-        var previous = pageSettings.Page > 0
+        var previous = pageSettings.Page > 1
             ? GetUrl(endpointName, new { page = pageSettings.Page - 1, pageSettings.PageSize })
             : null;
         var next = pageSettings.Page < numberOfPages - 1
@@ -29,9 +29,9 @@ public class BaseController: ControllerBase
             : null;
 
         // links to first, current and last page
-        var first = GetUrl(endpointName, new { page = 0, pageSettings.PageSize });
+        var first = GetUrl(endpointName, new { page = 1, pageSettings.PageSize });
         var cur = GetUrl(endpointName, new { pageSettings.Page, pageSettings.PageSize });
-        var last = GetUrl(endpointName, new { page = numberOfPages - 1, pageSettings.PageSize });
+        var last = GetUrl(endpointName, new { page = numberOfPages, pageSettings.PageSize });
 
         return new
         {

@@ -1,4 +1,5 @@
-﻿using DataServiceLayer.Services;
+﻿using DataServiceLayer.Domains;
+using DataServiceLayer.Services;
 using Microsoft.AspNetCore.Mvc;
 using WebServiceLayer.Models;
 
@@ -21,16 +22,32 @@ public class TitleController: BaseController
     }
 
 
-    [HttpGet]
+    [HttpGet (Name = nameof(GetTitlesByName))]
     public IActionResult GetTitlesByName([FromQuery] PageSettings pageSettings, string? search = null)
     {
-        
+        // without serach parameter, return all titles paged
         if (string.IsNullOrEmpty(search))
         {
-            return Ok(_titleService.GetTitles(pageSettings.PageSize, pageSettings.Page));
+            var titles = _titleService.GetTitles(pageSettings.Page, pageSettings.PageSize);
+            var numberOfItems = _titleService.GetTitleCount();
+
+            var result = CreatePaging(nameof(GetTitlesByName), titles, numberOfItems, pageSettings);
+
+            return Ok(result);
+
         }
 
-        return Ok(_titleService.GetTitlesByName(search, false));
+        // with search parameter, return filtered titles paged
+        else
+        {
+            var titles = _titleService.GetTitles(pageSettings.Page, pageSettings.PageSize);
+            var numberOfItems = _titleService.GetTitleCount();
+
+            var result = CreatePaging(nameof(GetTitlesByName), titles, numberOfItems, pageSettings);
+
+            return Ok(result);
+        }
+        //return Ok(_titleService.GetTitlesByName(pageSettings.Page, pageSettings.PageSize, search));
     }
 
 

@@ -19,16 +19,18 @@ namespace DataServiceLayer.Services;
 
 
 
-    public IList<TitleSummaryDto> GetTitles(int max, int page, int pageSize)
+    public IList<TitleSummaryDto> GetTitles(int page, int pageSize)
     {
-        return _dbContext.Titles.Take(max)
+        return _dbContext.Titles.OrderBy(t => t.Id)
+                                .Skip(page * pageSize)
+                                .Take(pageSize)
                                 .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle, StartYear = t.StartYear, Poster = t.Poster, Type = t.Type })
                                 .ToList();
     }
 
 
     // NOTE: is case sensitive
-    public IList<TitleSummaryDto> GetTitlesByName(string search, bool ordered = false)
+    public IList<TitleSummaryDto> GetTitlesByName(int page, int pageSize, string search, bool ordered = false)
     {
         if (!ordered)
         { 
@@ -47,7 +49,10 @@ namespace DataServiceLayer.Services;
     }
 
 
-
+    public int GetTitleCount()
+    {
+        return _dbContext.Titles.Count();
+    }
 
 
     //methods below are just for eplxoration
