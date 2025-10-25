@@ -28,10 +28,9 @@ public class TitleController: BaseController
         // without serach parameter, return all titles paged
         if (string.IsNullOrEmpty(search))
         {
-            var titles = _titleService.GetTitles(pageSettings.Page, pageSettings.PageSize);
-            var numberOfItems = _titleService.GetTitleCount();
+            var pagedResult = _titleService.GetTitles(pageSettings.Page, pageSettings.PageSize);
 
-            var result = CreatePaging(nameof(GetTitlesByName), titles, numberOfItems, pageSettings);
+            var result = CreatePaging(nameof(GetTitlesByName), pagedResult.Items, pagedResult.NumberOfItems.Value, pageSettings);
 
             return Ok(result);
 
@@ -40,10 +39,9 @@ public class TitleController: BaseController
         // with search parameter, return filtered titles paged
         else
         {
-            var titles = _titleService.GetTitles(pageSettings.Page, pageSettings.PageSize);
-            var numberOfItems = _titleService.GetTitleCount();
+            var pagedResult = _titleService.GetTitlesByName(search, pageSettings.Page, pageSettings.PageSize);
 
-            var result = CreatePaging(nameof(GetTitlesByName), titles, numberOfItems, pageSettings);
+            var result = CreatePaging(nameof(GetTitlesByName), pagedResult.Items, pagedResult.NumberOfItems.Value, pageSettings);
 
             return Ok(result);
         }

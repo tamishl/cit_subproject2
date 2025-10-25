@@ -41,7 +41,7 @@ public class BaseController: ControllerBase
             Last = last,
             Current = cur,
             NumberOfPages = numberOfPages,
-            NumberOfIems = numberOfItems,
+            NumberOfItems = numberOfItems,
             Items = items
         };
     }

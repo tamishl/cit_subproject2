@@ -3,6 +3,7 @@ using DataServiceLayer.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,39 +20,74 @@ namespace DataServiceLayer.Services;
 
 
 
-    public IList<TitleSummaryDto> GetTitles(int page, int pageSize)
+    public PagedResultDto<TitleSummaryDto> GetTitles(int page = 1, int pageSize = 10, bool includeCount = true)
     {
-        return _dbContext.Titles.OrderBy(t => t.Id)
+        var query = _dbContext.Titles;
+        var items = query.OrderBy(t => t.Id)
                                 .Skip(page * pageSize)
                                 .Take(pageSize)
-                                .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle, StartYear = t.StartYear, Poster = t.Poster, Type = t.Type })
+                                .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle,
+                                                                   StartYear = t.StartYear,
+                                                                   Poster = t.Poster,
+                                                                   Type = t.Type })
                                 .ToList();
-    }
-
-
-    // NOTE: is case sensitive
-    public IList<TitleSummaryDto> GetTitlesByName(int page, int pageSize, string search, bool ordered = false)
-    {
-        if (!ordered)
+        if (includeCount)
         { 
-            return _dbContext.Titles.Where(t => t.PrimaryTitle.Contains(search))
-                                .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle, StartYear = t.StartYear, Poster = t.Poster, Type = t.Type })
-                                .ToList();
+            return new PagedResultDto<TitleSummaryDto>
+            {
+                Items = items,
+                NumberOfItems = _dbContext.Titles.Count()
+            };
         }
 
         else
         {
-            return _dbContext.Titles.Where(t => t.PrimaryTitle.Contains(search))
-                                    .OrderBy(t => t.Id)
-                                    .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle, StartYear = t.StartYear, Poster = t.Poster, Type = t.Type })
-                                    .ToList();
+            return new PagedResultDto<TitleSummaryDto>
+            {
+                Items = items,
+                NumberOfItems = null
+            };
+    } 
+    }
+
+
+    // NOTE: is case sensitive
+    public PagedResultDto<TitleSummaryDto> GetTitlesByName(string search, int page = 1, int pageSize = 10, bool includeCount = true)
+    {
+
+        var query = _dbContext.Titles.Where(t => t.PrimaryTitle.Contains(search));
+
+        var items = query.OrderBy(t => t.Id)
+                         .Skip(page * pageSize)
+                         .Take(pageSize)
+                         .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle,
+                                                            StartYear = t.StartYear,
+                                                            Poster = t.Poster,
+                                                            Type = t.Type })
+                         .ToList();
+
+        if (includeCount)
+            {
+                return new PagedResultDto<TitleSummaryDto>
+                {
+                    Items = items,
+                    NumberOfItems = query.Count()
+                };
+            }
+            else
+            {
+                return new PagedResultDto<TitleSummaryDto>
+                {
+                    Items = items,
+                    NumberOfItems = null
+                };
         }
     }
 
 
     public int GetTitleCount()
     {
-        return _dbContext.Titles.Count();
+            return _dbContext.Titles.Count();
     }
 
 
