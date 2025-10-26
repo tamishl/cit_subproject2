@@ -24,13 +24,13 @@ namespace DataServiceLayer.Services;
     {
         var query = _dbContext.Titles;
         var items = query.OrderBy(t => t.Id)
-                                .Skip(page * pageSize)
-                                .Take(pageSize)
-                                .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle,
-                                                                   StartYear = t.StartYear,
-                                                                   Poster = t.Poster,
-                                                                   Type = t.Type })
-                                .ToList();
+                         .Skip(page * pageSize)
+                         .Take(pageSize)
+                         .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle,
+                                                            StartYear = t.StartYear,
+                                                            Poster = t.Poster,
+                                                            TypeId = t.Type.Id })
+                         .ToList(); 
         if (includeCount)
         { 
             return new PagedResultDto<TitleSummaryDto>
@@ -63,7 +63,7 @@ namespace DataServiceLayer.Services;
                          .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle,
                                                             StartYear = t.StartYear,
                                                             Poster = t.Poster,
-                                                            Type = t.Type })
+                                                            TypeId = t.Type.Id })
                          .ToList();
 
         if (includeCount)

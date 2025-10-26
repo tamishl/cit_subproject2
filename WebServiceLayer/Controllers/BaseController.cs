@@ -19,6 +19,8 @@ public class BaseController: ControllerBase
     {
         // integer disivion rounding up (possible because numberOfItems and pageSettings.PageSize can not be negative)
         var numberOfPages = (numberOfItems + pageSettings.PageSize - 1) / pageSettings.PageSize;
+
+        // ensure page is in valid range
         pageSettings.Page = Math.Clamp(pageSettings.Page, 0, Math.Max(0, numberOfPages - 1));
 
         // link to pages or null if there is no page
