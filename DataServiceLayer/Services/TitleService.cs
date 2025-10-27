@@ -1,5 +1,6 @@
 ﻿using DataServiceLayer.Domains;
 using DataServiceLayer.DTOs;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,7 +56,9 @@ namespace DataServiceLayer.Services;
     public PagedResultDto<TitleSummaryDto> GetTitlesByName(string search, int page = 0, int pageSize = 10, bool includeCount = true)
     {
 
-        var query = _dbContext.Titles.Where(t => t.PrimaryTitle.Contains(search));
+
+        //var query = _dbContext.Titles.Where(t => t.PrimaryTitle.Contains(search)); // case sensitive
+        var query = _dbContext.Titles.Where(t => EF.Functions.ILike(t.PrimaryTitle, $"%{search}%")); // case insensitive
 
         var items = query.OrderBy(t => t.Id)
                          .Skip(page * pageSize)
