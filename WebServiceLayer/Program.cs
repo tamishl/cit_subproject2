@@ -1,14 +1,16 @@
 
 // Starting point for configuring web application
 using DataServiceLayer.Services;
+using Mapster;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddControllers();
-
+// Add services to the container
 builder.Services.AddScoped<ITitleService, TitleService>();
 
+builder.Services.AddControllers();
+
+builder.Services.AddMapster();
 
 // Create the app
 var app = builder.Build();

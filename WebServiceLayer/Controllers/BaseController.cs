@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Emit;
-using WebServiceLayer.Models;
+using WebServiceLayer.DTOs;
 
 namespace WebServiceLayer.Controllers;
 

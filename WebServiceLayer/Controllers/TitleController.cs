@@ -1,7 +1,7 @@
 ﻿using DataServiceLayer.Domains;
 using DataServiceLayer.Services;
 using Microsoft.AspNetCore.Mvc;
-using WebServiceLayer.Models;
+using WebServiceLayer.DTOs;
 
 namespace WebServiceLayer.Controllers;
 
@@ -9,9 +9,9 @@ namespace WebServiceLayer.Controllers;
 [Route("api/titles")]
 [ApiController]
 
-public class TitleController: BaseController
+public class TitleController : BaseController
 {
-    
+
     private ITitleService _titleService;
 
 
@@ -22,7 +22,7 @@ public class TitleController: BaseController
     }
 
 
-    [HttpGet (Name = nameof(GetTitlesByName))]
+    [HttpGet(Name = nameof(GetTitlesByName))]
     public IActionResult GetTitlesByName([FromQuery] PageSettings pageSettings, string? search = null)
     {
         // without serach parameter, return all titles paged
@@ -49,8 +49,17 @@ public class TitleController: BaseController
     }
 
 
-    //[HttpGet("{movies}")]
-    //public IActionResult GetMovies([)
+    [HttpGet("{id}")]
+    public IActionResult GetTitle(string id)
+    {
+        var result = _titleService.GetTitle(id);
+
+        return result is not null ? Ok(result) : NotFound("Title does not exist");
+    }
+
+
+    //[HttpGet("{titleType}")]
+    //public IActionResult GetMovies(string titleType)
     //{
     //    var titles = _titleService.GetMovies();
 

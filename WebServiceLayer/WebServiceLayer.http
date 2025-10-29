@@ -18,4 +18,13 @@ Accept: application/json
 GET {{WebServiceLayer_HostAddress}}/api/titles?search=water&pageSize=6
 Accept: application/json
 
+###
 
+
+GET {{WebServiceLayer_HostAddress}}/api/titles/tt0081912 
+Accept: application/json
+
+###
+
+GET {{WebServiceLayer_HostAddress}}/api/titles/ttmadeup100 
+Accept: application/json

@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 
 namespace DataServiceLayer.Services;
 
-    public class TitleService: ITitleService
-    {
+public class TitleService: ITitleService
+{
     private MovieDbContext _dbContext;
 
     public TitleService()
@@ -21,7 +21,7 @@ namespace DataServiceLayer.Services;
 
 
 
-    public PagedResultDto<TitleSummaryDto> GetTitles(int page = 0, int pageSize = 10, bool includeCount = true)
+    public PagedResultDto<TitleSummaryDto> GetTitles(int page = 0, int pageSize = 10)
     {
         var query = _dbContext.Titles;
         var items = query.OrderBy(t => t.Id)
@@ -32,28 +32,16 @@ namespace DataServiceLayer.Services;
                                                             Poster = t.Poster,
                                                             TypeId = t.Type.Id })
                          .ToList(); 
-        if (includeCount)
-        { 
-            return new PagedResultDto<TitleSummaryDto>
-            {
-                Items = items,
-                TotalNumberOfItems = _dbContext.Titles.Count()
-            };
-        }
 
-        else
+        return new PagedResultDto<TitleSummaryDto>
         {
-            return new PagedResultDto<TitleSummaryDto>
-            {
-                Items = items,
-                TotalNumberOfItems = null
-            };
-    } 
+            Items = items,
+            TotalNumberOfItems = _dbContext.Titles.Count()
+        };
     }
 
 
-    // NOTE: is case sensitive
-    public PagedResultDto<TitleSummaryDto> GetTitlesByName(string search, int page = 0, int pageSize = 10, bool includeCount = true)
+    public PagedResultDto<TitleSummaryDto> GetTitlesByName(string search, int page = 0, int pageSize = 10)
     {
 
 
@@ -63,28 +51,48 @@ namespace DataServiceLayer.Services;
         var items = query.OrderBy(t => t.Id)
                          .Skip(page * pageSize)
                          .Take(pageSize)
-                         .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle,
-                                                            StartYear = t.StartYear,
-                                                            Poster = t.Poster,
-                                                            TypeId = t.Type.Id })
+                         .Select(t => new TitleSummaryDto
+                         { PrimaryTitle = t.PrimaryTitle,
+                           StartYear = t.StartYear,
+                           Poster = t.Poster,
+                           TypeId = t.Type.Id
+                         })
                          .ToList();
 
-        if (includeCount)
-            {
-                return new PagedResultDto<TitleSummaryDto>
-                {
-                    Items = items,
-                    TotalNumberOfItems = query.Count()
-                };
-            }
-            else
-            {
-                return new PagedResultDto<TitleSummaryDto>
-                {
-                    Items = items,
-                    TotalNumberOfItems = null
-                };
-        }
+        return new PagedResultDto<TitleSummaryDto>
+        {
+            Items = items,
+            TotalNumberOfItems = query.Count()
+        };
+    }
+  
+
+
+    public PagedResultDto<TitleSummaryDto> GetTitlesByType(string type, int page = 0, int pageSize = 10)
+    {
+        var query = _dbContext.TitleTypes.FirstOrDefault(t => t.Id == type).Titles;
+        var items = query.OrderBy(t => t.Id)
+                         .Skip(page * pageSize)
+                         .Take(pageSize)
+                         .Select(t => new TitleSummaryDto
+                         {
+                             PrimaryTitle = t.PrimaryTitle,
+                             StartYear = t.StartYear,
+                             Poster = t.Poster,
+                             TypeId = t.Type.Id
+                         })
+                         .ToList();
+
+        return new PagedResultDto<TitleSummaryDto>
+        {
+            Items = items,
+            TotalNumberOfItems = items?.Count
+        };
+    }
+
+    public Title? GetTitle(string id)
+    {
+        return _dbContext.Titles.FirstOrDefault(t => t.Id == id);
     }
 
 
@@ -92,12 +100,4 @@ namespace DataServiceLayer.Services;
     {
             return _dbContext.Titles.Count();
     }
-
-
-    //methods below are just for eplxoration
-    public string? GetTitleNameById(string id) // only for testing
-    {
-        return _dbContext.Titles.FirstOrDefault(t => t.Id == id)?.PrimaryTitle;
-    }
-
 }

@@ -1,4 +1,4 @@
-﻿namespace WebServiceLayer.Models;
+﻿namespace WebServiceLayer.DTOs;
 
 public class PageSettings
 {   public int PageSize { get; set; } = 10;

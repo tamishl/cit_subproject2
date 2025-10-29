@@ -8,6 +8,6 @@ namespace DataServiceLayer.DTOs;
 
 public class PagedResultDto<T>
 {
-    public IList<T> Items { get; set; }
+    public IList<T>? Items { get; set; }
     public int? TotalNumberOfItems { get; set; }
 }
