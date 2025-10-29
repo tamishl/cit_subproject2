@@ -1,14 +1,14 @@
-﻿using System;
+﻿using DataServiceLayer.Domains;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataServiceLayer.Domains;
+namespace DataServiceLayer.DTOs;
 
-public class Title
+public class TitleDto
 {
-    public string Id { get; set; }
     public string PrimaryTitle { get; set; }
     public string OriginalTitle { get; set; }
     public bool IsAdult { get; set; }
@@ -24,11 +24,5 @@ public class Title
     public ICollection<Genre>? Genres { get; set; }
     public ICollection<Person>? Directors { get; set; }
     public ICollection<Person>? Writers { get; set; }
-    public ICollection<Person>? KnownForPersons { get; set; }
-    //public ICollection<User>? BookmarkedBy { get; set; }
-
-
-
-
-
+    //public ICollection<Person>? KnownForPersons { get; set; }
 }

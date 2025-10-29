@@ -1,12 +1,14 @@
 ﻿using DataServiceLayer.Domains;
 using DataServiceLayer.DTOs;
 using Microsoft.EntityFrameworkCore;
+using Npgsql.Internal.Postgres;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Mapster;
 
 namespace DataServiceLayer.Services;
 
@@ -27,11 +29,8 @@ public class TitleService: ITitleService
         var items = query.OrderBy(t => t.Id)
                          .Skip(page * pageSize)
                          .Take(pageSize)
-                         .Select(t => new TitleSummaryDto { PrimaryTitle = t.PrimaryTitle,
-                                                            StartYear = t.StartYear,
-                                                            Poster = t.Poster,
-                                                            TypeId = t.Type.Id })
-                         .ToList(); 
+                         .Select(t => t.Adapt<TitleSummaryDto>())
+                         .ToList();
 
         return new PagedResultDto<TitleSummaryDto>
         {
@@ -51,12 +50,7 @@ public class TitleService: ITitleService
         var items = query.OrderBy(t => t.Id)
                          .Skip(page * pageSize)
                          .Take(pageSize)
-                         .Select(t => new TitleSummaryDto
-                         { PrimaryTitle = t.PrimaryTitle,
-                           StartYear = t.StartYear,
-                           Poster = t.Poster,
-                           TypeId = t.Type.Id
-                         })
+                         .Select(t => t.Adapt<TitleSummaryDto>())
                          .ToList();
 
         return new PagedResultDto<TitleSummaryDto>
@@ -74,13 +68,7 @@ public class TitleService: ITitleService
         var items = query.OrderBy(t => t.Id)
                          .Skip(page * pageSize)
                          .Take(pageSize)
-                         .Select(t => new TitleSummaryDto
-                         {
-                             PrimaryTitle = t.PrimaryTitle,
-                             StartYear = t.StartYear,
-                             Poster = t.Poster,
-                             TypeId = t.Type.Id
-                         })
+                         .Select(t => t.Adapt<TitleSummaryDto>())
                          .ToList();
 
         return new PagedResultDto<TitleSummaryDto>
@@ -90,9 +78,26 @@ public class TitleService: ITitleService
         };
     }
 
-    public Title? GetTitle(string id)
+    public TitleDto? GetTitle(string id)
     {
-        return _dbContext.Titles.FirstOrDefault(t => t.Id == id);
+        return _dbContext.Titles.Include(t => t.Ratings)
+                                .Include(t => t.Cast)
+                                .Include(t => t.Genres)
+                                .Include(t => t.Type)
+                                .Include(t => t.Directors)
+                                .Include(t => t.Writers)
+                                .FirstOrDefault(t => t.Id == id).Adapt<TitleDto>();
+    }
+
+    public PagedResultDto<TitleSummaryDto>? GetAkas(string id)
+    {
+        //return _dbContext.Titles.FirstOrDefault(t => t.Id == id).Akas
+        //                        .Select(ta => new TitleAkaSummaryDto
+        //                        {
+        //                            Title = ta.TitleName;
+        //                        };
+
+        return null;
     }
 
 

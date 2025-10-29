@@ -103,7 +103,7 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Title>()
                             .HasMany(t => t.Cast)
                             .WithOne(c => c.Title)
-                            .HasForeignKey("title_id");
+                            .HasForeignKey(c => c.TitleId);
 
         //map Title to Director. I haven't created a class for the join table(title_director) since it only contains the two FKs
         modelBuilder.Entity<Title>()
@@ -123,7 +123,7 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Title>()
                             .HasMany(t => t.Genres)
                             .WithMany(g => g.Titles)
-                            .UsingEntity(j => j.ToTable("title_genre")
+                            .UsingEntity(j => j.ToTable("title_genre") // specify the join table in the db
                             .HasData());
 
         //map Title to TitleType
@@ -135,6 +135,7 @@ public class MovieDbContext : DbContext
         //map TitleType to title_type
         modelBuilder.Entity<TitleType>().ToTable("title_type");
         modelBuilder.Entity<TitleType>().Property(tt => tt.Id).HasColumnName("title_type_id");
+
 
 
         // map TitleAka to title_akas
@@ -154,7 +155,7 @@ public class MovieDbContext : DbContext
                             .HasForeignKey("context");
 
 
-
+        //mapping in Title instead of in TitleAka
         // map TitleAka to Title
         modelBuilder.Entity<TitleAka>()
                             .HasOne(ta => ta.Title)
