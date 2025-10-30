@@ -80,12 +80,13 @@ public class TitleService: ITitleService
 
     public TitleDto? GetTitle(string id)
     {
-        return _dbContext.Titles.Include(t => t.Ratings)
-                                .Include(t => t.Cast)
+        return _dbContext.Titles
+                                //.Include(t => t.Ratings)
+                                //.Include(t => t.Cast)
                                 .Include(t => t.Genres)
-                                .Include(t => t.Type)
-                                .Include(t => t.Directors)
-                                .Include(t => t.Writers)
+                                //.Include(t => t.Type)
+                                //.Include(t => t.Directors)
+                                //.Include(t => t.Writers)
                                 .FirstOrDefault(t => t.Id == id).Adapt<TitleDto>();
     }
 

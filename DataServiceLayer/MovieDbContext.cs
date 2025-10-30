@@ -57,6 +57,7 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Genre>().ToTable("genre");
         modelBuilder.Entity<Genre>().Property(g => g.Id).HasColumnName("genre_id");
 
+
         // map Person to person
         modelBuilder.Entity<Person>().ToTable("person");
         modelBuilder.Entity<Person>().Property(p => p.Id).HasColumnName("person_id");
@@ -123,8 +124,21 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Title>()
                             .HasMany(t => t.Genres)
                             .WithMany(g => g.Titles)
-                            .UsingEntity(j => j.ToTable("title_genre") // specify the join table in the db
-                            .HasData());
+                            .UsingEntity(j => j.ToTable("title_genre")); // specify the join table in the db
+
+        // alternatie mapping: specifying keys
+        //modelBuilder.Entity<Title>()
+        //            .HasMany(t => t.Genres)
+        //            .WithMany(g => g.Titles)
+        //            .UsingEntity<Dictionary<string, object>>(
+        //             "title_genre",
+        //             j => j.HasOne<Genre>()
+        //             .WithMany()
+        //             .HasForeignKey("genre_id"),
+        //             j => j.HasOne<Title>()
+        //             .WithMany()
+        //            .HasForeignKey("title_id"));
+
 
         //map Title to TitleType
         modelBuilder.Entity<Title>()
