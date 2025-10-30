@@ -120,24 +120,25 @@ public class MovieDbContext : DbContext
                             .UsingEntity(j => j.ToTable("title_writer")
                             .HasData());
 
-        //map Title to Genre
-        modelBuilder.Entity<Title>()
-                            .HasMany(t => t.Genres)
-                            .WithMany(g => g.Titles)
-                            .UsingEntity(j => j.ToTable("title_genre")); // specify the join table in the db
-
-        // alternatie mapping: specifying keys
+        ////map Title to Genre
         //modelBuilder.Entity<Title>()
-        //            .HasMany(t => t.Genres)
-        //            .WithMany(g => g.Titles)
-        //            .UsingEntity<Dictionary<string, object>>(
-        //             "title_genre",
-        //             j => j.HasOne<Genre>()
-        //             .WithMany()
-        //             .HasForeignKey("genre_id"),
-        //             j => j.HasOne<Title>()
-        //             .WithMany()
-        //            .HasForeignKey("title_id"));
+        //                    .HasMany(t => t.Genres)
+        //                    .WithMany()
+        //                    .UsingEntity(j => j.ToTable("title_genre")); // specify the join table in the db
+
+        //// alternatie mapping: specifying keys
+        modelBuilder.Entity<Title>()
+                    .HasMany(t => t.Genres)
+                    .WithMany()
+                    .UsingEntity<Dictionary<string, object>>(
+                     "title_genre",
+                     j => j.HasOne<Genre>()
+                     .WithMany()
+                     .HasForeignKey("genre_id"),
+                     j => j.HasOne<Title>()
+                     .WithMany()
+                    .HasForeignKey("title_id"));
+        //.ToTable("title_genre");
 
 
         //map Title to TitleType
