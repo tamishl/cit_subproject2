@@ -50,10 +50,9 @@ namespace DataServiceLayer.Services
             _dbContext.SaveChanges();
             return bookmark;
         }
-        public PagedResultDto<BookmarkTitleDto> GetBookmarkedTitles(string username)
+        public PagedResultDto<BookmarkTitleDto> GetBookmarkedTitles(string username, int page = 0, int pageSize = 10)
         {
             var query = _dbContext.BookmarkTitles.Where(bt => bt.User.Username == username)
-                                                 .OrderBy(bt => bt.CreatedAt)
                                                  .Select(bt => new BookmarkTitleDto
                                                  {
                                                      PrimaryTitle = bt.Title.PrimaryTitle,
@@ -61,31 +60,36 @@ namespace DataServiceLayer.Services
                                                      Plot = bt.Title.Plot,
                                                      Poster = bt.Title.Poster,
                                                  });
-            var items = query.ToList();
-            
+            var items = query.OrderByDescending(bt => bt.CreatedAt)
+                             .Skip(page * pageSize)
+                             .Take(pageSize)
+                             .ToList();
+
             return new PagedResultDto<BookmarkTitleDto>
             {
                 Items = items,
-                TotalNumberOfItems = _dbContext.BookmarkTitles.Count()
+                TotalNumberOfItems = query.Count()
             };
         }
 
-        public PagedResultDto<BookmarkTitleDto> GetAllTitleBookmarks()
+        public PagedResultDto<BookmarkTitleDto> GetAllTitleBookmarks(int page = 0, int pageSize = 10)
         {
-            var query = _dbContext.BookmarkTitles.OrderBy(bt => bt.CreatedAt)
-                                                 .Select(bt => new BookmarkTitleDto
+            var query = _dbContext.BookmarkTitles.Select(bt => new BookmarkTitleDto
                                                  {
                                                      PrimaryTitle = bt.Title.PrimaryTitle,
                                                      Username = bt.User.Username,
                                                      Plot = bt.Title.Plot,
                                                      Poster = bt.Title.Poster,
                                                  });
-            var items = query.ToList();
+            var items = query.OrderByDescending(bt => bt.CreatedAt)
+                             .Skip(page * pageSize)
+                             .Take(pageSize)
+                             .ToList(); 
 
             return new PagedResultDto<BookmarkTitleDto>
             {
                 Items = items,
-                TotalNumberOfItems = _dbContext.BookmarkTitles.Count()
+                TotalNumberOfItems = query.Count()
             };
         }
 
@@ -149,35 +153,44 @@ namespace DataServiceLayer.Services
             return bookmark;
         }
 
-        public PagedResultDto<BookmarkPersonDto> GetBookmarkPersons(string username)
+        public PagedResultDto<BookmarkPersonDto> GetBookmarkPersons(string username, int page = 0, int pageSize = 10)
         {
-            var bookmarks = _dbContext.BookmarkPersons.Include(bp => bp.Person)
-                                                     .Include(bp => bp.User)
-                                                     .Where(bp => bp.User.Username == username)
-                                                     .OrderBy(bp => bp.CreatedAt)
-                                                     .ToList();
-
-            var items = bookmarks.Adapt<List<BookmarkPersonDto>>();
+            var query = _dbContext.BookmarkPersons.Where(bp => bp.User.Username == username)
+                                                  .Select(bp => new BookmarkPersonDto
+                                                  {
+                                                     Username = bp.User.Username,
+                                                     Name = bp.Person.Name,
+                                                     CreatedAt = bp.CreatedAt
+                                                  });
+            var items = query.OrderByDescending(bt => bt.CreatedAt)
+                             .Skip(page * pageSize)
+                             .Take(pageSize)
+                             .ToList();
 
             return new PagedResultDto<BookmarkPersonDto>
             {
                 Items = items,
-                TotalNumberOfItems = _dbContext.BookmarkPersons.Count()
+                TotalNumberOfItems = query.Count()
             };
         }
 
-        public PagedResultDto<BookmarkPersonDto> GetAllPersonBookmarks()
+        public PagedResultDto<BookmarkPersonDto> GetAllPersonBookmarks(int page = 0, int pageSize = 10)
         {
-            var bookmarks = _dbContext.BookmarkPersons.Include(bp => bp.Person)
-                                                     .Include(bp => bp.User)
-                                                     .OrderBy(bp => bp.CreatedAt)
-                                                     .ToList();
-            var items = bookmarks.Adapt<List<BookmarkPersonDto>>();
+            var query = _dbContext.BookmarkPersons.Select(bp => new BookmarkPersonDto
+            {
+                Username = bp.User.Username,
+                Name = bp.Person.Name,
+                CreatedAt = bp.CreatedAt
+            });
+            var items = query.OrderByDescending(bt => bt.CreatedAt)
+                             .Skip(page * pageSize)
+                             .Take(pageSize)
+                             .ToList();
 
             return new PagedResultDto<BookmarkPersonDto>
             {
                 Items = items,
-                TotalNumberOfItems = _dbContext.BookmarkPersons.Count()
+                TotalNumberOfItems = query.Count()
             };
         }
 

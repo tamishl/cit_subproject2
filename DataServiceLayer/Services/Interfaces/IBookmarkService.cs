@@ -11,15 +11,15 @@ namespace DataServiceLayer.Services.Interfaces
     public interface IBookmarkService
     {
         public BookmarkTitle CreateBookmarkTitle(string titleId, string username, string note);
-        public PagedResultDto<BookmarkTitleDto> GetBookmarkedTitles(string username);
-        public PagedResultDto<BookmarkTitleDto> GetAllTitleBookmarks();
-        BookmarkTitle? DeleteBookmarkTitle(string titleId, string username);
+        public PagedResultDto<BookmarkTitleDto> GetBookmarkedTitles(string username, int page = 0, int pageSize = 10);
+        public PagedResultDto<BookmarkTitleDto> GetAllTitleBookmarks(int page = 0, int pageSize = 10);
+        public BookmarkTitle? DeleteBookmarkTitle(string titleId, string username);
         public bool UpdateBookmarkTitle(string titleId, string username, string note);
         public BookmarkPerson CreateBookmarkPerson(string personId, string username, string note);
-        public PagedResultDto<BookmarkPersonDto> GetAllPersonBookmarks();
-        public PagedResultDto<BookmarkPersonDto> GetBookmarkPersons(string username);
-        public void DeleteBookmarkPerson(string personId, string username);
-        public void UpdateBookmarkPerson(string personId, string username, string note);
+        public PagedResultDto<BookmarkPersonDto> GetBookmarkPersons(string username, int page = 0, int pageSize = 10);
+        public PagedResultDto<BookmarkPersonDto> GetAllPersonBookmarks(int page = 0, int pageSize = 10);
+        public BookmarkPerson? DeleteBookmarkPerson(string personId, string username);
+        public bool UpdateBookmarkPerson(string personId, string username, string note);
        
     }
 }

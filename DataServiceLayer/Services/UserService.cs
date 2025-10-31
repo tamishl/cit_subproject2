@@ -77,7 +77,7 @@ namespace DataServiceLayer.Services
             return new PagedResultDto<UserMinimumDetailsDto>
             {
                 Items = items,
-                TotalNumberOfItems = _dbContext.Titles.Count()
+                TotalNumberOfItems = query.Count()
             };
         }
 

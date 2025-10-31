@@ -112,7 +112,7 @@ public class MovieDbContext : DbContext
                             .WithOne(c => c.Person)
                             .HasForeignKey(c => c.PersonId);
 
-        /*
+        
         // map Person to KnownFor. I haven't created a class for the join table(person_notable_title) since it only contains the two FKs
         modelBuilder.Entity<Person>()
                             .HasMany(p => p.KnownFor)
@@ -124,7 +124,7 @@ public class MovieDbContext : DbContext
                             .WithMany()
                             .UsingEntity(j => j.ToTable("person_profession")
                             .HasData());
-        */
+        
         // map Profession to profession
         modelBuilder.Entity<Profession>().ToTable("profession");
         modelBuilder.Entity<Profession>().Property(pr => pr.Id).HasColumnName("profession_id");
@@ -147,7 +147,7 @@ public class MovieDbContext : DbContext
                             .HasMany(t => t.Cast)
                             .WithOne(c => c.Title)
                             .HasForeignKey(c => c.TitleId);
-        /*
+        
         //map Title to Director. I haven't created a class for the join table(title_director) since it only contains the two FKs
         modelBuilder.Entity<Title>()
                             .HasMany(t => t.Directors)
@@ -161,7 +161,7 @@ public class MovieDbContext : DbContext
                             .WithMany(p => p.WriterOf)
                             .UsingEntity(j => j.ToTable("title_writer")
                             .HasData());
-        */
+        
         //// alternatie mapping: specifying keys
         modelBuilder.Entity<Title>()
                     .HasMany(t => t.Genres)
@@ -231,24 +231,24 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Context>().ToTable("context");
         modelBuilder.Entity<Context>().Property(c => c.Id).HasColumnName("context_id");
 
-
-
         // map Rating to rating_history
         modelBuilder.Entity<Rating>().ToTable("rating_history");
         modelBuilder.Entity<Rating>().Property(r => r.Id).HasColumnName("rating_id");
         modelBuilder.Entity<Rating>().Property(r => r.RatingValue).HasColumnName("rating");
         modelBuilder.Entity<Rating>().Property(r => r.RatingDate).HasColumnName("ratetime");
- 
-        
+
+
         // map Rating to Title and User
         modelBuilder.Entity<Rating>()
                             .HasOne(r => r.Title)
                             .WithMany(t => t.Ratings)
                             .HasForeignKey("title_id");
+
         modelBuilder.Entity<Rating>()
                             .HasOne(r => r.User)
                             .WithMany(u => u.RatedTitles)
                             .HasForeignKey("username");
+
 
         // map Search to search_history
         modelBuilder.Entity<Search>().ToTable("search_history");
