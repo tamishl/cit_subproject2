@@ -64,12 +64,12 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Person>().Property(p => p.Name).HasColumnName("name");
         modelBuilder.Entity<Person>().Property(p => p.BirthYear).HasColumnName("birth_year");
         modelBuilder.Entity<Person>().Property(p => p.DeathYear).HasColumnName("death_year");
-        modelBuilder.Entity<Person>()
 
         // map Person to Casting
+        modelBuilder.Entity<Person>()
                             .HasMany(p => p.Castings)
                             .WithOne(c => c.Person)
-                            .HasForeignKey("person_id");
+                            .HasForeignKey(c => c.PersonId);
 
         // map Person to KnownFor. I haven't created a class for the join table(person_notable_title) since it only contains the two FKs
         modelBuilder.Entity<Person>()
@@ -120,16 +120,10 @@ public class MovieDbContext : DbContext
                             .UsingEntity(j => j.ToTable("title_writer")
                             .HasData());
 
-        ////map Title to Genre
-        //modelBuilder.Entity<Title>()
-        //                    .HasMany(t => t.Genres)
-        //                    .WithMany()
-        //                    .UsingEntity(j => j.ToTable("title_genre")); // specify the join table in the db
-
         //// alternatie mapping: specifying keys
         modelBuilder.Entity<Title>()
                     .HasMany(t => t.Genres)
-                    .WithMany()
+                    .WithMany(g => g.Titles)
                     .UsingEntity<Dictionary<string, object>>(
                      "title_genre",
                      j => j.HasOne<Genre>()
@@ -137,21 +131,20 @@ public class MovieDbContext : DbContext
                      .HasForeignKey("genre_id"),
                      j => j.HasOne<Title>()
                      .WithMany()
-                    .HasForeignKey("title_id")); 
-        //.ToTable("title_genre");
+                    .HasForeignKey("title_id"))
+                    .ToTable("title_genre");
 
 
         //map Title to TitleType
         modelBuilder.Entity<Title>()
                             .HasOne(t => t.Type)
-                            .WithMany()
-                            //.WithMany(tt => tt.Titles)
+                            .WithMany(tt => tt.Titles)
                             .HasForeignKey("title_type_id");
 
         //map TitleType to title_type
         modelBuilder.Entity<TitleType>().ToTable("title_type");
         modelBuilder.Entity<TitleType>().Property(tt => tt.Id).HasColumnName("title_type_id");
-        //modelBuilder.Entity<TitleType>().Property(tt => tt.TitleIds).HasColumnName("title_id");
+        //modelBuilder.Entity<TitleType>().Property(tt => tt.Titles).HasColumnName("title_id");
 
 
         //map Title to TitleAka

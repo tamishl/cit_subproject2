@@ -17,12 +17,12 @@ public class TitleDto
     public int? RuntimeMinutes { get; set; }
     public string? Plot { get; set; }
     public string? Poster { get; set; }
-    public ICollection<TitleAka> Akas { get; set; }
+    public ICollection<string> Akas { get; set; }
     public ICollection<Rating>? Ratings { get; set; }
-    public ICollection<Casting>? Cast { get; set; }
-    public TitleType Type { get; set; }
-    public ICollection<Genre>? Genres { get; set; }
-    public ICollection<Person>? Directors { get; set; }
-    public ICollection<Person>? Writers { get; set; }
+    public ICollection<string>? Cast { get; set; }
+    public string TypeId { get; set; }
+    public ICollection<string>? Genres { get; set; }
+    public ICollection<string>? Directors { get; set; }
+    public ICollection<string>? Writers { get; set; }
     //public ICollection<Person>? KnownForPersons { get; set; }
 }

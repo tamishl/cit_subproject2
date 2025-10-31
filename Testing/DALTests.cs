@@ -3,18 +3,7 @@
 public class DALTests
 {
     [Fact]
-
-
-    public void GetTitlesByName_ReturnsTitles()
-    {
-        var titleService = new DataServiceLayer.Services.TitleService();
-        var result = titleService.GetTitlesByName("Harry Potter");
-        Assert.Equal(25, result.Items.Count);
-        Assert.Equal("Lego Harry Potter and the Philosopher's Stone", result.Items[9].PrimaryTitle);
-    }
-
-    [Fact]
-    public void GetTitles_ReturnsTitles()
+    public void GetTitles_Valid_ReturnsTitles()
     {
         var titleService = new DataServiceLayer.Services.TitleService();
         var result = titleService.GetTitles(10);
@@ -24,4 +13,39 @@ public class DALTests
         Assert.NotEmpty(result.Items[6].PrimaryTitle);
 
     }
+
+    [Fact]
+    public void GetTitlesByName_Valid_ReturnsTitles()
+    {
+        var titleService = new DataServiceLayer.Services.TitleService();
+        var result = titleService.GetTitlesByName("Harry Potter", 0, 100);
+        Assert.Equal(25, result.Items.Count);
+        Assert.Equal("Lego Harry Potter and the Philosopher's Stone", result.Items[9].PrimaryTitle);
+    }
+
+
+    [Fact]
+    public void GetTitlesByName_InValid_ReturnsNoTitles()
+    {
+        var titleService = new DataServiceLayer.Services.TitleService();
+        var result = titleService.GetTitlesByName("sijneqlwehbq", 0, 100);
+        Assert.Empty(result.Items);
+        Assert.Equal(0, result.TotalNumberOfItems);
+    }
+
+
+
+
+    [Fact]
+    public void GetTitlesByGenre_Valid_ReturnsTitles()
+    {
+        var titleService = new DataServiceLayer.Services.TitleService();
+        var result = titleService.GetTitlesByGenre("horror", 0, 20);
+        Assert.Equal(20, result.Items.Count);
+        Assert.Equal(3998, result.TotalNumberOfItems);
+    }
+
+
+
+
 }

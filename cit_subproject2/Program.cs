@@ -7,10 +7,10 @@ Console.WriteLine($" this is my password: {password}");
 
 var titleService = new TitleService();
 
-//Console.WriteLine(titleService.GetTitle("tt0081912"));
+Console.WriteLine(titleService.GetTitle("tt0081912"));
 
 //Console.WriteLine(titleService.GetTitlesByGenre("Fantasy"));
-Console.WriteLine(titleService.GetTitlesByType("movie"));
+//Console.WriteLine(titleService.GetTitlesByType("movie"));
 
 //Console.WriteLine(titleService.GetTitlesByName("Potter").Items[1].PrimaryTitle);
 

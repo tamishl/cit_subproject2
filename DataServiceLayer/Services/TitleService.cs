@@ -67,7 +67,7 @@ public class TitleService: ITitleService
 
     public PagedResultDto<TitleSummaryDto>? GetTitlesByGenre(string genreId, int page = 0, int pageSize = 10)
     {
-        var query = _dbContext.Titles.Where(t => t.Genres.Any(g => g.Id == genreId));
+        var query = _dbContext.Titles.Where(t => t.Genres.Any(g => EF.Functions.ILike(g.Id, $"{genreId}")));
 
         var items = query.OrderBy(t => t.Id)
                          .Skip(page * pageSize)
@@ -102,11 +102,25 @@ public class TitleService: ITitleService
 
     public TitleDto? GetTitle(string id)
     {
-        return _dbContext.Titles
+        return _dbContext.Titles.Select(t => new
+        {
+            t.Id,
+            t.PrimaryTitle,
+            t.OriginalTitle,
+            t.IsAdult,
+            t.StartYear,
+            t.EndYear,
+            t.RuntimeMinutes,
+            t.Plot,
+            t.Poster,
+            TypeId = t.Type.Id,
+            Genres = t.Genres.Select(g => g.Id),
+            //Cast = t.Cast.Select(c => c.Person.Id)
+
+        })
                                 //.Include(t => t.Ratings)
                                 //.Include(t => t.Cast)
-                                .Include(t => t.Genres) // improvement: prevent unnecessary join by EF core?
-                                .Include(t => t.Type)
+                            
                                 //.Include(t => t.Directors)
                                 //.Include(t => t.Writers)
                                 .FirstOrDefault(t => t.Id == id).Adapt<TitleDto>();
