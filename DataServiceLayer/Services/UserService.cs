@@ -79,22 +79,20 @@ namespace DataServiceLayer.Services
 
         public bool UpdateUser(User updatedUser)
         {
-            var existingUser = _dbContext.Users.FirstOrDefault(u => u.Username.ToLower().Equals(updatedUser.Username.ToLower()));
+            var existingUser = GetUser(updatedUser.Username);
 
             if (existingUser == null)
             {
                 return false;
             }
 
-            if (UserNameExist(updatedUser.Username))
-            {
-                return false;
-            }
-            if (EmailExist(updatedUser.Email))
+            if (_dbContext.Users.Any(u => EF.Functions.ILike(u.Email, updatedUser.Email)
+                                  && u.Username != updatedUser.Username))
             {
                 return false;
             }
 
+      
             existingUser.Username = updatedUser.Username;
             existingUser.Email = updatedUser.Email;
             existingUser.FirstName = updatedUser.FirstName;
@@ -103,8 +101,9 @@ namespace DataServiceLayer.Services
 
             _dbContext.SaveChanges();
             return true;
-
         }
+
+
         public User DeleteUser(User user)
         {
             _dbContext.Users.Remove(user);
