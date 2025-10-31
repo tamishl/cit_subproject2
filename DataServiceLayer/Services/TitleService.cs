@@ -22,6 +22,9 @@ public class TitleService: ITitleService
     }
 
 
+ // improve getting count by using window functions >> get total count in the same query as the query that gets result
+
+
 
     public PagedResultDto<TitleSummaryDto> GetTitles(int page = 0, int pageSize = 10)
     {
@@ -59,12 +62,13 @@ public class TitleService: ITitleService
             TotalNumberOfItems = query.Count()
         };
     }
-  
 
 
-    public PagedResultDto<TitleSummaryDto> GetTitlesByType(string type, int page = 0, int pageSize = 10)
+
+    public PagedResultDto<TitleSummaryDto>? GetTitlesByGenre(string genreId, int page = 0, int pageSize = 10)
     {
-        var query = _dbContext.TitleTypes.FirstOrDefault(t => t.Id == type).Titles;
+        var query = _dbContext.Titles.Where(t => t.Genres.Any(g => g.Id == genreId));
+
         var items = query.OrderBy(t => t.Id)
                          .Skip(page * pageSize)
                          .Take(pageSize)
@@ -74,7 +78,25 @@ public class TitleService: ITitleService
         return new PagedResultDto<TitleSummaryDto>
         {
             Items = items,
-            TotalNumberOfItems = items?.Count
+            TotalNumberOfItems = query.Count()
+        };
+    }
+
+
+
+    public PagedResultDto<TitleSummaryDto> GetTitlesByType(string typeId, int page = 0, int pageSize = 10)
+    {
+        var query = _dbContext.Titles.Where(t => EF.Functions.ILike(t.Type.Id, $"{typeId}"));
+        var items = query.OrderBy(t => t.Id)
+                         .Skip(page * pageSize)
+                         .Take(pageSize)
+                         .Select(t => t.Adapt<TitleSummaryDto>())
+                         .ToList();
+
+        return new PagedResultDto<TitleSummaryDto>
+        {
+            Items = items,
+            TotalNumberOfItems = query.Count()
         };
     }
 
@@ -83,8 +105,8 @@ public class TitleService: ITitleService
         return _dbContext.Titles
                                 //.Include(t => t.Ratings)
                                 //.Include(t => t.Cast)
-                                .Include(t => t.Genres)
-                                //.Include(t => t.Type)
+                                .Include(t => t.Genres) // improvement: prevent unnecessary join by EF core?
+                                .Include(t => t.Type)
                                 //.Include(t => t.Directors)
                                 //.Include(t => t.Writers)
                                 .FirstOrDefault(t => t.Id == id).Adapt<TitleDto>();

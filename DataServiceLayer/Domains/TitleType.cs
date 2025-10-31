@@ -9,5 +9,5 @@ namespace DataServiceLayer.Domains;
 public class TitleType
 {
     public string Id { get; set; }
-    public ICollection<Title>? Titles { get; set; }
+    //public ICollection<string>? TitleIds { get; set; }
 }

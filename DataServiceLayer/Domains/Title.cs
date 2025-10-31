@@ -17,7 +17,6 @@ public class Title
     public int? RuntimeMinutes { get; set; }
     public string? Plot { get; set; }
     public string? Poster { get; set; }
-    public ICollection<TitleAka> Akas { get; set; }
     public ICollection<Rating>? Ratings { get; set; }
     public ICollection<Casting>? Cast { get; set; }
     public TitleType Type { get; set; }
@@ -26,6 +25,8 @@ public class Title
     public ICollection<Person>? Writers { get; set; }
     public ICollection<Person>? KnownForPersons { get; set; }
     //public ICollection<User>? BookmarkedBy { get; set; }
+
+    public ICollection<TitleAka> Akas { get; set; }
 
 
 

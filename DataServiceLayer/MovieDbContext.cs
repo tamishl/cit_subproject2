@@ -137,19 +137,28 @@ public class MovieDbContext : DbContext
                      .HasForeignKey("genre_id"),
                      j => j.HasOne<Title>()
                      .WithMany()
-                    .HasForeignKey("title_id"));
+                    .HasForeignKey("title_id")); 
         //.ToTable("title_genre");
 
 
         //map Title to TitleType
         modelBuilder.Entity<Title>()
                             .HasOne(t => t.Type)
-                            .WithMany(tt => tt.Titles)
+                            .WithMany()
+                            //.WithMany(tt => tt.Titles)
                             .HasForeignKey("title_type_id");
 
         //map TitleType to title_type
         modelBuilder.Entity<TitleType>().ToTable("title_type");
         modelBuilder.Entity<TitleType>().Property(tt => tt.Id).HasColumnName("title_type_id");
+        //modelBuilder.Entity<TitleType>().Property(tt => tt.TitleIds).HasColumnName("title_id");
+
+
+        //map Title to TitleAka
+        modelBuilder.Entity<Title>()
+                            .HasMany(t => t.Akas)
+                            .WithOne()
+                            .HasForeignKey("title_id");
 
 
 
@@ -169,13 +178,6 @@ public class MovieDbContext : DbContext
                             .WithMany()
                             .HasForeignKey("context");
 
-
-        //mapping in Title instead of in TitleAka
-        // map TitleAka to Title
-        modelBuilder.Entity<TitleAka>()
-                            .HasOne(ta => ta.Title)
-                            .WithMany()
-                            .HasForeignKey("title_id");
 
 
         // map Episode to episode
