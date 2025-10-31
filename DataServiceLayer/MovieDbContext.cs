@@ -214,28 +214,16 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Search>().Property(s => s.Query).HasColumnName("query");
 
 
-
         // map User to user
         modelBuilder.Entity<User>().ToTable("user");
-        modelBuilder.Entity<User>().Property(u => u.UserName).HasColumnName("username");
+        modelBuilder.Entity<User>().Property(u => u.Username).HasColumnName("username");
         modelBuilder.Entity<User>().Property(u => u.FirstName).HasColumnName("first_name");
         modelBuilder.Entity<User>().Property(u => u.LastName).HasColumnName("last_name");
         modelBuilder.Entity<User>().Property(u => u.Email).HasColumnName("email");
         modelBuilder.Entity<User>().Property(u => u.Password).HasColumnName("password");
-        modelBuilder.Entity<User>().HasKey(u => u.UserName); // define PK
+        modelBuilder.Entity<User>().Property(u => u.Salt).HasColumnName("salt");
+        modelBuilder.Entity<User>().HasKey(u => u.Username); // define PK
 
-        // map User with BookmarkedTitles. I havent created a class for the join table(title_bookmark) since it only contains the two FKs
-        modelBuilder.Entity<User>()
-                            .HasMany(u => u.BookmarkedTitles)
-                            .WithMany()
-                            .UsingEntity(j => j.ToTable("title_bookmark")
-                            .HasData());
-
-        // map User with BookmarkedPersons. I havent created a class for the join table(person_bookmark) since it only contains the two FKs
-        modelBuilder.Entity<User>().HasMany(u => u.BookmarkedPersons)
-                            .WithMany()
-                            .UsingEntity(j => j.ToTable("person_bookmark")
-                            .HasData());
 
         // map User with Search
         modelBuilder.Entity<User>()

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataServiceLayer.Services;
+namespace DataServiceLayer.Services.Interfaces;
 
     public interface ITitleService
     {

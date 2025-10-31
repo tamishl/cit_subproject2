@@ -1,5 +1,5 @@
 ﻿using DataServiceLayer.Domains;
-using DataServiceLayer.Services;
+using DataServiceLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using WebServiceLayer.DTOs;
 

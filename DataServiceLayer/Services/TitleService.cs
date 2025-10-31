@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Mapster;
+using DataServiceLayer.Services.Interfaces;
 
 namespace DataServiceLayer.Services;
 

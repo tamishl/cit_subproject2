@@ -1,6 +1,7 @@
 
 // Starting point for configuring web application
 using DataServiceLayer.Services;
+using DataServiceLayer.Services.Interfaces;
 using Mapster;
 
 var builder = WebApplication.CreateBuilder(args);
