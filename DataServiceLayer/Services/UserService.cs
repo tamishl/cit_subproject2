@@ -62,12 +62,16 @@ namespace DataServiceLayer.Services
 
         public PagedResultDto<UserMinimumDetailsDto> GetAllUsers(int page = 0, int pageSize = 10)
         {
-            var query = _dbContext.Users;
+            var query = _dbContext.Users
+                .Select(u => new UserMinimumDetailsDto
+                {
+                    Username = u.Username,
+                    Email = u.Email
+                });
 
             var items = query.OrderBy(t => t.Username)
                              .Skip(page * pageSize)
                              .Take(pageSize)
-                             .Select(u => u.Adapt<UserMinimumDetailsDto>())
                              .ToList();
 
             return new PagedResultDto<UserMinimumDetailsDto>

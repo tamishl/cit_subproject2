@@ -17,6 +17,6 @@ public class User
     public string Salt { get; set; }
     public ICollection<Search>? SearchHistory { get; set; }
     public ICollection<Rating>? RatedTitles { get; set; }
-    public ICollection<Title>? BookmarkedTitles { get; set; }
-    public ICollection<Person>? BookmarkedPersons { get; set; }
+    public ICollection<BookmarkTitle>? BookmarkedTitles { get; set; }
+    public ICollection<BookmarkPerson>? BookmarkedPersons { get; set; }
 }

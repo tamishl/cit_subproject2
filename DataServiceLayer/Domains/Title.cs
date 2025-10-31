@@ -21,10 +21,11 @@ public class Title
     public ICollection<Casting>? Cast { get; set; }
     public TitleType Type { get; set; }
     public ICollection<Genre>? Genres { get; set; }
-    public ICollection<Person>? Directors { get; set; }
-    public ICollection<Person>? Writers { get; set; }
-    public ICollection<Person>? KnownForPersons { get; set; }
-    //public ICollection<User>? BookmarkedBy { get; set; }
+    //public ICollection<Person>? Directors { get; set; }
+    //public ICollection<Person>? Writers { get; set; }
+    //public ICollection<Person>? KnownForPersons { get; set; }
+
+    public ICollection<BookmarkTitle>? Bookmarks { get; set; }
 
     public ICollection<TitleAka> Akas { get; set; }
 
