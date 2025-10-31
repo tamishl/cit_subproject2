@@ -115,7 +115,7 @@ public class TitleService: ITitleService
             t.Poster,
             TypeId = t.Type.Id,
             Genres = t.Genres.Select(g => g.Id),
-            //Cast = t.Cast.Select(c => c.Person.Id)
+            Cast = t.Cast.Select(c => c.Person.Id)
 
         })
                                 //.Include(t => t.Ratings)
