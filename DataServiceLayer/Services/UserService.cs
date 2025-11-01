@@ -20,7 +20,7 @@ namespace DataServiceLayer.Services
             _dbContext = new MovieDbContext();
         }
 
-        public User CreateUser(string username, string password, string firstName, string lastName, string email, string salt)
+        public User CreateUser(string username, string password, string? firstName, string? lastName, string email, string salt)
         {
             if (UserNameExist(username) || string.IsNullOrWhiteSpace(username))
             {

@@ -48,13 +48,7 @@ public class UserController : BaseController
 
         Console.WriteLine($"Username: {userDto.Username}, Password: {userDto.Password}, Hashpassword: {hashPassword}, firstname: {userDto.FirstName}");
 
-        var newUser = _userService.CreateUser(username: userDto.Username,
-                                password: hashPassword,
-                                firstName: userDto.FirstName,
-                                lastName: userDto.LastName,
-                                email: userDto.Email,
-                                salt: salt);
-
+        var newUser = _userService.CreateUser(userDto.Username, hashPassword, userDto.FirstName, userDto.LastName, userDto.Email, salt);
 
         return Ok(newUser);
     }
