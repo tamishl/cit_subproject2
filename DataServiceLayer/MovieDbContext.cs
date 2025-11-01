@@ -99,6 +99,8 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Title>().Property(t => t.RuntimeMinutes).HasColumnName("runtime_minutes");
         modelBuilder.Entity<Title>().Property(t => t.Plot).HasColumnName("plot");
         modelBuilder.Entity<Title>().Property(t => t.Poster).HasColumnName("poster");
+        modelBuilder.Entity<Title>().Property(t => t.TypeId).HasColumnName("title_type_id");
+
 
         // map Title to Casting
         modelBuilder.Entity<Title>()
@@ -106,22 +108,24 @@ public class MovieDbContext : DbContext
                             .WithOne(c => c.Title)
                             .HasForeignKey(c => c.TitleId);
 
-        //map Title to Director. I haven't created a class for the join table(title_director) since it only contains the two FKs
+
+        // map Titll and Directors (Person) via join table title_director
         modelBuilder.Entity<Title>()
-                            .HasMany(t => t.Directors)
-                            .WithMany()
-                            .UsingEntity(j => j.ToTable("title_director")
-                            .HasData());
+                    .HasMany(t => t.Directors)
+                    .WithMany()
+                    .UsingEntity<Dictionary<string, object>>(
+                     "title_director",
+                     j => j.HasOne<Person>()
+                     .WithMany()
+                     .HasForeignKey("person_id"),
+                     j => j.HasOne<Title>()
+                     .WithMany()
+                    .HasForeignKey("title_id"))
+                    .ToTable("title_director");
 
-        ////map Title to Writer. I haven't created a class for the join table(title_writer) since it only contains the two FKs
-        //modelBuilder.Entity<Title>()
-        //                    .HasMany(t => t.Writers)
-        //                    .WithMany(p => p.WriterOf)
-        //                    .UsingEntity(j => j.ToTable("title_writer")
-        //                    .HasData());
 
 
-        // map Titll and Person via join table title_genre
+        // map Titll and Writers (Person) via join table title_writer
         modelBuilder.Entity<Title>()
                     .HasMany(t => t.Writers)
                     .WithMany()
@@ -136,7 +140,7 @@ public class MovieDbContext : DbContext
                     .ToTable("title_writer");
 
 
-        // map Titlle and Genre via join table title_genre
+        // map Title and Genre via join table title_genre
         modelBuilder.Entity<Title>()
                     .HasMany(t => t.Genres)
                     .WithMany(g => g.Titles)
@@ -155,11 +159,12 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Title>()
                             .HasOne(t => t.Type)
                             .WithMany(tt => tt.Titles)
-                            .HasForeignKey("title_type_id");
+                            .HasForeignKey(t => t.TypeId);
 
         //map TitleType to title_type
         modelBuilder.Entity<TitleType>().ToTable("title_type");
         modelBuilder.Entity<TitleType>().Property(tt => tt.Id).HasColumnName("title_type_id");
+
         //modelBuilder.Entity<TitleType>().Property(tt => tt.Titles).HasColumnName("title_id");
 
 
