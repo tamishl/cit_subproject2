@@ -1,4 +1,4 @@
-@WebServiceLayer_HostAddress = http://localhost:5555
+@WebServiceLayer_HostAddress = https://localhost:5555
 
 GET {{WebServiceLayer_HostAddress}}/api/titles/
 Accept: application/json
@@ -27,4 +27,32 @@ Accept: application/json
 ###
 
 GET {{WebServiceLayer_HostAddress}}/api/titles/ttmadeup100 
+Accept: application/json
+
+###
+
+Post {{WebServiceLayer_HostAddress}}/api/User
+Accept: application/json
+Content-Type: application/json
+{ 
+  "username": "testuser",
+  "password": "testMig",
+  "firstName": "Test",
+  "lastName": "User",
+  "email": "test@email.com"
+}
+
+###
+
+PUT {{WebServiceLayer_HostAddress}}/api/User
+Accept: application/json
+Content-Type: application/json
+{ 
+  "username": "testuser",
+  "password": "testMig"
+}
+
+###
+
+DELETE {{WebServiceLayer_HostAddress}}/api/User/testuser
 Accept: application/json

@@ -13,8 +13,9 @@ namespace DataServiceLayer.Services.Interfaces
 
         // Dataservice Ratings
         public Rating CreateRating(string titleId, string username, int ratingValue);
-        public void DeleteRating(string titleId, string username);
         public PagedResultDto<RatingDto> GetUserRatings(User user, int page = 0, int pageSize = 10);
         public PagedResultDto<RatingDto> GetAllRatings(int page = 0, int pageSize = 10);
+        public bool DeleteRating(string titleId, string username);
+
     }
 }
