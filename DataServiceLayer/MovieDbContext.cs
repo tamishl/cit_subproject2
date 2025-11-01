@@ -13,6 +13,7 @@ public class MovieDbContext : DbContext
     public DbSet<Title> Titles { get; set; }
     public DbSet<Person> Persons { get; set; }
     public DbSet<Rating> Ratings { get; set; }
+    public DbSet<TitleRating> TitleRatings { get; set; }
     public DbSet<Casting> Castings { get; set; }
     public DbSet<Genre> Genres { get; set; }
     public DbSet<Profession> Professions { get; set; }
@@ -41,44 +42,10 @@ public class MovieDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
 
-        //map BookmarkPerson to person_bookmark
-        modelBuilder.Entity<BookmarkPerson>().ToTable("person_bookmark");
-        modelBuilder.Entity<BookmarkPerson>().Property(bp => bp.CreatedAt).HasColumnName("created_at");
-        modelBuilder.Entity<BookmarkPerson>().Property(bp => bp.Note).HasColumnName("note");
-        modelBuilder.Entity<BookmarkPerson>().Property<string>("username");
-        modelBuilder.Entity<BookmarkPerson>().Property<string>("person_id");
-        modelBuilder.Entity<BookmarkPerson>().HasKey("person_id", "username");// composite PK
 
-        // map PersonBookmark to Person and User
-        modelBuilder.Entity<BookmarkPerson>()
-                            .HasOne(r => r.Person)
-                            .WithMany(t => t.Bookmarks)
-                            .HasForeignKey("person_id");
-
-        modelBuilder.Entity<BookmarkPerson>()
-                            .HasOne(r => r.User)
-                            .WithMany(u => u.BookmarkedPersons)
-                            .HasForeignKey("username");
-
-
-        //map BookmarkTitle to title_bookmark
-        modelBuilder.Entity<BookmarkTitle>().ToTable("title_bookmark");
-        modelBuilder.Entity<BookmarkTitle>().Property(bt => bt.CreatedAt).HasColumnName("created_at");
-        modelBuilder.Entity<BookmarkTitle>().Property(bt => bt.Note).HasColumnName("note");
-        modelBuilder.Entity<BookmarkTitle>().Property<string>("username");
-        modelBuilder.Entity<BookmarkTitle>().Property<string>("title_id");
-        modelBuilder.Entity<BookmarkTitle>().HasKey("title_id", "username");// composite PK
-
-        // map PersonBookmark to Person and User
-        modelBuilder.Entity<BookmarkTitle>()
-                            .HasOne(r => r.Title)
-                            .WithMany(t => t.Bookmarks)
-                            .HasForeignKey("title_id");
-
-        modelBuilder.Entity<BookmarkTitle>()
-                            .HasOne(r => r.User)
-                            .WithMany(u => u.BookmarkedTitles)
-                            .HasForeignKey("username");
+        /////////////////////////////////////////////////////////
+        ///                      IMDB DATA                    ///                   
+        /////////////////////////////////////////////////////////
 
         // map Casting to casting   
         modelBuilder.Entity<Casting>().ToTable("casting");
@@ -151,7 +118,7 @@ public class MovieDbContext : DbContext
                             .HasForeignKey(c => c.TitleId);
 
 
-        // map Titll and Directors (Person) via join table title_director
+        // map Title and Directors (Person) via table title_director
         modelBuilder.Entity<Title>()
                     .HasMany(t => t.Directors)
                     .WithMany()
@@ -167,7 +134,7 @@ public class MovieDbContext : DbContext
 
 
 
-        // map Titll and Writers (Person) via join table title_writer
+        // map Title and Writers (Person) via table title_writer
         modelBuilder.Entity<Title>()
                     .HasMany(t => t.Writers)
                     .WithMany()
@@ -197,17 +164,21 @@ public class MovieDbContext : DbContext
                     .ToTable("title_genre");
 
 
-        //map Title to TitleType
+        // map Title to TitleType
         modelBuilder.Entity<Title>()
                             .HasOne(t => t.Type)
                             .WithMany(tt => tt.Titles)
                             .HasForeignKey(t => t.TypeId);
 
+        // map Title to TitleRating
+        modelBuilder.Entity<Title>()
+                            .HasOne(t => t.TitleRating)
+                            .WithOne(tr => tr.Title)
+                            .HasForeignKey<TitleRating>(tr => tr.TitleId);
+
         //map TitleType to title_type
         modelBuilder.Entity<TitleType>().ToTable("title_type");
         modelBuilder.Entity<TitleType>().Property(tt => tt.Id).HasColumnName("title_type_id");
-
-        //modelBuilder.Entity<TitleType>().Property(tt => tt.Titles).HasColumnName("title_id");
 
 
         //map Title to TitleAka
@@ -259,16 +230,66 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Rating>().Property(r => r.RatingDate).HasColumnName("ratetime");
 
 
-        // map Rating to Title and User
-        modelBuilder.Entity<Rating>()
-                            .HasOne(r => r.Title)
-                            .WithMany(t => t.Ratings)
-                            .HasForeignKey("title_id");
-
+        // map Rating to User
         modelBuilder.Entity<Rating>()
                             .HasOne(r => r.User)
                             .WithMany(u => u.RatedTitles)
                             .HasForeignKey("username");
+
+        // map TitleRating to title_rating
+        modelBuilder.Entity<TitleRating>().ToTable("title_rating");
+        modelBuilder.Entity<TitleRating>().Property(tr => tr.TitleId).HasColumnName("title_id");
+        modelBuilder.Entity<TitleRating>().Property(tr => tr.AverageRating).HasColumnName("average_rating");
+        modelBuilder.Entity<TitleRating>().Property(tr => tr.Votes).HasColumnName("votes");
+        modelBuilder.Entity<TitleRating>().HasKey(tr => tr.TitleId);
+
+
+
+
+
+        /////////////////////////////////////////////////////////
+        ///                        USER                       ///                   
+        /////////////////////////////////////////////////////////
+
+        //map BookmarkPerson to person_bookmark
+        modelBuilder.Entity<BookmarkPerson>().ToTable("person_bookmark");
+        modelBuilder.Entity<BookmarkPerson>().Property(bp => bp.CreatedAt).HasColumnName("created_at");
+        modelBuilder.Entity<BookmarkPerson>().Property(bp => bp.Note).HasColumnName("note");
+        modelBuilder.Entity<BookmarkPerson>().Property<string>("username");
+        modelBuilder.Entity<BookmarkPerson>().Property<string>("person_id");
+        modelBuilder.Entity<BookmarkPerson>().HasKey("person_id", "username");// composite PK
+
+        // map PersonBookmark to Person and User
+        modelBuilder.Entity<BookmarkPerson>()
+                            .HasOne(r => r.Person)
+                            .WithMany(t => t.Bookmarks)
+                            .HasForeignKey("person_id");
+
+        modelBuilder.Entity<BookmarkPerson>()
+                            .HasOne(r => r.User)
+                            .WithMany(u => u.BookmarkedPersons)
+                            .HasForeignKey("username");
+
+
+        //map BookmarkTitle to title_bookmark
+        modelBuilder.Entity<BookmarkTitle>().ToTable("title_bookmark");
+        modelBuilder.Entity<BookmarkTitle>().Property(bt => bt.CreatedAt).HasColumnName("created_at");
+        modelBuilder.Entity<BookmarkTitle>().Property(bt => bt.Note).HasColumnName("note");
+        modelBuilder.Entity<BookmarkTitle>().Property<string>("username");
+        modelBuilder.Entity<BookmarkTitle>().Property<string>("title_id");
+        modelBuilder.Entity<BookmarkTitle>().HasKey("title_id", "username");// composite PK
+
+        // map PersonBookmark to Person and User
+        modelBuilder.Entity<BookmarkTitle>()
+                            .HasOne(r => r.Title)
+                            .WithMany(t => t.Bookmarks)
+                            .HasForeignKey("title_id");
+
+        modelBuilder.Entity<BookmarkTitle>()
+                            .HasOne(r => r.User)
+                            .WithMany(u => u.BookmarkedTitles)
+                            .HasForeignKey("username");
+
 
 
         // map Search to search_history

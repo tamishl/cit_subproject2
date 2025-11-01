@@ -17,7 +17,7 @@ public class TitleDto
     public int? RuntimeMinutes { get; set; }
     public string? Plot { get; set; }
     public string? Poster { get; set; }
-    public ICollection<Rating>? Ratings { get; set; }
+    public ICollection<TitleRatingDto>? TitleRating { get; set; }
     public ICollection<string>? Cast { get; set; }
     public string TypeId { get; set; }
     public ICollection<string>? Genres { get; set; }
