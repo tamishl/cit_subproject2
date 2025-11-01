@@ -48,8 +48,8 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Casting>().Property(c => c.Ordering).HasColumnName("ordering");
         modelBuilder.Entity<Casting>().HasKey(c => new { c.TitleId, c.PersonId, c.Ordering });// composite PK
 
-        //map category to Profession
-        modelBuilder.Entity<Casting>().HasOne(c => c.Category) 
+        // map profession to Profession
+        modelBuilder.Entity<Casting>().HasOne(c => c.Profession) 
                                       .WithMany()
                                       .HasForeignKey("profession_id");
 
@@ -109,18 +109,34 @@ public class MovieDbContext : DbContext
         //map Title to Director. I haven't created a class for the join table(title_director) since it only contains the two FKs
         modelBuilder.Entity<Title>()
                             .HasMany(t => t.Directors)
-                            .WithMany(p => p.DirectorOf)
+                            .WithMany()
                             .UsingEntity(j => j.ToTable("title_director")
                             .HasData());
 
-        //map Title to Writer. I haven't created a class for the join table(title_writer) since it only contains the two FKs
-        modelBuilder.Entity<Title>()
-                            .HasMany(t => t.Writers)
-                            .WithMany(p => p.WriterOf)
-                            .UsingEntity(j => j.ToTable("title_writer")
-                            .HasData());
+        ////map Title to Writer. I haven't created a class for the join table(title_writer) since it only contains the two FKs
+        //modelBuilder.Entity<Title>()
+        //                    .HasMany(t => t.Writers)
+        //                    .WithMany(p => p.WriterOf)
+        //                    .UsingEntity(j => j.ToTable("title_writer")
+        //                    .HasData());
 
-        //// alternatie mapping: specifying keys
+
+        // map Titll and Person via join table title_genre
+        modelBuilder.Entity<Title>()
+                    .HasMany(t => t.Writers)
+                    .WithMany()
+                    .UsingEntity<Dictionary<string, object>>(
+                     "title_writer",
+                     j => j.HasOne<Person>()
+                     .WithMany()
+                     .HasForeignKey("person_id"),
+                     j => j.HasOne<Title>()
+                     .WithMany()
+                    .HasForeignKey("title_id"))
+                    .ToTable("title_writer");
+
+
+        // map Titlle and Genre via join table title_genre
         modelBuilder.Entity<Title>()
                     .HasMany(t => t.Genres)
                     .WithMany(g => g.Titles)

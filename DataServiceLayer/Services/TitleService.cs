@@ -115,7 +115,10 @@ public class TitleService: ITitleService
             t.Poster,
             TypeId = t.Type.Id,
             Genres = t.Genres.Select(g => g.Id),
-            Cast = t.Cast.Select(c => c.Person.Id)
+            Cast = t.Cast.Select(c => c.Person.Name),
+            Writers = t.Writers.Select(w => w.Name)
+            //Directors = t.Directors.Select(d => d.Name)
+
 
         })
                                 //.Include(t => t.Ratings)
@@ -123,7 +126,8 @@ public class TitleService: ITitleService
                             
                                 //.Include(t => t.Directors)
                                 //.Include(t => t.Writers)
-                                .FirstOrDefault(t => t.Id == id).Adapt<TitleDto>();
+            .AsSplitQuery()                    
+            .FirstOrDefault(t => t.Id == id).Adapt<TitleDto>();
     }
 
     public PagedResultDto<TitleSummaryDto>? GetAkas(string id)
