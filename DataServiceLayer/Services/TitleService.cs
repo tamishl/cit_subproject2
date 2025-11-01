@@ -117,9 +117,8 @@ public class TitleService: ITitleService
             Genres = t.Genres.Select(g => g.Id),
             Cast = t.Cast.Select(c => c.Person.Name),
             Writers = t.Writers.Select(w => w.Name),
-            Directors = t.Directors.Select(d => d.Name)
+            Directors = t.Directors.Select(d => d.Name),
             //Ratings = ...
-
 
                                 }).AsSplitQuery()
                                   .FirstOrDefault(t => t.Id == id).Adapt<TitleDto>();
