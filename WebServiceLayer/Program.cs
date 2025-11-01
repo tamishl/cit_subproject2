@@ -1,12 +1,33 @@
 
 // Starting point for configuring web application
 using DataServiceLayer.Services;
+using DataServiceLayer.Services.Interfaces;
 using Mapster;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using WebServiceLayer.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddScoped<ITitleService, TitleService>();
+builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton(new Hashing());
+
+var secret = "asdjkfhasdjkfhasdjkl234123fhasjkldhfasdjkfhasdjkfhasdjkl234123fhasjkldhf";
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(opt =>
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
+            ClockSkew = TimeSpan.Zero
+        }
+    );
 
 builder.Services.AddControllers();
 

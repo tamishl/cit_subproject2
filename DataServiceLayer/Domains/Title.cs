@@ -25,7 +25,8 @@ public class Title
     public ICollection<Person>? Directors { get; set; }
     public ICollection<Person>? Writers { get; set; }
     public ICollection<Person>? KnownForPersons { get; set; }
-    //public ICollection<User>? BookmarkedBy { get; set; }
+
+    public ICollection<BookmarkTitle>? Bookmarks { get; set; }
 
     public ICollection<TitleAka> Akas { get; set; }
 

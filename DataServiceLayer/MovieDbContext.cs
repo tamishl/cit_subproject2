@@ -21,6 +21,8 @@ public class MovieDbContext : DbContext
     public DbSet<Episode> Episodes { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Search> Searches { get; set; }
+    public DbSet<BookmarkPerson> BookmarkPersons { get; set; }
+    public DbSet<BookmarkTitle> BookmarkTitles { get; set; }
 
 
     // connect to db
@@ -38,6 +40,45 @@ public class MovieDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+        //map BookmarkPerson to person_bookmark
+        modelBuilder.Entity<BookmarkPerson>().ToTable("person_bookmark");
+        modelBuilder.Entity<BookmarkPerson>().Property(bp => bp.CreatedAt).HasColumnName("created_at");
+        modelBuilder.Entity<BookmarkPerson>().Property(bp => bp.Note).HasColumnName("note");
+        modelBuilder.Entity<BookmarkPerson>().Property<string>("username");
+        modelBuilder.Entity<BookmarkPerson>().Property<string>("person_id");
+        modelBuilder.Entity<BookmarkPerson>().HasKey("person_id", "username");// composite PK
+
+        // map PersonBookmark to Person and User
+        modelBuilder.Entity<BookmarkPerson>()
+                            .HasOne(r => r.Person)
+                            .WithMany(t => t.Bookmarks)
+                            .HasForeignKey("person_id");
+
+        modelBuilder.Entity<BookmarkPerson>()
+                            .HasOne(r => r.User)
+                            .WithMany(u => u.BookmarkedPersons)
+                            .HasForeignKey("username");
+
+
+        //map BookmarkTitle to title_bookmark
+        modelBuilder.Entity<BookmarkTitle>().ToTable("title_bookmark");
+        modelBuilder.Entity<BookmarkTitle>().Property(bt => bt.CreatedAt).HasColumnName("created_at");
+        modelBuilder.Entity<BookmarkTitle>().Property(bt => bt.Note).HasColumnName("note");
+        modelBuilder.Entity<BookmarkTitle>().Property<string>("username");
+        modelBuilder.Entity<BookmarkTitle>().Property<string>("title_id");
+        modelBuilder.Entity<BookmarkTitle>().HasKey("title_id", "username");// composite PK
+
+        // map PersonBookmark to Person and User
+        modelBuilder.Entity<BookmarkTitle>()
+                            .HasOne(r => r.Title)
+                            .WithMany(t => t.Bookmarks)
+                            .HasForeignKey("title_id");
+
+        modelBuilder.Entity<BookmarkTitle>()
+                            .HasOne(r => r.User)
+                            .WithMany(u => u.BookmarkedTitles)
+                            .HasForeignKey("username");
 
         // map Casting to casting   
         modelBuilder.Entity<Casting>().ToTable("casting");
@@ -71,6 +112,7 @@ public class MovieDbContext : DbContext
                             .WithOne(c => c.Person)
                             .HasForeignKey(c => c.PersonId);
 
+        
         // map Person to KnownFor. I haven't created a class for the join table(person_notable_title) since it only contains the two FKs
         modelBuilder.Entity<Person>()
                             .HasMany(p => p.KnownFor)
@@ -82,7 +124,7 @@ public class MovieDbContext : DbContext
                             .WithMany()
                             .UsingEntity(j => j.ToTable("person_profession")
                             .HasData());
-
+        
         // map Profession to profession
         modelBuilder.Entity<Profession>().ToTable("profession");
         modelBuilder.Entity<Profession>().Property(pr => pr.Id).HasColumnName("profession_id");
@@ -210,23 +252,24 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Context>().ToTable("context");
         modelBuilder.Entity<Context>().Property(c => c.Id).HasColumnName("context_id");
 
-
-
         // map Rating to rating_history
         modelBuilder.Entity<Rating>().ToTable("rating_history");
-        modelBuilder.Entity<Rating>().Property(r => r.Id).HasColumnName("ratingid");
+        modelBuilder.Entity<Rating>().Property(r => r.Id).HasColumnName("rating_id");
         modelBuilder.Entity<Rating>().Property(r => r.RatingValue).HasColumnName("rating");
         modelBuilder.Entity<Rating>().Property(r => r.RatingDate).HasColumnName("ratetime");
+
 
         // map Rating to Title and User
         modelBuilder.Entity<Rating>()
                             .HasOne(r => r.Title)
                             .WithMany(t => t.Ratings)
                             .HasForeignKey("title_id");
+
         modelBuilder.Entity<Rating>()
                             .HasOne(r => r.User)
                             .WithMany(u => u.RatedTitles)
                             .HasForeignKey("username");
+
 
         // map Search to search_history
         modelBuilder.Entity<Search>().ToTable("search_history");
@@ -235,28 +278,16 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Search>().Property(s => s.Query).HasColumnName("query");
 
 
-
         // map User to user
         modelBuilder.Entity<User>().ToTable("user");
-        modelBuilder.Entity<User>().Property(u => u.UserName).HasColumnName("username");
+        modelBuilder.Entity<User>().Property(u => u.Username).HasColumnName("username");
         modelBuilder.Entity<User>().Property(u => u.FirstName).HasColumnName("first_name");
         modelBuilder.Entity<User>().Property(u => u.LastName).HasColumnName("last_name");
         modelBuilder.Entity<User>().Property(u => u.Email).HasColumnName("email");
         modelBuilder.Entity<User>().Property(u => u.Password).HasColumnName("password");
-        modelBuilder.Entity<User>().HasKey(u => u.UserName); // define PK
+        modelBuilder.Entity<User>().Property(u => u.Salt).HasColumnName("salt");
+        modelBuilder.Entity<User>().HasKey(u => u.Username); // define PK
 
-        // map User with BookmarkedTitles. I havent created a class for the join table(title_bookmark) since it only contains the two FKs
-        modelBuilder.Entity<User>()
-                            .HasMany(u => u.BookmarkedTitles)
-                            .WithMany()
-                            .UsingEntity(j => j.ToTable("title_bookmark")
-                            .HasData());
-
-        // map User with BookmarkedPersons. I havent created a class for the join table(person_bookmark) since it only contains the two FKs
-        modelBuilder.Entity<User>().HasMany(u => u.BookmarkedPersons)
-                            .WithMany()
-                            .UsingEntity(j => j.ToTable("person_bookmark")
-                            .HasData());
 
         // map User with Search
         modelBuilder.Entity<User>()

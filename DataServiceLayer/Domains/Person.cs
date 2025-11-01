@@ -20,5 +20,5 @@ public class Person
     //public ICollection<Title>? DirectorOf { get; set; }
     //public ICollection<Title>? WriterOf { get; set; }
 
-    //public ICollection<User>? BookmarkedBy { get; set; }
+    public ICollection<BookmarkPerson>? Bookmarks { get; set; }
 }
