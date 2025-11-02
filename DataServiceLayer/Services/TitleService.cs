@@ -116,15 +116,19 @@ public class TitleService: ITitleService
             t.Poster,
             t.TypeId,
             Genres = t.Genres.Select(g => g.Id),
-            Cast = t.Cast.Select(c => c.Person.Name),
             Writers = t.Writers.Select(w => w.Name),
             Directors = t.Directors.Select(d => d.Name),
-            //TitleRating = new TitleRatingDto
-            //{
-            //    TitleId = t.TitleRating.TitleId,
-            //    AverageRating = t.TitleRating.AverageRating,
-            //    Votes = t.TitleRating.Votes
-            //}
+            Cast = t.Cast.Select(c => new PersonCastDto
+            {
+                Name = c.Person.Name,
+                ProfessionId = c.Profession.Id
+            }),
+            TitleRating = new TitleRatingDto
+            {
+                TitleId = t.TitleRating.TitleId,
+                AverageRating = t.TitleRating.AverageRating,
+                Votes = t.TitleRating.Votes
+            }
                                 }).AsSplitQuery()
                                   .FirstOrDefault(t => t.Id == id).Adapt<TitleDto>();
 
