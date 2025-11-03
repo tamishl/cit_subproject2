@@ -3,6 +3,7 @@
 using DataServiceLayer.Services;
 using DataServiceLayer.Services.Interfaces;
 using Mapster;
+using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -15,7 +16,7 @@ builder.Services.AddScoped<ITitleService, TitleService>();
 builder.Services.AddSingleton<IUserService, UserService>();
 builder.Services.AddSingleton(new Hashing());
 
-var secret = "asdjkfhasdjkfhasdjkl234123fhasjkldhfasdjkfhasdjkfhasdjkl234123fhasjkldhf";
+var secret = builder.Configuration.GetSection("Auth:Secret").Value;
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
@@ -31,6 +32,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddControllers();
 
+builder.Services.AddHttpContextAccessor();
+
+// Register Mapper service for dependency injection
+builder.Services.AddScoped<WebServiceLayer.Services.Mapper>();
 builder.Services.AddMapster();
 
 // Create the app

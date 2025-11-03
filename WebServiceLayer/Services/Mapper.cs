@@ -8,11 +8,11 @@ namespace WebServiceLayer.Services
 {
     public class Mapper
     {
-        public  IMapper _mapper;
+        private  IMapper _mapper;
         private LinkGenerator _linkGenerator;
-        private HttpContextAccessor _httpContextAccessor;
+        private IHttpContextAccessor _httpContextAccessor;
 
-        public Mapper(IMapper mapper, LinkGenerator linkGenerator, HttpContextAccessor httpContextAccessor)
+        public Mapper(IMapper mapper, LinkGenerator linkGenerator, IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
             _linkGenerator = linkGenerator;
@@ -21,27 +21,61 @@ namespace WebServiceLayer.Services
 
         //Mapping 
 
-        public CreateUser CreateUserDto(User user)
+        public UserInfo? CreateUserDto(User user)
         {
-            var dto = _mapper.Map<CreateUser>(user);
-            dto.UrlNewUser = GetUrl(nameof(UserController.GetUser), new {username = user.Username });
+            if (user == null)
+            {
+                return null;
+            }
 
-            return dto;
+            var result = _mapper.Map<UserInfo>(user);
+            result.UrlUser = GetUrl(nameof(UserController.GetUser), new {username = user.Username });
+
+            return result;
         }
 
-        public UserMinimumInfo UserMinimumInfoDto(UserMinimumDetailsDto user)
+        public UserMinimumInfo? UserMinimumInfoDto(UserMinimumDetailsDto userDto)
         {
-            var dto = _mapper.Map<UserMinimumInfo>(user);
-            dto.UrlUser = GetUrl(nameof(UserController.GetUser), new { username = user.Username });
-            return dto;
+            if (userDto == null)
+            {
+                return null;
+            }
+
+            var result = _mapper.Map<UserMinimumInfo>(userDto);
+            result.UrlUser = GetUrl(nameof(UserController.GetUser), new { username = userDto.Username });
+            return result;
         }
 
+        public UserMinimumInfo UserMinimumInfoDto(User user)
+        {
+            if (user == null)
+            {
+                return null;
+            }
+
+            var result = _mapper.Map<UserMinimumInfo>(user);
+            result.UrlUser = GetUrl(nameof(UserController.GetUser), new { username = user.Username });
+            return result;
+        }
+
+        public UserMinimumInfo? AllUsers(UserMinimumDetailsDto userDto)
+        {
+            if (userDto == null)
+            {
+                return null;
+            }
+
+            var result = _mapper.Map<UserMinimumInfo>(userDto);
+            result.UrlUser = GetUrl(nameof(UserController.GetUser), new { username = userDto.Username });
+            return result;
+        }
 
         //Helper method to generate URLs
 
-        protected string? GetUrl(string endpointName, object values)
+        private string? GetUrl(string endpointName, object values)
         {
             var httpContext = _httpContextAccessor.HttpContext;
+            if (httpContext == null) return null;
             return _linkGenerator.GetUriByName(httpContext, endpointName, values);
         }
     }

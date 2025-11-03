@@ -80,6 +80,12 @@ Accept: application/json
 
 ###
 
+GET {{WebServiceLayer_HostAddress}}/api/User
+Accept: application/json
+
+
+###
 DELETE {{WebServiceLayer_HostAddress}}/api/User/testuser
 Accept: application/json
+Authorization: Bearer 
 
