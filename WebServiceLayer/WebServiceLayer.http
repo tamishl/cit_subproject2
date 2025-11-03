@@ -13,7 +13,15 @@ Content-Type: application/json
 }
 ###
 
-GET {{WebServiceLayer_HostAddress}}/api/titles?page=2&pageSize=12
+POST {{WebServiceLayer_HostAddress}}/api/titles?page=12&pageSize=5
+Accept: application/json
+Content-Type: application/json
+{ 
+  "search": "potter radcliff"
+}
+###
+
+GET {{WebServiceLayer_HostAddress}}/api/titles?page=2&pageSize=2
 Accept: application/json
 
 ###

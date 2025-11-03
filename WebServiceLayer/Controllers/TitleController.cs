@@ -1,6 +1,7 @@
 ﻿using DataServiceLayer.Domains;
 using DataServiceLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebServiceLayer.DTOs;
 
 namespace WebServiceLayer.Controllers;
@@ -48,6 +49,7 @@ public class TitleController : BaseController
         //return Ok(_titleService.GetTitlesByName(pageSettings.Page, pageSettings.PageSize, search));
     }
 
+
     [HttpPost(Name = nameof(GetTitlesBySearch))]
     public IActionResult GetTitlesBySearch([FromQuery] PageSettings pageSettings, [FromBody] SearchDto? searchDto = null)
     {
@@ -62,7 +64,8 @@ public class TitleController : BaseController
 
         else
         {
-            var result = _titleService.GetTitlesBySearch(searchDto.Search);
+            var pagedResult = _titleService.GetTitlesBySearch(searchDto.Search, pageSettings.Page, pageSettings.PageSize);
+            var result = CreatePaging(nameof(GetTitlesBySearch), pagedResult.Items, pagedResult.TotalNumberOfItems.Value, pageSettings);
 
             return Ok(result);
         }

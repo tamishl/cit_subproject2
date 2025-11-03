@@ -16,7 +16,7 @@ namespace DataServiceLayer.Services.Interfaces;
     PagedResultDto<TitleSummaryDto>? GetTitlesByGenre(string genreId, int page = 0, int pageSize = 10);
     PagedResultDto<TitleSummaryDto> GetTitlesByType(string typeId, int page = 0, int pageSize = 10);
 
-    ICollection<TitleSummaryDto> GetTitlesBySearch(string search);
+    PagedResultDto<TitleSummaryDto> GetTitlesBySearch(string search, int page = 0, int pageSize = 10);
     TitleDto? GetTitle(string id);
     int GetTitleCount();
 

@@ -153,10 +153,18 @@ public class TitleService: ITitleService
     }
 
 
-    public ICollection<TitleSummaryDto> GetTitlesBySearch(string search)
+    public PagedResultDto<TitleSummaryDto> GetTitlesBySearch(string search, int page = 0, int pageSize = 10)
     {
-        return _dbContext.TitleReadDtos.FromSqlInterpolated($"SELECT * FROM best_match_variadic(VARIADIC {search.Split(' ')})")
-                                       .Select(t => t.Adapt<TitleSummaryDto>()).ToList();
+        var query = _dbContext.TitleReadDtos.FromSqlInterpolated($"SELECT * FROM best_match_variadic(VARIADIC {search.Split(' ')})");
+        var items = query.Skip(page * pageSize)
+                         .Take(pageSize)
+                         .Select(t => t.Adapt<TitleSummaryDto>()).ToList();
+
+        return new PagedResultDto<TitleSummaryDto>
+        {
+            Items = items,
+            TotalNumberOfItems = query.Count()
+        };
     }
 
 
