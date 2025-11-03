@@ -1,4 +1,5 @@
 ﻿using DataServiceLayer.Domains;
+using DataServiceLayer.DTOs;
 using MapsterMapper;
 using WebServiceLayer.Controllers;
 using WebServiceLayer.DTOs;
@@ -20,7 +21,7 @@ namespace WebServiceLayer.Services
 
         //Mapping 
 
-        private CreateUser CreateUserDto(User user)
+        public CreateUser CreateUserDto(User user)
         {
             var dto = _mapper.Map<CreateUser>(user);
             dto.UrlNewUser = GetUrl(nameof(UserController.GetUser), new {username = user.Username });
@@ -28,6 +29,19 @@ namespace WebServiceLayer.Services
             return dto;
         }
 
+        public UserMinimumInfo UserMinimumInfoDto(User user)
+        {
+            var dto = _mapper.Map<UserMinimumInfo>(user);
+            dto.UrlUser = GetUrl(nameof(UserController.GetUser), new { username = user.Username });
+            return dto;
+        }
+
+        public UserMinimumInfo UserMinimumInfoDto(UserMinimumDetailsDto user)
+        {
+            var dto = _mapper.Map<UserMinimumInfo>(user);
+            dto.UrlUser = GetUrl(nameof(UserController.GetUser), new { username = user.Username });
+            return dto;
+        }
 
 
         //Helper method to generate URLs

@@ -19,12 +19,14 @@ public class UserController : BaseController
 
     private IUserService _userService;
     private Hashing _hashing;
+    private Mapper _mapper;
 
-    public UserController(IUserService userService, LinkGenerator linkGenerator, Hashing hashing)
+    public UserController(IUserService userService, LinkGenerator linkGenerator, Hashing hashing, Mapper mapper)
         : base(linkGenerator)
     {
         _userService = userService;
         _hashing = hashing;
+        _mapper = mapper;
     }
 
     [HttpPost]
@@ -50,9 +52,9 @@ public class UserController : BaseController
 
         var newUser = _userService.CreateUser(userDto.Username, hashPassword, userDto.FirstName, userDto.LastName, userDto.Email, salt);
 
+        var createdUserDto = _mapper.CreateUserDto(newUser);
 
-
-        return Ok(newUser);
+        return Ok(createdUserDto);
     }
 
     [HttpPut]
@@ -115,12 +117,15 @@ public class UserController : BaseController
         {
             return NotFound("User does not exist");
         }
-        return Ok(user);
+
+        var userDto = _mapper.CreateUserDto(user);
+
+        return Ok(userDto);
     }
 
     [HttpGet]
 
-    public IActionResult GetAllUsers()
+    public IActionResult GetAllUsers(PageSettings pageSettings)
     {
         var users = _userService.GetAllUsers();
 
@@ -128,6 +133,10 @@ public class UserController : BaseController
         {
             return NotFound("No users found");
         }
+
+        var usersDto = users.Items.Select(u => _mapper.CreateUserDto(u)).ToList();
+
+        var result = CreatePaging(nameof(GetAllUsers), users.Items, users.TotalNumberOfItems.Value, pageSettings);
 
         return Ok(users);
     }
