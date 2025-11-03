@@ -114,17 +114,24 @@ public class TitleService: ITitleService
             t.RuntimeMinutes,
             t.Plot,
             t.Poster,
-            TypeId = t.Type.Id,
+            t.TypeId,
             Genres = t.Genres.Select(g => g.Id),
-            Cast = t.Cast.Select(c => c.Person.Id)
+            Writers = t.Writers.Select(w => w.Name),
+            Directors = t.Directors.Select(d => d.Name),
+            Cast = t.Cast.Select(c => new PersonCastDto
+            {
+                Name = c.Person.Name,
+                ProfessionId = c.Profession.Id
+            }),
+            TitleRating = new TitleRatingDto
+            {
+                TitleId = t.TitleRating.TitleId,
+                AverageRating = t.TitleRating.AverageRating,
+                Votes = t.TitleRating.Votes
+            }
+                                }).AsSplitQuery()
+                                  .FirstOrDefault(t => t.Id == id).Adapt<TitleDto>();
 
-        })
-                                //.Include(t => t.Ratings)
-                                //.Include(t => t.Cast)
-                            
-                                //.Include(t => t.Directors)
-                                //.Include(t => t.Writers)
-                                .FirstOrDefault(t => t.Id == id).Adapt<TitleDto>();
     }
 
     public PagedResultDto<TitleSummaryDto>? GetAkas(string id)

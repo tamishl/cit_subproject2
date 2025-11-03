@@ -19,28 +19,28 @@ Console.WriteLine(titleService.GetTitle("tt0081912"));
 
 //Console.WriteLine(titleService.GetTitlesByName("Potter").Items[1].PrimaryTitle);
 
-userService.DeleteUser(username: "Blommo");
-userService.CreateUser(username: "Blommo",
-                                             email: "minMail@hotmail.com",
-                                             password: "etpassword",
-                                             salt: "saltmedmeresalt");
+//userService.DeleteUser(username: "Blommo");
+//userService.CreateUser(username: "Blommo",
+//                                             email: "minMail@hotmail.com",
+//                                             password: "etpassword",
+//                                             salt: "saltmedmeresalt");
 
-//Create
-bookmarkService.CreateBookmarkTitle("tt33042905", "Blommo", "KÆÆÆFt den er fed!");
+////Create
+//bookmarkService.CreateBookmarkTitle("tt33042905", "Blommo", "KÆÆÆFt den er fed!");
 
-//Get
+////Get
 
-var result = bookmarkService.GetBookmarkedTitles("Blommo");
+//var result = bookmarkService.GetBookmarkedTitles("Blommo");
 
-string json = JsonSerializer.Serialize(result, new JsonSerializerOptions
-{
-    WriteIndented = true
-});
+//string json = JsonSerializer.Serialize(result, new JsonSerializerOptions
+//{
+//    WriteIndented = true
+//});
 
-Console.WriteLine(json);
+//Console.WriteLine(json);
 
 
-userService.DeleteUser(username: "Blommo");
+//userService.DeleteUser(username: "Blommo");
 /*
 
 

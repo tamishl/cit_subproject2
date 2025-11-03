@@ -17,8 +17,8 @@ public class Person
     public ICollection<Profession>? Professions { get; set; }
 
     public ICollection<Title>? KnownFor { get; set; }
-    public ICollection<Title>? DirectorOf { get; set; }
-    public ICollection<Title>? WriterOf { get; set; }
+    //public ICollection<Title>? DirectorOf { get; set; }
+    //public ICollection<Title>? WriterOf { get; set; }
 
     public ICollection<BookmarkPerson>? Bookmarks { get; set; }
 }
