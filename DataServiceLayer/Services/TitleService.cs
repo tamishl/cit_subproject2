@@ -146,6 +146,14 @@ public class TitleService: ITitleService
     }
 
 
+    public ICollection<string> GetTitlesBySearch(string search)
+    {
+        return _dbContext.TitleReadDtos.FromSqlInterpolated($"SELECT * FROM best_match_variadic({search})")
+                                .Select(t => t.PrimaryTitle)
+                                .ToList();
+    }
+
+
     public int GetTitleCount()
     {
             return _dbContext.Titles.Count();

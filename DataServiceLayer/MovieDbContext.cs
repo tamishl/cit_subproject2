@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DataServiceLayer.Domains;
+using DataServiceLayer.ReadDTOs;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DataServiceLayer.Domains;
 
 namespace DataServiceLayer;
 
@@ -24,6 +25,8 @@ public class MovieDbContext : DbContext
     public DbSet<Search> Searches { get; set; }
     public DbSet<BookmarkPerson> BookmarkPersons { get; set; }
     public DbSet<BookmarkTitle> BookmarkTitles { get; set; }
+
+    public DbSet<TitleReadDto> TitleReadDtos { get; set; }
 
 
     // connect to db
@@ -242,6 +245,13 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<TitleRating>().Property(tr => tr.AverageRating).HasColumnName("average_rating");
         modelBuilder.Entity<TitleRating>().Property(tr => tr.Votes).HasColumnName("votes");
         modelBuilder.Entity<TitleRating>().HasKey(tr => tr.TitleId);
+
+
+
+        // map TitleReadDto to output best_match_variadic()
+        modelBuilder.Entity<TitleReadDto>().HasNoKey();
+        modelBuilder.Entity<TitleReadDto>().Property(trd => trd.PrimaryTitle).HasColumnName("match_title");
+        modelBuilder.Entity<TitleReadDto>().Property(trd => trd.Matches).HasColumnName("matches");
 
 
 
