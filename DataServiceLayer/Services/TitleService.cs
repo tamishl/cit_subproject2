@@ -134,6 +134,13 @@ public class TitleService: ITitleService
 
     }
 
+
+
+    public TitleSummaryDto? GetTitleSummary(string id)
+    {
+        return _dbContext.Titles.FirstOrDefault(t => t.Id == id).Adapt<TitleSummaryDto>();
+    }
+
     public PagedResultDto<TitleSummaryDto>? GetAkas(string id)
     {
         //return _dbContext.Titles.FirstOrDefault(t => t.Id == id).Akas
@@ -143,6 +150,21 @@ public class TitleService: ITitleService
         //                        };
 
         return null;
+    }
+
+
+    public PagedResultDto<TitleSummaryDto> GetTitlesBySearch(string search, int page = 0, int pageSize = 10)
+    {
+        var query = _dbContext.TitleReadDtos.FromSqlInterpolated($"SELECT * FROM best_match_variadic(VARIADIC {search.Split(' ')})");
+        var items = query.Skip(page * pageSize)
+                         .Take(pageSize)
+                         .Select(t => t.Adapt<TitleSummaryDto>()).ToList();
+
+        return new PagedResultDto<TitleSummaryDto>
+        {
+            Items = items,
+            TotalNumberOfItems = query.Count()
+        };
     }
 
 

@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DataServiceLayer.Domains;
+using DataServiceLayer.ReadDTOs;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DataServiceLayer.Domains;
 
 namespace DataServiceLayer;
 
@@ -26,7 +27,7 @@ public class MovieDbContext : DbContext
     public DbSet<BookmarkPerson> BookmarkPersons { get; set; }
     public DbSet<BookmarkTitle> BookmarkTitles { get; set; }
 
-    
+    public DbSet<TitleReadDto> TitleReadDtos { get; set; }
 
 
     // connect to db
@@ -247,7 +248,23 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<PersonRating>().Property(pr => pr.Votes).HasColumnName("votes");
         modelBuilder.Entity<PersonRating>().HasKey(pr => pr.PersonId);
 
-     
+        // map TitleReadDto to output best_match_variadic()
+        modelBuilder.Entity<TitleReadDto>().HasNoKey();
+        //modelBuilder.Entity<TitleReadDto>().Property(trd => trd.TitleId).HasColumnName("match_title_id");
+        modelBuilder.Entity<TitleReadDto>().Property(t => t.Id).HasColumnName("title_id");
+        modelBuilder.Entity<TitleReadDto>().Property(t => t.PrimaryTitle).HasColumnName("primary_title");
+        modelBuilder.Entity<TitleReadDto>().Property(t => t.OriginalTitle).HasColumnName("original_title");
+        modelBuilder.Entity<TitleReadDto>().Property(t => t.IsAdult).HasColumnName("is_adult");
+        modelBuilder.Entity<TitleReadDto>().Property(t => t.StartYear).HasColumnName("start_year");
+        modelBuilder.Entity<TitleReadDto>().Property(t => t.EndYear).HasColumnName("end_year");
+        modelBuilder.Entity<TitleReadDto>().Property(t => t.RuntimeMinutes).HasColumnName("runtime_minutes");
+        modelBuilder.Entity<TitleReadDto>().Property(t => t.Plot).HasColumnName("plot");
+        modelBuilder.Entity<TitleReadDto>().Property(t => t.Poster).HasColumnName("poster");
+        modelBuilder.Entity<TitleReadDto>().Property(t => t.TypeId).HasColumnName("title_type_id");
+
+
+
+
 
         /////////////////////////////////////////////////////////
         ///                        USER                       ///                   
