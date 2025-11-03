@@ -12,7 +12,7 @@ public class Person
     public string Name { get; set; }
     public string? BirthYear { get; set; }
     public string? DeathYear { get; set; }
-    public ICollection<Casting>? Castings { get; set; }
+    public ICollection<Casting> Castings { get; set; }
 
     public ICollection<Profession>? Professions { get; set; }
 

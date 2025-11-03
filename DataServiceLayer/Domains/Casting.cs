@@ -16,5 +16,7 @@ public class Casting
     public string? Job { get; set; }
     public string? CharacterName { get; set; }
     public int Ordering { get; set; }
+    // public string Department { get; set; } 
+    // public string Role { get; set; }
 
 }
