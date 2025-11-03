@@ -29,13 +29,6 @@ namespace WebServiceLayer.Services
             return dto;
         }
 
-        public UserMinimumInfo UserMinimumInfoDto(User user)
-        {
-            var dto = _mapper.Map<UserMinimumInfo>(user);
-            dto.UrlUser = GetUrl(nameof(UserController.GetUser), new { username = user.Username });
-            return dto;
-        }
-
         public UserMinimumInfo UserMinimumInfoDto(UserMinimumDetailsDto user)
         {
             var dto = _mapper.Map<UserMinimumInfo>(user);
