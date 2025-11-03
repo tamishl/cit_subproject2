@@ -59,7 +59,6 @@ namespace DataServiceLayer.Services
             return _dbContext.Users.FirstOrDefault(u => EF.Functions.ILike(u.Email, email));
         }
 
-
         public PagedResultDto<UserMinimumDetailsDto> GetAllUsers(int page = 0, int pageSize = 10)
         {
             var query = _dbContext.Users
@@ -80,7 +79,6 @@ namespace DataServiceLayer.Services
                 TotalNumberOfItems = query.Count()
             };
         }
-
         public bool UpdateUser(User updatedUser)
         {
             var existingUser = GetUser(updatedUser.Username);

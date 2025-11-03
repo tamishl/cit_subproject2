@@ -50,6 +50,8 @@ public class UserController : BaseController
 
         var newUser = _userService.CreateUser(userDto.Username, hashPassword, userDto.FirstName, userDto.LastName, userDto.Email, salt);
 
+
+
         return Ok(newUser);
     }
 
@@ -104,6 +106,49 @@ public class UserController : BaseController
 
         return Ok("User deleted successfully");
     }
+
+    [HttpGet("{username}", Name = nameof(GetUser))]
+    public IActionResult GetUser(string username)
+    {
+        var user = _userService.GetUser(username);
+        if (user == null)
+        {
+            return NotFound("User does not exist");
+        }
+        return Ok(user);
+    }
+
+    [HttpGet]
+
+    public IActionResult GetAllUsers()
+    {
+        var users = _userService.GetAllUsers();
+
+        if (users.TotalNumberOfItems == 0)
+        {
+            return NotFound("No users found");
+        }
+
+        return Ok(users);
+    }
+
+    [HttpPut("{username}")]
+
+    public IActionResult UpdateUser(string username)
+    {
+        var user = _userService.GetUser(username);
+
+        if(user == null)
+        {
+            return NotFound("No user found");
+        }
+
+        var updatedUser = _userService.UpdateUser(user);
+
+        return Ok(updatedUser);
+    }
+
+
 
 
 

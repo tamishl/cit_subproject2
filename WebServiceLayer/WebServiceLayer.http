@@ -31,6 +31,10 @@ Accept: application/json
 
 ###
 
+##################################
+############# USER ###############
+##################################
+
 Post {{WebServiceLayer_HostAddress}}/api/User
 Accept: application/json
 Content-Type: application/json
@@ -54,5 +58,11 @@ Content-Type: application/json
 
 ###
 
+GET {{WebServiceLayer_HostAddress}}/api/User/testuser
+Accept: application/json
+
+###
+
 DELETE {{WebServiceLayer_HostAddress}}/api/User/testuser
 Accept: application/json
+
