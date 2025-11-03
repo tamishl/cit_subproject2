@@ -134,6 +134,13 @@ public class TitleService: ITitleService
 
     }
 
+
+
+    public TitleSummaryDto? GetTitleSummary(string id)
+    {
+        return _dbContext.Titles.FirstOrDefault(t => t.Id == id).Adapt<TitleSummaryDto>();
+    }
+
     public PagedResultDto<TitleSummaryDto>? GetAkas(string id)
     {
         //return _dbContext.Titles.FirstOrDefault(t => t.Id == id).Akas
@@ -146,11 +153,10 @@ public class TitleService: ITitleService
     }
 
 
-    public ICollection<string> GetTitlesBySearch(string search)
+    public ICollection<TitleSummaryDto> GetTitlesBySearch(string search)
     {
-        return _dbContext.TitleReadDtos.FromSqlInterpolated($"SELECT * FROM best_match_variadic({search})")
-                                .Select(t => t.PrimaryTitle)
-                                .ToList();
+        return _dbContext.TitleReadDtos.FromSqlInterpolated($"SELECT * FROM best_match_variadic(VARIADIC {search.Split(' ')})")
+                                       .Select(t => t.Adapt<TitleSummaryDto>()).ToList();
     }
 
 

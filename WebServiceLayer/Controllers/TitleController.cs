@@ -25,7 +25,7 @@ public class TitleController : BaseController
     [HttpGet(Name = nameof(GetTitlesByName))]
     public IActionResult GetTitlesByName([FromQuery] PageSettings pageSettings, string? search = null)
     {
-        // without serach parameter, return all titles paged
+        // without serach value, return all titles paged
         if (string.IsNullOrEmpty(search))
         {
             var pagedResult = _titleService.GetTitles(pageSettings.Page, pageSettings.PageSize);
@@ -36,7 +36,7 @@ public class TitleController : BaseController
 
         }
 
-        // with search parameter, return filtered titles paged
+        // with search value, return filtered titles paged
         else
         {
             var pagedResult = _titleService.GetTitlesByName(search, pageSettings.Page, pageSettings.PageSize);
@@ -46,6 +46,26 @@ public class TitleController : BaseController
             return Ok(result);
         }
         //return Ok(_titleService.GetTitlesByName(pageSettings.Page, pageSettings.PageSize, search));
+    }
+
+    [HttpPost(Name = nameof(GetTitlesBySearch))]
+    public IActionResult GetTitlesBySearch([FromQuery] PageSettings pageSettings, [FromBody] SearchDto? searchDto = null)
+    {
+        if (searchDto is null)
+        {
+            var pagedResult = _titleService.GetTitles(pageSettings.Page, pageSettings.PageSize);
+
+            var result = CreatePaging(nameof(GetTitlesBySearch), pagedResult.Items, pagedResult.TotalNumberOfItems.Value, pageSettings);
+
+            return Ok(result);
+        }
+
+        else
+        {
+            var result = _titleService.GetTitlesBySearch(searchDto.Search);
+
+            return Ok(result);
+        }
     }
 
 
