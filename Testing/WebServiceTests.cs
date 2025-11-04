@@ -40,10 +40,15 @@ public class WebServiceTests
 
     // Helper methods
     // Debug line: //Console.WriteLine($"---DATA IN <method>{data}---");
+
     (JArray, HttpStatusCode) GetArray(string url)
     {
         var client = new HttpClient();
+
+        // HttpResponseMessage: statuscode, headers and content
         var response = client.GetAsync(url).Result;
+
+        // Read body as string: raw JSON text
         var result = response.Content.ReadAsStringAsync().Result;
 
         // Convert JSON string to JObject
@@ -53,5 +58,23 @@ public class WebServiceTests
 
 
         return (data, response.StatusCode);
+    }
+
+
+
+    (JObject, HttpStatusCode) GetObject(string url)
+    {
+        var client = new HttpClient();
+
+        // HttpResponseMessage: statuscode, headers and content
+        var response = client.GetAsync(url).Result;
+
+        // Read body as string: raw JSON text
+        var data = response.Content.ReadAsStringAsync().Result;
+
+        // Convert JSON string to .NET object
+        // Cast .NET object into a JSON object
+        // Add status code
+        return ((JObject)JsonConvert.DeserializeObject(data), response.StatusCode);
     }
 }
