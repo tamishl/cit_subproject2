@@ -1,13 +1,6 @@
 ﻿using DataServiceLayer.Domains;
 using DataServiceLayer.DTOs;
 using Microsoft.EntityFrameworkCore;
-using Npgsql.Internal.Postgres;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using Mapster;
 using DataServiceLayer.Services.Interfaces;
 
