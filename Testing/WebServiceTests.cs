@@ -15,6 +15,10 @@ public class WebServiceTests
     private const string TitlesApi = "https://localhost:5555/api/titles";
 
 
+    /////////////////////////////////////////////////////////
+    ///                        DATA                       ///                   
+    /////////////////////////////////////////////////////////
+
 
     [Fact]
     public void TitlesApi_GetWithNoArguments_OkAndTenTitles()
@@ -22,21 +26,32 @@ public class WebServiceTests
         var (data, statusCode) = GetArray(TitlesApi);
 
         Assert.Equal(HttpStatusCode.OK, statusCode);
-        Assert.Equal(8, data.Count);
-        Assert.Equal("Beverages", data.First()["name"]);
-        Assert.Equal("Seafood", data.Last()["name"]);
+        Assert.Equal(10, data.Count);
+        Assert.Equal("The Twilight Zone", data.First()["primaryTitle"]);
     }
+
+
+
+
+
+
 
 
 
     // Helper methods
-
-    (JObject, HttpStatusCode) GetObject(string url)
+    // Debug line: //Console.WriteLine($"---DATA IN <method>{data}---");
+    (JArray, HttpStatusCode) GetArray(string url)
     {
         var client = new HttpClient();
-        var response = client.GetAsync(url).Result; //HttpResponseMessage: statuscode, headers and content
-        var data = response.Content.ReadAsStringAsync().Result;
-        return ((JObject)JsonConvert.DeserializeObject(data), response.StatusCode);
-    }
+        var response = client.GetAsync(url).Result;
+        var result = response.Content.ReadAsStringAsync().Result;
 
+        // Convert JSON string to JObject
+        // Cast to JSON object so it has an indexer (plain objects don't)
+        var jObj = JsonConvert.DeserializeObject<JObject>(result);
+        var data = (JArray)jObj["items"];
+
+
+        return (data, response.StatusCode);
+    }
 }

@@ -13,9 +13,6 @@ var bookmarkService = new BookmarkService();
 var userService = new UserService();
 
 var result= titleService.GetTitlesBySearch("potter radcliff");
-foreach (var r in result)
-{ Console.WriteLine(r.PrimaryTitle);
-};
 
 //Console.WriteLine(titleService.GetTitle("tt0081912"));
 //Console.WriteLine(titleService.GetTitlesByGenre("Fantasy"));
