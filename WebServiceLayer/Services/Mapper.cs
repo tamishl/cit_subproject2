@@ -70,6 +70,22 @@ namespace WebServiceLayer.Services
             return result;
         }
 
+        //Rating mapping
+        public UserRatingDto? RatingDto(RatingDto ratingDto)
+        {
+            if (ratingDto == null)
+            {
+                return null;
+            }
+            var result = _mapper.Map<UserRatingDto>(ratingDto);
+            result.TitleUrl = GetUrl(nameof(TitleController.GetTitle), new { title = ratingDto.TitleId });
+
+            return result;
+        }
+
+
+
+
         //Helper method to generate URLs
 
         private string? GetUrl(string endpointName, object values)

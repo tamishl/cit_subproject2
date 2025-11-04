@@ -52,7 +52,7 @@ Accept: application/json
 ############# USER ###############
 ##################################
 
-Post {{WebServiceLayer_HostAddress}}/api/User
+Post {{WebServiceLayer_HostAddress}}/api/users
 Accept: application/json
 Content-Type: application/json
 { 
@@ -65,7 +65,7 @@ Content-Type: application/json
 
 ###
 
-PUT {{WebServiceLayer_HostAddress}}/api/User
+PUT {{WebServiceLayer_HostAddress}}/api/users
 Accept: application/json
 Content-Type: application/json
 { 
@@ -75,17 +75,21 @@ Content-Type: application/json
 
 ###
 
-GET {{WebServiceLayer_HostAddress}}/api/User/testuser
+GET {{WebServiceLayer_HostAddress}}/api/users/testuser
 Accept: application/json
 
 ###
 
-GET {{WebServiceLayer_HostAddress}}/api/User
+GET {{WebServiceLayer_HostAddress}}/api/users
 Accept: application/json
 
 
 ###
-DELETE {{WebServiceLayer_HostAddress}}/api/User/testuser
+DELETE {{WebServiceLayer_HostAddress}}/api/users/testuser
 Accept: application/json
 Authorization: Bearer 
 
+###
+
+GET {{WebServiceLayer_HostAddress}}/api/users/testuser/ratings
+Accept: application/json

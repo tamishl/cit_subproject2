@@ -13,7 +13,7 @@ using WebServiceLayer.Services;
 namespace WebServiceLayer.Controllers;
 
 
-[Route("api/User")]
+[Route("api/users")]
 [ApiController]
 
 public class UserController : BaseController

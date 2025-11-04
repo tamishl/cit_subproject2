@@ -36,44 +36,50 @@ namespace DataServiceLayer.Services
                 throw new ArgumentException($"Rating value must be between 1 and 10.");
             }
 
-            var existingRating = _dbContext.Ratings.FirstOrDefault(r => r.TitleId == titleId && r.Username == username);
-            
+            var rating = _dbContext.Ratings.FirstOrDefault(r => r.TitleId == titleId && r.Username == username);
 
-            if (existingRating != null)
+
+            if (rating != null)
             {
                 //if rating exists, update it. I dont know what is the best way of doing it. 
-                var existingRatingValue = existingRating.RatingValue;
-                existingRating.RatingValue = ratingValue;
-                existingRating.RatingDate = DateTime.UtcNow;
-                UpdateTitleRatings(existingRating, false, existingRatingValue,ratingValue);
-                UpdatePersonRatings(existingRating);
-                _dbContext.SaveChanges();
-                return existingRating;
+                var oldValue = rating.RatingValue;
+                rating.RatingValue = ratingValue;
+                rating.RatingDate = DateTime.UtcNow;
+                UpdateTitleRatings(rating, false, oldValue, ratingValue);
+                UpdatePersonRatings(rating);
+            }
+            else
+            {
+                // if rating does not exist, create it
+                rating = new Rating
+                
+                {
+                    TitleId = titleId,
+                    Username = username,
+                    RatingValue = ratingValue,
+                    RatingDate = DateTime.UtcNow
+                };
+
+                _dbContext.Ratings.Add(rating);
+                UpdateTitleRatings(rating, true);
+                UpdatePersonRatings(rating);
             }
 
-            // if rating does not exist, create it
-            var rating = new Rating
-            {
-                TitleId = titleId,
-                Username = username,
-                RatingValue = ratingValue,
-                RatingDate = DateTime.UtcNow
-            };
-
-            _dbContext.Ratings.Add(rating);
-            UpdateTitleRatings(rating, true);
-            UpdatePersonRatings(rating);
             _dbContext.SaveChanges();
+
             return rating;
         }
 
         public PagedResultDto<RatingDto> GetUserRatings(string username, int page = 0, int pageSize = 10)
         {
-            var query = _dbContext.Ratings.Where(r => r.Username == username)
+            var query = _dbContext.Ratings.Include(r => r.Title)
+                                          .Where(r => r.Username == username)
+                                          .ToList()
                                           .GroupBy(r => r.TitleId)
                                           .Select(g => g.OrderByDescending(r => r.RatingDate).First())
                                           .Select(r => new RatingDto
                                           {
+                                              TitleId = r.TitleId,
                                               TitleName = r.Title.PrimaryTitle,
                                               Poster = r.Title.Poster,
                                               Plot = r.Title.Plot,
@@ -97,6 +103,7 @@ namespace DataServiceLayer.Services
                                           .Select(g => g.OrderByDescending(r => r.RatingDate).First())
                                           .Select(r => new RatingDto
                                           {
+                                              TitleId = r.TitleId,
                                               TitleName = r.Title.PrimaryTitle,
                                               Poster = r.Title.Poster,
                                               Plot = r.Title.Plot,

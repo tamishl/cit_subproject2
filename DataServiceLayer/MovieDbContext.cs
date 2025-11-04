@@ -336,7 +336,7 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Rating>().Property(r => r.TitleId).HasColumnName("title_id");
         modelBuilder.Entity<Rating>().Property(r => r.Id).HasColumnName("rating_id");
         modelBuilder.Entity<Rating>().Property(r => r.RatingValue).HasColumnName("rating");
-        modelBuilder.Entity<Rating>().Property(r => r.RatingDate).HasColumnName("ratetime");
+        modelBuilder.Entity<Rating>().Property(r => r.RatingDate).HasColumnName("rate_time");
 
 
         // map Rating to User
