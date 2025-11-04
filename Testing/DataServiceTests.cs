@@ -46,122 +46,135 @@ public class DataServiceTests
         Assert.Equal(20, result.Items.Count);
         Assert.Equal(3998, result.TotalNumberOfItems);
     }
+    
+    [Fact]
+    public void CreateUser_Valid_CreatesAndReturnsNewUser()
+    {
+        var userService = new DataServiceLayer.Services.UserService();
+        var newUser = userService.CreateUser(username: "Blommo",
+                                             firstName: null,
+                                             lastName: null,
+                                             email: "minMail@hotmail.com",
+                                             password: "etpassword",
+                                             salt: "saltmedmeresalt");
+        Assert.Equal("Blommo", newUser.Username);
+        Assert.True(newUser.Email != null);
 
-    //[Fact]
-    //public void CreateUser_Valid_CreatesAndReturnsNewUser()
-    //{
-    //    var userService = new DataServiceLayer.Services.UserService();
-    //    var newUser = userService.CreateUser(username: "Blommo",
-    //                                         email: "minMail@hotmail.com",
-    //                                         password: "etpassword",
-    //                                         salt: "saltmedmeresalt");
-    //    Assert.Equal("Blommo", newUser.Username);
-    //    Assert.True(newUser.Email != null);
+        userService.DeleteUser(newUser);
+    }
 
-    //    userService.DeleteUser(newUser);
-    //}
+    
+    [Fact]
+    public void GetUser_Valid_ReturnsUser()
+    {
+        var userService = new DataServiceLayer.Services.UserService();
+        userService.CreateUser(username: "Blommo",
+                               email: "minMail@hotmail.com",
+                               firstName: null,
+                               lastName: null,
+                               password: "etpassword",
+                               salt: "saltmedmeresalt");
 
-    //[Fact]
-    //public void GetUser_Valid_ReturnsUser()
-    //{
-    //    var userService = new DataServiceLayer.Services.UserService();
-    //    userService.CreateUser(username: "Blommo",
-    //                           email: "minMail@hotmail.com",
-    //                           password: "etpassword",
-    //                           salt: "saltmedmeresalt");
+        var user = userService.GetUser("Blommo");
+        Assert.Equal("minMail@hotmail.com", user.Email);
+        Assert.True(user.Password != null);
 
-    //    var user = userService.GetUser("Blommo");
-    //    Assert.Equal("minMail@hotmail.com", user.Email);
-    //    Assert.True(user.Password != null);
+        userService.DeleteUser(user);
+    }
 
-    //    userService.DeleteUser(user);
-    //}
+    [Fact]
+    public void GetAllUsers_Valid_ReturnsAListOfUserMinimumDetialsDto()
+    {
+        var userService = new DataServiceLayer.Services.UserService();
+        userService.CreateUser(username: "Jalte",
+                              email: "Har@hotmail.com",
+                              firstName: null,
+                              lastName: null,
+                              password: "etpassword",
+                              salt: "saltmedmeresalt");
 
-    //[Fact]
-    //public void GetAllUsers_Valid_ReturnsAListOfUserMinimumDetialsDto()
-    //{
-    //    var userService = new DataServiceLayer.Services.UserService();
-    //    userService.CreateUser(username: "Jalte",
-    //                          email: "Har@hotmail.com",
-    //                          password: "etpassword",
-    //                          salt: "saltmedmeresalt");
+        userService.CreateUser(username: "Blommo",
+                              email: "minMail@hotmail.com",
+                              firstName: null,
+                              lastName: null,
+                              password: "etpassword",
+                              salt: "saltmedmeresaltmedendnumeresalt");
 
-    //    userService.CreateUser(username: "Blommo",
-    //                          email: "minMail@hotmail.com",
-    //                          password: "etpassword",
-    //                          salt: "saltmedmeresaltmedendnumeresalt");
+        var users = userService.GetAllUsers();
+        Assert.Equal(users.Items.Count, 2);
+        Assert.Equal("Jalte", users.Items[1].Username);
 
-    //    var users = userService.GetAllUsers();
-    //    Assert.Equal(users.Items.Count, 2);
-    //    Assert.Equal("Jalte", users.Items[1].Username);
+        userService.DeleteUser("Blommo");
+        userService.DeleteUser("Jalte");
+    }
 
-    //    userService.DeleteUser("Blommo");
-    //    userService.DeleteUser("Jalte");
-    //}
+    [Fact]
+    public void UpdateUser_Valid_UpdatesUserAndReturnsTrue()
+    {
+        var userService = new UserService();
 
-    //[Fact]
-    //public void UpdateUser_Valid_UpdatesUserAndReturnsTrue()
-    //{
-    //    var userService = new UserService();
-
-    //    // Arrange: create a user
-    //    var user = userService.CreateUser(username: "Blommo",
-    //                                      email: "minMail@hotmail.com",
-    //                                      password: "etpassword",
-    //                                      salt: "saltmedmeresaltmedendnumeresalt"
-    //    );
-
-
-    //    user.Email = "updated@example.com";
-    //    user.FirstName = "UpdatedName";
-
-    //    var result = userService.UpdateUser(user);
-
-    //    Assert.True(result);
-
-    //    var updatedUser = userService.GetUser("Blommo");
-    //    Assert.NotNull(updatedUser);
-    //    Assert.Equal("updated@example.com", updatedUser.Email);
-    //    Assert.Equal("UpdatedName", updatedUser.FirstName);
-
-    //    // Cleanup
-    //    userService.DeleteUser("Blommo");
-    //}
-
-    //[Fact]
-    //public void DeleteUser_Valid_DeletesUserAndReturnsTrue()
-    //{
-    //    var userService = new UserService();
-
-    //    // Arrange: create a user
-    //    userService.CreateUser(
-    //        username: "DeleteMe",
-    //        email: "deleteme@example.com",
-    //        password: "password",
-    //        salt: "salt"
-    //    );
-
-    //    // Act: delete the user
-    //    var result = userService.DeleteUser("DeleteMe");
-
-    //    // Assert
-    //    Assert.True(result);
-
-    //    var deletedUser = userService.GetUser("DeleteMe");
-    //    Assert.Null(deletedUser);
-    //}
-
-    //[Fact]
-    //public void DeleteUser_NonExistent_ReturnsFalse()
-    //{
-    //    var userService = new UserService();
-
-    //    // Act: try to delete a user that doesn't exist
-    //    var result = userService.DeleteUser("ThePhantom");
-
-    //    // Assert
-    //    Assert.False(result);
-    //}
+        // Arrange: create a user
+        var user = userService.CreateUser(username: "Blommo",
+                                          email: "minMail@hotmail.com",
+                                          firstName: null,
+                                          lastName: null,
+                                          password: "etpassword",
+                                          salt: "saltmedmeresaltmedendnumeresalt"
+        );
 
 
+        user.Email = "updated@example.com";
+        user.FirstName = "UpdatedName";
+
+        var result = userService.UpdateUser(user);
+
+        Assert.True(result);
+
+        var updatedUser = userService.GetUser("Blommo");
+        Assert.NotNull(updatedUser);
+        Assert.Equal("updated@example.com", updatedUser.Email);
+        Assert.Equal("UpdatedName", updatedUser.FirstName);
+
+        // Cleanup
+        userService.DeleteUser("Blommo");
+    }
+
+    [Fact]
+    public void DeleteUser_Valid_DeletesUserAndReturnsTrue()
+    {
+        var userService = new UserService();
+
+        // Arrange: create a user
+        userService.CreateUser(username: "Blommo",
+                               email: "minMail@hotmail.com",
+                               firstName: null,
+                               lastName: null,
+                               password: "etpassword",
+                               salt: "saltmedmeresaltmedendnumeresalt"
+        );
+       
+
+        // Act: delete the user
+        var result = userService.DeleteUser("Blommo");
+
+        // Assert
+        Assert.True(result);
+
+        var deletedUser = userService.GetUser("Blommo");
+        Assert.Null(deletedUser);
+    }
+
+    [Fact]
+    public void DeleteUser_NonExistent_ReturnsFalse()
+    {
+        var userService = new UserService();
+
+        // Act: try to delete a user that doesn't exist
+        var result = userService.DeleteUser("ThePhantom");
+
+        // Assert
+        Assert.False(result);
+    }
+
+    
 }

@@ -36,13 +36,17 @@ namespace DataServiceLayer.Services
                 throw new ArgumentException($"Rating value must be between 1 and 10.");
             }
 
-            var existingRating = _dbContext.Ratings.FirstOrDefault(r => r.Title.Id == titleId && r.User.Username == username);
+            var existingRating = _dbContext.Ratings.FirstOrDefault(r => r.TitleId == titleId && r.Username == username);
+            
 
             if (existingRating != null)
             {
                 //if rating exists, update it. I dont know what is the best way of doing it. 
+                var existingRatingValue = existingRating.RatingValue;
                 existingRating.RatingValue = ratingValue;
                 existingRating.RatingDate = DateTime.UtcNow;
+                UpdateTitleRatings(existingRating, false, existingRatingValue,ratingValue);
+                UpdatePersonRatings(existingRating);
                 _dbContext.SaveChanges();
                 return existingRating;
             }
@@ -50,22 +54,23 @@ namespace DataServiceLayer.Services
             // if rating does not exist, create it
             var rating = new Rating
             {
-                Title = _dbContext.Titles.First(t => t.Id == titleId),
-                User = _dbContext.Users.First(u => u.Username == username),
+                TitleId = titleId,
+                Username = username,
                 RatingValue = ratingValue,
                 RatingDate = DateTime.UtcNow
             };
+
             _dbContext.Ratings.Add(rating);
-            UpdateTitleRatings(rating);
+            UpdateTitleRatings(rating, true);
             UpdatePersonRatings(rating);
             _dbContext.SaveChanges();
             return rating;
         }
 
-        public PagedResultDto<RatingDto> GetUserRatings(User user, int page = 0, int pageSize = 10)
+        public PagedResultDto<RatingDto> GetUserRatings(string username, int page = 0, int pageSize = 10)
         {
-            var query = _dbContext.Ratings.Where(r => r.User == user)
-                                          .GroupBy(r => r.Title.Id)
+            var query = _dbContext.Ratings.Where(r => r.Username == username)
+                                          .GroupBy(r => r.TitleId)
                                           .Select(g => g.OrderByDescending(r => r.RatingDate).First())
                                           .Select(r => new RatingDto
                                           {
@@ -88,7 +93,7 @@ namespace DataServiceLayer.Services
 
         public PagedResultDto<RatingDto> GetAllRatings(int page = 0, int pageSize = 10)
         {
-            var query = _dbContext.Ratings.GroupBy(r => new { r.Title.Id, r.User.Username })
+            var query = _dbContext.Ratings.GroupBy(r => new { r.TitleId, r.Username })
                                           .Select(g => g.OrderByDescending(r => r.RatingDate).First())
                                           .Select(r => new RatingDto
                                           {
@@ -111,7 +116,7 @@ namespace DataServiceLayer.Services
 
         public bool DeleteRating(string titleId, string username)
         {
-            var rating = _dbContext.Ratings.FirstOrDefault(r => r.User.Username == username && r.Title.Id == titleId);
+            var rating = _dbContext.Ratings.FirstOrDefault(r => r.Username == username && r.TitleId == titleId);
 
             if (rating == null)
             {
@@ -123,36 +128,38 @@ namespace DataServiceLayer.Services
             return true;
         }
 
-        public void UpdateTitleRatings(Rating rating)
+        public void UpdateTitleRatings(Rating rating, bool isNewRating,int existingRatingValue = 0, int newRatingValue = 0)
         {
 
-            var titleRating = _dbContext.TitleRatings.FirstOrDefault(t => t.TitleId == rating.Title.Id);
+            var titleRating = _dbContext.TitleRatings.FirstOrDefault(t => t.TitleId == rating.TitleId);
 
             if (titleRating == null)
             {
                 var firstRating = new TitleRating
                 {
-                    Title = rating.Title,
+                    TitleId = rating.TitleId,
                     AverageRating = rating.RatingValue,
                     Votes = 1
                 };
                 _dbContext.TitleRatings.Add(firstRating);
             }
 
-            else
+            if (isNewRating)
             {
                 titleRating.Votes += 1;
                 titleRating.AverageRating = (titleRating.AverageRating * (titleRating.Votes - 1) + rating.RatingValue) / titleRating.Votes;
             }
 
-            //_dbContext.SaveChanges();
-
+            else 
+            {
+                titleRating.AverageRating = (titleRating.AverageRating * titleRating.Votes + (newRatingValue - existingRatingValue)) / titleRating.Votes;
+            } 
         }
 
         public void UpdatePersonRatings(Rating rating)
         {
             // get all persons in the rated title
-            var persons = _dbContext.Castings.Where(c => c.TitleId == rating.Title.Id)
+            var persons = _dbContext.Castings.Where(c => c.TitleId == rating.TitleId)
                                                .Select(c => c.PersonId)
                                                .ToList();
 
