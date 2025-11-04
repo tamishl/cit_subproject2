@@ -34,15 +34,15 @@ namespace DataServiceLayer.Services
                 throw new ArgumentException($"User with username {username} does not exist.");
             }
 
-            if (_dbContext.BookmarkTitles.Any(b => b.Title.Id == titleId && b.User.Username == username))
+            if (_dbContext.BookmarkTitles.Any(b => b.TitleId == titleId && b.Username == username))
             {
                 throw new ArgumentException($"Bookmark for Title ID {titleId} by User {username} already exists.");
             }
 
             var bookmark = new BookmarkTitle
             {
-                Title = _dbContext.Titles.First(t => t.Id == titleId),
-                User = _dbContext.Users.First(u => u.Username == username),
+                TitleId = titleId,
+                Username = username,
                 CreatedAt = DateTime.UtcNow,
                 Note = note
             };
@@ -52,13 +52,14 @@ namespace DataServiceLayer.Services
         }
         public PagedResultDto<BookmarkTitleDto> GetBookmarkedTitles(string username, int page = 0, int pageSize = 10)
         {
-            var query = _dbContext.BookmarkTitles.Where(bt => bt.User.Username == username)
+            var query = _dbContext.BookmarkTitles.Where(bt => bt.Username == username)
                                                  .Select(bt => new BookmarkTitleDto
                                                  {
                                                      PrimaryTitle = bt.Title.PrimaryTitle,
-                                                     Username = bt.User.Username,
+                                                     Username = username,
                                                      Plot = bt.Title.Plot,
                                                      Poster = bt.Title.Poster,
+                                                     CreatedAt = bt.CreatedAt
                                                  });
             var items = query.OrderByDescending(bt => bt.CreatedAt)
                              .Skip(page * pageSize)
@@ -77,10 +78,11 @@ namespace DataServiceLayer.Services
             var query = _dbContext.BookmarkTitles.Select(bt => new BookmarkTitleDto
                                                  {
                                                      PrimaryTitle = bt.Title.PrimaryTitle,
-                                                     Username = bt.User.Username,
+                                                     Username = bt.Username,
                                                      Plot = bt.Title.Plot,
                                                      Poster = bt.Title.Poster,
-                                                 });
+                                                     CreatedAt = bt.CreatedAt
+            });
             var items = query.OrderByDescending(bt => bt.CreatedAt)
                              .Skip(page * pageSize)
                              .Take(pageSize)
@@ -95,7 +97,7 @@ namespace DataServiceLayer.Services
 
         public BookmarkTitle? DeleteBookmarkTitle(string titleId, string username)
         {
-            var bookmark = _dbContext.BookmarkTitles.FirstOrDefault(bt => bt.Title.Id == titleId && bt.User.Username == username);
+            var bookmark = _dbContext.BookmarkTitles.FirstOrDefault(bt => bt.TitleId == titleId && bt.Username == username);
 
             if (bookmark != null)
             {
@@ -108,7 +110,7 @@ namespace DataServiceLayer.Services
 
         public bool UpdateBookmarkTitle(string titleId, string username, string note) // could change to BookmarkTitle as parameter
         {
-            var bookmark = _dbContext.BookmarkTitles.FirstOrDefault(bt => bt.Title.Id == titleId && bt.User.Username == username);
+            var bookmark = _dbContext.BookmarkTitles.FirstOrDefault(bt => bt.TitleId == titleId && bt.Username == username);
 
             if (bookmark != null)
             {
@@ -135,15 +137,15 @@ namespace DataServiceLayer.Services
                 throw new ArgumentException($"User with username {username} does not exist.");
             }
 
-            if (_dbContext.BookmarkPersons.Any(b => b.Person.Id == personId && b.User.Username == username))
+            if (_dbContext.BookmarkPersons.Any(b => b.PersonId == personId && b.Username == username))
             {
                 throw new ArgumentException($"Bookmark for Person ID {personId} by User {username} already exists.");
             }
 
             var bookmark = new BookmarkPerson
             {
-                Person = _dbContext.Persons.First(p => p.Id == personId),
-                User = _dbContext.Users.First(u => u.Username == username),
+                PersonId = personId,
+                Username = username,
                 Note = note,
                 CreatedAt = DateTime.UtcNow
             };
@@ -155,10 +157,10 @@ namespace DataServiceLayer.Services
 
         public PagedResultDto<BookmarkPersonDto> GetBookmarkPersons(string username, int page = 0, int pageSize = 10)
         {
-            var query = _dbContext.BookmarkPersons.Where(bp => bp.User.Username == username)
+            var query = _dbContext.BookmarkPersons.Where(bp => bp.Username == username)
                                                   .Select(bp => new BookmarkPersonDto
                                                   {
-                                                     Username = bp.User.Username,
+                                                     Username = username,
                                                      Name = bp.Person.Name,
                                                      CreatedAt = bp.CreatedAt
                                                   });
@@ -178,7 +180,7 @@ namespace DataServiceLayer.Services
         {
             var query = _dbContext.BookmarkPersons.Select(bp => new BookmarkPersonDto
             {
-                Username = bp.User.Username,
+                Username = bp.Username,
                 Name = bp.Person.Name,
                 CreatedAt = bp.CreatedAt
             });
@@ -196,7 +198,7 @@ namespace DataServiceLayer.Services
 
         public BookmarkPerson? DeleteBookmarkPerson(string personId, string username)
         {
-            var bookmark = _dbContext.BookmarkPersons.FirstOrDefault(bp => bp.Person.Id == personId && bp.User.Username == username);
+            var bookmark = _dbContext.BookmarkPersons.FirstOrDefault(bp => bp.PersonId == personId && bp.Username == username);
 
             if (bookmark != null)
             {
@@ -204,12 +206,12 @@ namespace DataServiceLayer.Services
                 _dbContext.SaveChanges();
                 return bookmark;
             }
-            return bookmark;
+            return null;
         }
 
         public bool UpdateBookmarkPerson(string personId, string username, string note)
         {
-            var bookmark = _dbContext.BookmarkPersons.FirstOrDefault(bp => bp.Person.Id == personId && bp.User.Username == username);
+            var bookmark = _dbContext.BookmarkPersons.FirstOrDefault(bp => bp.PersonId == personId && bp.Username == username);
 
             if (bookmark != null)
             {

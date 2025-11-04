@@ -1,12 +1,13 @@
-﻿using System;
+﻿using DataServiceLayer.Domains;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataServiceLayer.Domains;
+namespace DataServiceLayer.ReadDTOs;
 
-public class Title
+public class TitleReadDto
 {
     public string Id { get; set; }
     public string PrimaryTitle { get; set; }
@@ -17,19 +18,5 @@ public class Title
     public int? RuntimeMinutes { get; set; }
     public string? Plot { get; set; }
     public string? Poster { get; set; }
-    public TitleRating TitleRating { get; set; }
-    public TitleType Type { get; set; }
     public string TypeId { get; set; }
-    public ICollection<Genre>? Genres { get; set; }
-    public ICollection<Casting>? Cast { get; set; }
-    public ICollection<Person>? Directors { get; set; }
-    public ICollection<Person>? Writers { get; set; }
-    public ICollection<Person>? KnownForPersons { get; set; }
-
-    public ICollection<TitleAka> Akas { get; set; }
-
-
-
-
-
 }

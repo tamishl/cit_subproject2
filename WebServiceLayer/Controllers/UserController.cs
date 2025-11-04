@@ -1,5 +1,7 @@
 ﻿using DataServiceLayer.Domains;
+using DataServiceLayer.Services;
 using DataServiceLayer.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -19,12 +21,16 @@ public class UserController : BaseController
 
     private IUserService _userService;
     private Hashing _hashing;
+    private Mapper _mapper;
+    private IConfiguration _configuration;
 
-    public UserController(IUserService userService, LinkGenerator linkGenerator, Hashing hashing)
+    public UserController(IUserService userService, LinkGenerator linkGenerator, Hashing hashing, Mapper mapper, IConfiguration configuration)
         : base(linkGenerator)
     {
         _userService = userService;
         _hashing = hashing;
+        _mapper = mapper;
+        _configuration = configuration;
     }
 
     [HttpPost]
@@ -50,7 +56,9 @@ public class UserController : BaseController
 
         var newUser = _userService.CreateUser(userDto.Username, hashPassword, userDto.FirstName, userDto.LastName, userDto.Email, salt);
 
-        return Ok(newUser);
+        var createdUserDto = _mapper.CreateUserDto(newUser);
+
+        return CreatedAtAction(nameof(GetUser), new { username = createdUserDto.Username }, createdUserDto);
     }
 
     [HttpPut]
@@ -72,11 +80,11 @@ public class UserController : BaseController
 
         var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, user.Username)
-
+            new Claim(ClaimTypes.Name, user.Username),
+            //new Claim(ClaimTypes.Role, user.Role)
         };
 
-        var secret = "asdjkfhasdjkfhasdjkl234123fhasjkldhfasdjkfhasdjkfhasdjkl234123fhasjkldhf";
+        var secret = _configuration.GetSection("Auth:Secret").Value;
         var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(secret));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
         var token = new JwtSecurityToken(
@@ -92,7 +100,7 @@ public class UserController : BaseController
 
 
     [HttpDelete("{username}")]
-
+    [Authorize]
     public IActionResult DeleteUser(string username)
     {
         var user = _userService.GetUser(username);
@@ -104,6 +112,57 @@ public class UserController : BaseController
 
         return Ok("User deleted successfully");
     }
+
+    [HttpGet("{username}", Name = nameof(GetUser))]
+    public IActionResult GetUser(string username)
+    {
+        var user = _userService.GetUser(username);
+        if (user == null)
+        {
+            return NotFound("User does not exist");
+        }
+
+        var userDto = _mapper.CreateUserDto(user);
+
+        return Ok(userDto);
+    }
+
+    [HttpGet(Name = nameof(GetAllUsers))]
+
+    public IActionResult GetAllUsers([FromQuery] PageSettings pageSettings)
+    {
+        var users = _userService.GetAllUsers(pageSettings.Page, pageSettings.PageSize);
+
+        if (users.TotalNumberOfItems == 0)
+        {
+            return NotFound("No users found");
+        }
+
+        var usersDto = users.Items?.Select(u => _mapper.AllUsers(u)).ToList();
+
+
+        var result = CreatePaging(nameof(GetAllUsers), usersDto, users.TotalNumberOfItems.Value, pageSettings);
+        
+        return Ok(result);
+    }
+
+    [HttpPut("{username}")]
+
+    public IActionResult UpdateUser(string username)
+    {
+        var user = _userService.GetUser(username);
+
+        if(user == null)
+        {
+            return NotFound("No user found");
+        }
+
+        var updatedUser = _userService.UpdateUser(user);
+
+        return Ok(updatedUser);
+    }
+
+
 
 
 

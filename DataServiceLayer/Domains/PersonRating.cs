@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace DataServiceLayer.Domains
 {
-    public class BookmarkPerson
+    public class PersonRating
     {
         public Person Person { get; set; }
         public string PersonId { get; set; }
-        public User User { get; set; }
-        public string Username { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public string Note { get; set; }
+        public double AverageRating { get; set; }
+        public int Votes { get; set; }
     }
 }

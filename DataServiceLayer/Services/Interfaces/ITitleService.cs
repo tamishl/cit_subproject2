@@ -14,9 +14,9 @@ namespace DataServiceLayer.Services.Interfaces;
     PagedResultDto<TitleSummaryDto> GetTitles(int page = 0, int pageSize = 10);
     PagedResultDto<TitleSummaryDto> GetTitlesByName(string search, int page = 0 , int pageSize = 10);
     PagedResultDto<TitleSummaryDto>? GetTitlesByGenre(string genreId, int page = 0, int pageSize = 10);
-    public PagedResultDto<TitleSummaryDto> GetTitlesByType(string typeId, int page = 0, int pageSize = 10);
+    PagedResultDto<TitleSummaryDto> GetTitlesByType(string typeId, int page = 0, int pageSize = 10);
 
-    //PagedResultDto<TitleAkaSummaryDto> GetAkas(string id, int page = 0, int pageSize = 10);
+    PagedResultDto<TitleSummaryDto> GetTitlesBySearch(string search, int page = 0, int pageSize = 10);
     TitleDto? GetTitle(string id);
     int GetTitleCount();
 

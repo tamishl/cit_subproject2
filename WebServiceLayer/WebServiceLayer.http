@@ -5,7 +5,23 @@ Accept: application/json
 
 ###
 
-GET {{WebServiceLayer_HostAddress}}/api/titles?page=2&pageSize=12
+POST {{WebServiceLayer_HostAddress}}/api/titles/
+Accept: application/json
+Content-Type: application/json
+{ 
+  "search": "potter radcliff"
+}
+###
+
+POST {{WebServiceLayer_HostAddress}}/api/titles?page=12&pageSize=5
+Accept: application/json
+Content-Type: application/json
+{ 
+  "search": "potter radcliff"
+}
+###
+
+GET {{WebServiceLayer_HostAddress}}/api/titles?page=2&pageSize=2
 Accept: application/json
 
 ###
@@ -29,7 +45,12 @@ Accept: application/json
 GET {{WebServiceLayer_HostAddress}}/api/titles/ttmadeup100 
 Accept: application/json
 
+
 ###
+
+##################################
+############# USER ###############
+##################################
 
 Post {{WebServiceLayer_HostAddress}}/api/User
 Accept: application/json
@@ -54,5 +75,17 @@ Content-Type: application/json
 
 ###
 
+GET {{WebServiceLayer_HostAddress}}/api/User/testuser
+Accept: application/json
+
+###
+
+GET {{WebServiceLayer_HostAddress}}/api/User
+Accept: application/json
+
+
+###
 DELETE {{WebServiceLayer_HostAddress}}/api/User/testuser
 Accept: application/json
+Authorization: Bearer 
+
