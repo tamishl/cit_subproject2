@@ -27,7 +27,7 @@ public class Title
     public ICollection<Person>? KnownForPersons { get; set; }
 
     public ICollection<BookmarkTitle>? Bookmarks { get; set; }
-
+    public ICollection<Rating>? Ratings { get; set; }
     public ICollection<TitleAka> Akas { get; set; }
 
 
