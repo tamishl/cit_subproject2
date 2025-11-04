@@ -95,7 +95,6 @@ namespace DataServiceLayer.Services
             }
 
       
-            existingUser.Username = updatedUser.Username;
             existingUser.Email = updatedUser.Email;
             existingUser.FirstName = updatedUser.FirstName;
             existingUser.LastName = updatedUser.LastName;

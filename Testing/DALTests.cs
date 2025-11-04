@@ -47,12 +47,14 @@ public class DALTests
         Assert.Equal(20, result.Items.Count);
         Assert.Equal(3998, result.TotalNumberOfItems);
     }
-
+    
     [Fact]
     public void CreateUser_Valid_CreatesAndReturnsNewUser()
     {
         var userService = new DataServiceLayer.Services.UserService();
         var newUser = userService.CreateUser(username: "Blommo",
+                                             firstName: null,
+                                             lastName: null,
                                              email: "minMail@hotmail.com",
                                              password: "etpassword",
                                              salt: "saltmedmeresalt");
@@ -62,12 +64,15 @@ public class DALTests
         userService.DeleteUser(newUser);
     }
 
+    
     [Fact]
     public void GetUser_Valid_ReturnsUser()
     {
         var userService = new DataServiceLayer.Services.UserService();
         userService.CreateUser(username: "Blommo",
                                email: "minMail@hotmail.com",
+                               firstName: null,
+                               lastName: null,
                                password: "etpassword",
                                salt: "saltmedmeresalt");
 
@@ -84,11 +89,15 @@ public class DALTests
         var userService = new DataServiceLayer.Services.UserService();
         userService.CreateUser(username: "Jalte",
                               email: "Har@hotmail.com",
+                              firstName: null,
+                              lastName: null,
                               password: "etpassword",
                               salt: "saltmedmeresalt");
 
         userService.CreateUser(username: "Blommo",
                               email: "minMail@hotmail.com",
+                              firstName: null,
+                              lastName: null,
                               password: "etpassword",
                               salt: "saltmedmeresaltmedendnumeresalt");
 
@@ -108,6 +117,8 @@ public class DALTests
         // Arrange: create a user
         var user = userService.CreateUser(username: "Blommo",
                                           email: "minMail@hotmail.com",
+                                          firstName: null,
+                                          lastName: null,
                                           password: "etpassword",
                                           salt: "saltmedmeresaltmedendnumeresalt"
         );
@@ -135,20 +146,22 @@ public class DALTests
         var userService = new UserService();
 
         // Arrange: create a user
-        userService.CreateUser(
-            username: "DeleteMe",
-            email: "deleteme@example.com",
-            password: "password",
-            salt: "salt"
+        userService.CreateUser(username: "Blommo",
+                               email: "minMail@hotmail.com",
+                               firstName: null,
+                               lastName: null,
+                               password: "etpassword",
+                               salt: "saltmedmeresaltmedendnumeresalt"
         );
+       
 
         // Act: delete the user
-        var result = userService.DeleteUser("DeleteMe");
+        var result = userService.DeleteUser("Blommo");
 
         // Assert
         Assert.True(result);
 
-        var deletedUser = userService.GetUser("DeleteMe");
+        var deletedUser = userService.GetUser("Blommo");
         Assert.Null(deletedUser);
     }
 
@@ -164,5 +177,5 @@ public class DALTests
         Assert.False(result);
     }
 
-
+    
 }
