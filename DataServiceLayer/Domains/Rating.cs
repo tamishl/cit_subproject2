@@ -13,5 +13,7 @@ public class Rating
     public int RatingValue { get; set; }
     public DateTime RatingDate { get; set; }
     public Title Title { get; set; }
+    public string TitleId { get; set; }
     public User User { get; set; }
+    public string Username { get; set; }
 }
