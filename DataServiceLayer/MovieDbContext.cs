@@ -278,7 +278,7 @@ public class MovieDbContext : DbContext
         // map PersonBookmark to Person and User
         modelBuilder.Entity<BookmarkPerson>()
                             .HasOne(bp => bp.Person)
-                            .WithMany(p => p.Bookmarks)
+                            .WithMany()
                             .HasForeignKey(bp => bp.PersonId);
 
         modelBuilder.Entity<BookmarkPerson>()
@@ -299,7 +299,7 @@ public class MovieDbContext : DbContext
         // map PersonBookmark to Person and User
         modelBuilder.Entity<BookmarkTitle>()
                             .HasOne(bt => bt.Title)
-                            .WithMany(t => t.Bookmarks)
+                            .WithMany()
                             .HasForeignKey(bt => bt.TitleId);
 
         modelBuilder.Entity<BookmarkTitle>()
