@@ -343,7 +343,7 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Rating>()
                             .HasOne(r => r.User)
                             .WithMany(u => u.RatedTitles)
-                            .HasForeignKey(r => r.U);
+                            .HasForeignKey(r => r.Username);
 
         // map Rating to Title
         modelBuilder.Entity<Rating>()
