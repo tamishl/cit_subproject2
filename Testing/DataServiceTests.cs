@@ -3,7 +3,7 @@ using DataServiceLayer.Services;
 
 namespace Testing;
 
-public class DALTests
+public class DataServiceTests
 {
     [Fact]
     public void GetTitles_Valid_ReturnsTitles()
@@ -35,7 +35,6 @@ public class DALTests
         Assert.Empty(result.Items);
         Assert.Equal(0, result.TotalNumberOfItems);
     }
-
 
 
 
@@ -123,7 +122,7 @@ public class DALTests
                                           salt: "saltmedmeresaltmedendnumeresalt"
         );
 
-        
+
         user.Email = "updated@example.com";
         user.FirstName = "UpdatedName";
 
