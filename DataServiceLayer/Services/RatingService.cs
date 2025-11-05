@@ -83,7 +83,7 @@ namespace DataServiceLayer.Services
                                               TitleName = r.Title.PrimaryTitle,
                                               Poster = r.Title.Poster,
                                               Plot = r.Title.Plot,
-                                              Rating = r.RatingValue
+                                              RatingValue = r.RatingValue
                                           });
 
             var items = query.Skip(page * pageSize)
@@ -107,7 +107,7 @@ namespace DataServiceLayer.Services
                                               TitleName = r.Title.PrimaryTitle,
                                               Poster = r.Title.Poster,
                                               Plot = r.Title.Plot,
-                                              Rating = r.RatingValue
+                                              RatingValue = r.RatingValue
                                           });
 
             var items = query.Skip(page * pageSize)

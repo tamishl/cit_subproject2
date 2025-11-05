@@ -15,7 +15,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataServiceLayer\DataServiceLayer.csproj" />
+    <ProjectReference Include="..\DataServiceLayer\DataAccesLayer.csproj" />
+    <ProjectReference Include="..\WebServiceLayer\WebServiceLayer.csproj" />
   </ItemGroup>
 
   <ItemGroup>

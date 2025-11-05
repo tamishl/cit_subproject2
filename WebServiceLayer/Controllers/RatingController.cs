@@ -48,24 +48,6 @@ public class RatingController : BaseController
         return Ok(result);
     }
 
-    
-    /*
-    [HttpPost]
 
-    public IActionResult CreateRating(string username, Rating rating)
-    {
-        var createdRating = _ratingService.CreateRating(rating.TitleId, username, rating.RatingValue);
-
-        if (createdRating == null)
-        {
-            return BadRequest("Could not create rating");
-        }
-
-      
-
-        return CreatedAtAction(nameof(GetRatings), new { username = username }, ratingDto);
-
-    }
-    */
 
 }
