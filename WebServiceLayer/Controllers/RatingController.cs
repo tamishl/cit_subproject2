@@ -39,11 +39,11 @@ public class RatingController : BaseController
     public IActionResult GetRatings(string username, [FromQuery] PageSettings pageSettings)
     {
         var ratings = _ratingService.GetUserRatings(username, pageSettings.Page, pageSettings.PageSize);
-
+  
 
         var ratingDto = ratings.Items.Select(r => _mapper.RatingDto(r)).ToList();
 
-        var result = CreatePaging(nameof(GetRatings), ratingDto, ratings.TotalNumberOfItems.Value, pageSettings);
+        var result = CreatePaging(nameof(GetRatings), ratingDto, ratings.TotalNumberOfItems.Value, pageSettings, new { username = username });
 
         return Ok(result);
     }

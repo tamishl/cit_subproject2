@@ -31,12 +31,27 @@ public class WebServiceTests
     }
 
 
-    public void TitlesApi_GetTitleValidArgs_OkAndTitle()
-    {
-        string title = "tt37976775";
-        var (data, statusCode) = GetObject($"{TitlesApi}/")
-    
-    }
+    //public void TitlesApi_GetTitleValidArgs_OkAndTitle()
+    //{
+    //    string title = "tt37976775";
+    //    var (data, statusCode) = GetObject($"{TitlesApi}/")
+
+    //}
+
+
+
+    //[Fact]
+    //public void RatingsApi_GetRatings()
+    //{
+    //    var (data, statusCode) = GetArray(RatingsApi);
+
+    //    Assert.Equal(HttpStatusCode.OK, statusCode);
+    //    Assert.Equal(10, data.Count);
+    //    Assert.Equal("The Twilight Zone", data.First()["primaryTitle"]);
+    //}
+
+
+
 
 
 

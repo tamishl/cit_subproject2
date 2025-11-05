@@ -46,7 +46,7 @@ public class TitleController : BaseController
 
             return Ok(result);
         }
-        //return Ok(_titleService.GetTitlesByName(pageSettings.Page, pageSettings.PageSize, search));
+      
     }
 
 
