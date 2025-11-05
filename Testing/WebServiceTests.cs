@@ -21,13 +21,21 @@ public class WebServiceTests
 
 
     [Fact]
-    public void TitlesApi_GetWithNoArguments_OkAndTenTitles()
+    public void TitlesApi_GetWithNoArguments_OkAndTitles()
     {
         var (data, statusCode) = GetArray(TitlesApi);
 
         Assert.Equal(HttpStatusCode.OK, statusCode);
         Assert.Equal(10, data.Count);
         Assert.Equal("The Twilight Zone", data.First()["primaryTitle"]);
+    }
+
+
+    public void TitlesApi_GetTitleValidArgs_OkAndTitle()
+    {
+        string title = "tt37976775";
+        var (data, statusCode) = GetObject($"{TitlesApi}/")
+    
     }
 
 
