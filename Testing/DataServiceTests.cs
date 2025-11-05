@@ -176,5 +176,51 @@ public class DataServiceTests
         Assert.False(result);
     }
 
+    [Fact]
+    public void GetPerson_Valid_ReturnsPersonDetails()
+    {
+        var personService = new DataServiceLayer.Services.PersonService();
+        var result = personService.GetPerson("nm0000138");
+
+        Assert.NotNull(result);
+        Assert.Equal("Leonardo DiCaprio", result.Name);
+        Assert.Equal("1974", result.BirthYear);
+        Assert.NotNull(result.KnownForTitles); 
+        Assert.Contains("Inception", result.KnownForTitles);
+    }
+
+    [Fact]
+    public void GetPeopleByName_Valid_ReturnsPagedPeople()
+    {
+        var personService = new DataServiceLayer.Services.PersonService();
+        var result = personService.GetPeopleByName("Leonardo", 0, 10);
+
+        Assert.NotNull(result);
+        Assert.NotNull(result.Items);
+        Assert.Single(result.Items);
+        Assert.Equal("Leonardo DiCaprio", result.Items[0].Name);
+    }
     
+    [Fact]
+    public void GetPeopleByName_InValid_ReturnsNoPeople()
+   {
+       var personService = new DataServiceLayer.Services.PersonService();
+       var result = personService.GetPeopleByName("abc", 0, 10);
+
+    
+        Assert.NotNull(result);// Ensure result is not null
+
+    
+       Assert.NotNull(result.Items);// Ensure Items is not null before checking if it is empty
+       Assert.Empty(result.Items);
+
+    
+       Assert.Equal(0, result.TotalNumberOfItems);
+    }
+
+
+
+
+
+
 }

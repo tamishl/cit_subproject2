@@ -14,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
 builder.Services.AddScoped<ITitleService, TitleService>();
 builder.Services.AddSingleton<IUserService, UserService>();
+builder.Services.AddSingleton<IRatingService, RatingService>();
 builder.Services.AddSingleton(new Hashing());
 
 var secret = builder.Configuration.GetSection("Auth:Secret").Value;
