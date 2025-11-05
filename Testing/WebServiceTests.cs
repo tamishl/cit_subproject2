@@ -13,6 +13,7 @@ public class WebServiceTests
 
 {
     private const string TitlesApi = "https://localhost:5555/api/titles";
+    private readonly HttpClient _client = new HttpClient();
 
 
     /////////////////////////////////////////////////////////
@@ -66,16 +67,16 @@ public class WebServiceTests
 
     (JArray, HttpStatusCode) GetArray(string url)
     {
-        var client = new HttpClient();
+        
 
         // HttpResponseMessage: statuscode, headers and content
-        var response = client.GetAsync(url).Result;
+        var response = _client.GetAsync(url).Result;
 
         // Read body as string: raw JSON text
         var result = response.Content.ReadAsStringAsync().Result;
 
-        // Convert JSON string to JObject
-        // Cast to JSON object so it has an indexer (plain objects don't)
+        // Convert JSON string to JObject so it has an indexer (plain objects don't)
+        // Cast to JSON Array
         var jObj = JsonConvert.DeserializeObject<JObject>(result);
         var data = (JArray)jObj["items"];
 
@@ -87,10 +88,9 @@ public class WebServiceTests
 
     (JObject, HttpStatusCode) GetObject(string url)
     {
-        var client = new HttpClient();
 
         // HttpResponseMessage: statuscode, headers and content
-        var response = client.GetAsync(url).Result;
+        var response = _client.GetAsync(url).Result;
 
         // Read body as string: raw JSON text
         var data = response.Content.ReadAsStringAsync().Result;
