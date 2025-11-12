@@ -5,6 +5,9 @@ namespace Testing;
 
 public class DataLayerTests
 {
+    /////////////////////////////////////////////////////////
+    ///                       TITLE                       ///                   
+    /////////////////////////////////////////////////////////
     [Fact]
     public void GetTitles_Valid_ReturnsTitles()
     {
@@ -46,7 +49,30 @@ public class DataLayerTests
         Assert.Equal(20, result.Items.Count);
         Assert.Equal(3998, result.TotalNumberOfItems);
     }
-    
+
+
+    [Fact]
+    public void GetTitle_Valid_ReturnsTitle()
+    {
+        var titleService = new TitleService();
+        var result = titleService.GetTitle("tt0063929");
+        Assert.Equal("Monty Python's Flying Circus", result.PrimaryTitle);
+        Assert.Equal("1969", result.StartYear);
+    }
+
+    [Fact]
+    public void GetTitle_InValid_ReturnsNull()
+    {
+        var titleService = new TitleService();
+        var result = titleService.GetTitle("ttmadeup");
+        Assert.Null(result);
+    }
+
+
+
+    /////////////////////////////////////////////////////////
+    ///                         USER                      ///                   
+    /////////////////////////////////////////////////////////
     [Fact]
     public void CreateUser_Valid_CreatesAndReturnsNewUser()
     {
@@ -176,6 +202,11 @@ public class DataLayerTests
         Assert.False(result);
     }
 
+
+    /////////////////////////////////////////////////////////
+    ///                        PERSON                     ///                   
+    /////////////////////////////////////////////////////////
+
     [Fact]
     public void GetPerson_Valid_ReturnsPersonDetails()
     {
@@ -206,15 +237,7 @@ public class DataLayerTests
    {
        var personService = new PersonService();
        var result = personService.GetPeopleByName("abc", 0, 10);
-
-    
-        Assert.NotNull(result);// Ensure result is not null
-
-    
-       Assert.NotNull(result.Items);// Ensure Items is not null before checking if it is empty
-       Assert.Empty(result.Items);
-
-    
+       Assert.Empty(result.Items);    
        Assert.Equal(0, result.TotalNumberOfItems);
     }
 

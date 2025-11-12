@@ -26,7 +26,7 @@ public class Title
     public ICollection<Person>? Writers { get; set; }
     public ICollection<Person>? KnownForPersons { get; set; }
 
-    public ICollection<TitleAka> Akas { get; set; }
+    public ICollection<TitleAka>? Akas { get; set; }
 
 
 

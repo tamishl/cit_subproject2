@@ -116,7 +116,7 @@ public class TitleService: ITitleService
                 Name = c.Person.Name,
                 ProfessionId = c.Profession.Id
             }),
-            TitleRating = new TitleRatingDto
+            TitleRating = t.TitleRating == null ? null : new TitleRatingDto
             {
                 TitleId = t.TitleRating.TitleId,
                 AverageRating = t.TitleRating.AverageRating,
