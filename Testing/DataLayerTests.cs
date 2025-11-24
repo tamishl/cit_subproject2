@@ -221,13 +221,14 @@ public class DataLayerTests
     }
 
     [Fact]
-    public void GetPersonsByName_Valid_ReturnsPagedPeople()
+    public void GetPersonsByName_Valid_ReturnsPersons()
     {
         var personService = new PersonService();
         var result = personService.GetPersonsByName("Leonardo", 0, 10);
 
         Assert.NotNull(result);
-        Assert.Single(result.Items);
+        Assert.Equal(10, result.Items.Count);
+        Assert.Equal(198, result.TotalNumberOfItems);
         Assert.Equal("Leonardo DiCaprio", result.Items[0].Name);
     }
     
@@ -235,7 +236,7 @@ public class DataLayerTests
     public void GetPeopleByName_InValid_ReturnsNoPeople()
    {
        var personService = new PersonService();
-       var result = personService.GetPersonsByName("abc", 0, 10);
+       var result = personService.GetPersonsByName("aaaaaaaa", 0, 10);
        Assert.Empty(result.Items);    
        Assert.Equal(0, result.TotalNumberOfItems);
     }

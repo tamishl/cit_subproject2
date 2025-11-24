@@ -1,4 +1,5 @@
-﻿using DataServiceLayer.Domains;
+﻿using DataAccesLayer.ReadDTOs;
+using DataServiceLayer.Domains;
 using DataServiceLayer.ReadDTOs;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -28,6 +29,7 @@ public class MovieDbContext : DbContext
     public DbSet<BookmarkTitle> BookmarkTitles { get; set; }
 
     public DbSet<TitleReadDto> TitleReadDtos { get; set; }
+    public DbSet<PersonReadDto> PersonReadDtos { get; set; }
 
 
     // connect to db
@@ -196,7 +198,7 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<TitleType>().Property(tt => tt.Id).HasColumnName("title_type_id");
 
 
-        //map Title to TitleAka
+        // map Title to TitleAka
         modelBuilder.Entity<Title>()
                             .HasMany(t => t.Akas)
                             .WithOne()
@@ -254,8 +256,7 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<PersonRating>().HasKey(pr => pr.PersonId);
 
         // map TitleReadDto to output best_match_variadic()
-        modelBuilder.Entity<TitleReadDto>().HasNoKey();
-        //modelBuilder.Entity<TitleReadDto>().Property(trd => trd.TitleId).HasColumnName("match_title_id");
+        modelBuilder.Entity<TitleReadDto>().HasNoKey(); // entity type has no key proerpty since it's a function
         modelBuilder.Entity<TitleReadDto>().Property(t => t.Id).HasColumnName("title_id");
         modelBuilder.Entity<TitleReadDto>().Property(t => t.PrimaryTitle).HasColumnName("primary_title");
         modelBuilder.Entity<TitleReadDto>().Property(t => t.OriginalTitle).HasColumnName("original_title");
@@ -266,6 +267,12 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<TitleReadDto>().Property(t => t.Plot).HasColumnName("plot");
         modelBuilder.Entity<TitleReadDto>().Property(t => t.Poster).HasColumnName("poster");
         modelBuilder.Entity<TitleReadDto>().Property(t => t.TypeId).HasColumnName("title_type_id");
+
+
+        // map PersonReadDto to output searc_string_name()
+        modelBuilder.Entity<PersonReadDto>().HasNoKey();
+        modelBuilder.Entity<PersonReadDto>().Property(p => p.Id).HasColumnName("match_person_id");
+        modelBuilder.Entity<PersonReadDto>().Property(p => p.Name).HasColumnName("match_name");
 
 
         /////////////////////////////////////////////////////////

@@ -45,8 +45,8 @@ public class PersonService : IPersonService
     {
 
         var person = _dbContext.Persons
-        .Include(p => p.KnownFor)  // Include KnownFor titles
-        .FirstOrDefault(p => p.Id == id);  
+                               .Include(p => p.KnownFor)  // Include KnownFor titles
+                               .FirstOrDefault(p => p.Id == id);  
 
         // If the person is not found, return null
         if (person == null) return null;
