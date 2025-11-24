@@ -31,12 +31,12 @@ namespace WebServiceLayer.Controllers
 
         // Get paginated list of people by name search
         [HttpGet("search")]
-        public IActionResult GetPeopleByName(
+        public IActionResult GetPersonsByName(
             [FromQuery] string search,
             [FromQuery] int page = 0,
             [FromQuery] int pageSize = 10)
         {
-            var people = _personService.GetPeopleByName(search, page, pageSize);
+            var people = _personService.GetPersonsByName(search, page, pageSize);
 
             if (people.Items != null && people.Items.Any())  // Check if Items is not null and has any items
             {

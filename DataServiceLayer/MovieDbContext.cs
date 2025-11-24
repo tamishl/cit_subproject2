@@ -88,14 +88,22 @@ public class MovieDbContext : DbContext
                             .HasOne(p => p.PersonRating)
                             .WithOne(pr => pr.Person)
                             .HasForeignKey<PersonRating>(pr => pr.PersonId);
-
-
-        // map Person to KnownFor. I haven't created a class for the join table(person_notable_title) since it only contains the two FKs
+    
+        // map Person and KnownFor (Title) via table person_notable_title
         modelBuilder.Entity<Person>()
-                            .HasMany(p => p.KnownFor)
-                            .WithMany(t => t.KnownForPersons)
-                            .UsingEntity(j => j.ToTable("person_notable_title")
-                            .HasData());
+                    .HasMany(p => p.KnownFor)
+                    .WithMany(t => t.KnownForPersons)
+                    .UsingEntity<Dictionary<string, object>>(       // shadow entity for person_notable_title
+                     "person_notable_title",                        // strings for table and FKs, because there's no class (nor navigation properties)
+                     j => j.HasOne<Title>()
+                     .WithMany()
+                     .HasForeignKey("title_id"),
+                     j => j.HasOne<Person>()
+                     .WithMany()
+                    .HasForeignKey("person_id"));
+
+
+
         // map Person to Profession. I haven't created a class for the join table(person_profession) since it only contains the two FKs
         modelBuilder.Entity<Person>().HasMany(p => p.Professions)
                             .WithMany()
@@ -139,8 +147,7 @@ public class MovieDbContext : DbContext
                      .HasForeignKey("person_id"),
                      j => j.HasOne<Title>()
                      .WithMany()
-                    .HasForeignKey("title_id"))
-                    .ToTable("title_director");
+                    .HasForeignKey("title_id"));
 
 
 
@@ -155,8 +162,7 @@ public class MovieDbContext : DbContext
                      .HasForeignKey("person_id"),
                      j => j.HasOne<Title>()
                      .WithMany()
-                    .HasForeignKey("title_id"))
-                    .ToTable("title_writer");
+                    .HasForeignKey("title_id"));
 
 
         // map Title and Genre via join table title_genre
@@ -170,8 +176,7 @@ public class MovieDbContext : DbContext
                      .HasForeignKey("genre_id"),
                      j => j.HasOne<Title>()
                      .WithMany()
-                    .HasForeignKey("title_id"))
-                    .ToTable("title_genre");
+                    .HasForeignKey("title_id"));
 
 
         // map Title to TitleType

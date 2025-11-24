@@ -21,8 +21,8 @@ public class PersonService : IPersonService
     }
 
 
-    // Get paginated list of people by name search
-    public PagedResultDto<PersonSummaryDto> GetPeopleByName(string search, int page = 0, int pageSize = 10)
+    // Get paginated list of persons by name search
+    public PagedResultDto<PersonSummaryDto> GetPersonsByName(string search, int page = 0, int pageSize = 10)
     {
         var query = _dbContext.Persons.Where(p => EF.Functions.ILike(p.Name, $"%{search}%"));
 

@@ -12,7 +12,7 @@ namespace DataServiceLayer.Services.Interfaces
     public interface IPersonService
     {
 
-        PagedResultDto<PersonSummaryDto> GetPeopleByName(string search, int page = 0, int pageSize = 10);
+        PagedResultDto<PersonSummaryDto> GetPersonsByName(string search, int page = 0, int pageSize = 10);
 
         PersonDetailsDto? GetPerson(string id);
         PagedResultDto<PersonCreditDto> GetPersonCredits(string id, int page = 0, int pageSize = 10);
