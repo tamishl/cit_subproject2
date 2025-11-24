@@ -14,7 +14,7 @@ public class Person
     public string? DeathYear { get; set; }
     public ICollection<Casting>? Castings { get; set; }
     public ICollection<Profession>? Professions { get; set; }
-    public ICollection<Title>? KnownFor { get; set; }
+    public ICollection<Title>? KnownForTitles { get; set; }
     //public ICollection<Title>? DirectorOf { get; set; }
     //public ICollection<Title>? WriterOf { get; set; }
     public PersonRating? PersonRating { get; set; }

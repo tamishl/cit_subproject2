@@ -108,10 +108,10 @@ public class TitleService: ITitleService
             t.Plot,
             t.Poster,
             t.TypeId,
-            Genres = t.Genres.Select(g => g.Id),
-            Writers = t.Writers.Select(w => w.Name),
-            Directors = t.Directors.Select(d => d.Name),
-            Cast = t.Cast.Select(c => new PersonCastDto
+            Genres = t.Genres == null ? null : t.Genres.Select(g => g.Id),
+            Writers = t.Writers == null ? null: t.Writers.Select(w => w.Name),
+            Directors = t.Directors == null ? null : t.Directors.Select(d => d.Name),
+            Cast = t.Cast == null ? null : t.Cast.Select(c => new PersonCastDto
             {
                 Name = c.Person.Name,
                 ProfessionId = c.Profession.Id
@@ -124,7 +124,6 @@ public class TitleService: ITitleService
             }
                                 }).AsSplitQuery()
                                   .FirstOrDefault(t => t.Id == id).Adapt<TitleDto>();
-
     }
 
 

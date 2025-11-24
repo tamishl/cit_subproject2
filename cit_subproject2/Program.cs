@@ -12,9 +12,12 @@ var titleService = new TitleService();
 var bookmarkService = new BookmarkService();
 var userService = new UserService();
 
+Console.WriteLine("-----------------");
+var result = titleService.GetTitle("tt0063929");
+
 //var result= titleService.GetTitlesBySearch("potter radcliff");
-var personService = new PersonService();
-var result = personService.GetPerson("nm0000138");
+//var personService = new PersonService();
+//var result = personService.GetPerson("nm0000138");
 
 //Console.WriteLine(titleService.GetTitle("tt0081912"));
 //Console.WriteLine(titleService.GetTitlesByGenre("Fantasy"));

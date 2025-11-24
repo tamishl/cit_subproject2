@@ -44,21 +44,34 @@ public class PersonService : IPersonService
     public PersonDetailsDto? GetPerson(string id)
     {
 
-        var person = _dbContext.Persons
-                               .Include(p => p.KnownFor)  // Include KnownFor titles
-                               .FirstOrDefault(p => p.Id == id);  
+        return _dbContext.Persons.Select(p => new
+                                    {
+                                        p.Id,
+                                        p.Name,
+                                        p.BirthYear,
+                                        p.DeathYear,
+                                        Professions = p.Professions == null ? null : p.Professions.Select(pr => pr.Id),
+                                        KnownForTitles = p.KnownForTitles == null ? null : p.KnownForTitles.Select(t => t.PrimaryTitle)
+                                    })
+                                 .FirstOrDefault(p => p.Id == id)
+                                 .Adapt<PersonDetailsDto>();
 
-        // If the person is not found, return null
-        if (person == null) return null;
+
+        //var person = _dbContext.Persons
+        //                       .Include(p => p.KnownFor)  // Include KnownFor titles
+        //                       .FirstOrDefault(p => p.Id == id);
+
+        //// If the person is not found, return null
+        //if (person == null) return null;
 
 
-        var personDetailsDto = person.Adapt<PersonDetailsDto>();
+        //var personDetailsDto = person.Adapt<PersonDetailsDto>();
 
 
-        personDetailsDto.Professions = person.Professions?.Select(pr => pr.Name).ToList();
-        personDetailsDto.KnownForTitles = person.KnownFor?.Select(t => t.PrimaryTitle).ToList();
+        //personDetailsDto.Professions = person.Professions?.Select(pr => pr.Id).ToList();
+        //personDetailsDto.KnownForTitles = person.KnownFor?.Select(t => t.PrimaryTitle).ToList();
 
-        return personDetailsDto;
+        //return personDetailsDto;
     }
 
     // Get paginated list of credits for a person

@@ -93,7 +93,7 @@ public class MovieDbContext : DbContext
     
         // map Person and KnownFor (Title) via table person_notable_title
         modelBuilder.Entity<Person>()
-                    .HasMany(p => p.KnownFor)
+                    .HasMany(p => p.KnownForTitles)
                     .WithMany(t => t.KnownForPersons)
                     .UsingEntity<Dictionary<string, object>>(       // shadow entity for person_notable_title
                      "person_notable_title",                        // strings for table and FKs, because there's no class (nor navigation properties)
