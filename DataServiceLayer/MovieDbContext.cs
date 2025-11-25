@@ -95,22 +95,29 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Person>()
                     .HasMany(p => p.KnownForTitles)
                     .WithMany(t => t.KnownForPersons)
-                    .UsingEntity<Dictionary<string, object>>(       // shadow entity for person_notable_title
+                    .UsingEntity<Dictionary<string, object>>(       // shadow entity for person_notable_title so we don't have to create a class
                      "person_notable_title",                        // strings for table and FKs, because there's no class (nor navigation properties)
-                     j => j.HasOne<Title>()
-                     .WithMany()
-                     .HasForeignKey("title_id"),
-                     j => j.HasOne<Person>()
-                     .WithMany()
-                    .HasForeignKey("person_id"));
+                     r => r.HasOne<Title>()                         // map the relationships for each row
+                           .WithMany()
+                           .HasForeignKey("title_id"),
+                     r => r.HasOne<Person>()
+                           .WithMany()
+                           .HasForeignKey("person_id"));
 
 
 
-        // map Person to Profession. I haven't created a class for the join table(person_profession) since it only contains the two FKs
-        modelBuilder.Entity<Person>().HasMany(p => p.Professions)
+        // map Person to Profession.
+        modelBuilder.Entity<Person>()
+                            .HasMany(p => p.Professions)
                             .WithMany()
-                            .UsingEntity(j => j.ToTable("person_profession")
-                            .HasData());
+                            .UsingEntity<Dictionary<string, object>>(
+                             "person_profession",
+                             r => r.HasOne<Profession>()
+                                   .WithMany()
+                                   .HasForeignKey("profession_id"),
+                             r => r.HasOne<Person>()
+                                   .WithMany()
+                                   .HasForeignKey("person_id"));
         
         // map Profession to profession
         modelBuilder.Entity<Profession>().ToTable("profession");

@@ -56,22 +56,6 @@ public class PersonService : IPersonService
                                  .FirstOrDefault(p => p.Id == id)
                                  .Adapt<PersonDetailsDto>();
 
-
-        //var person = _dbContext.Persons
-        //                       .Include(p => p.KnownFor)  // Include KnownFor titles
-        //                       .FirstOrDefault(p => p.Id == id);
-
-        //// If the person is not found, return null
-        //if (person == null) return null;
-
-
-        //var personDetailsDto = person.Adapt<PersonDetailsDto>();
-
-
-        //personDetailsDto.Professions = person.Professions?.Select(pr => pr.Id).ToList();
-        //personDetailsDto.KnownForTitles = person.KnownFor?.Select(t => t.PrimaryTitle).ToList();
-
-        //return personDetailsDto;
     }
 
     // Get paginated list of credits for a person
