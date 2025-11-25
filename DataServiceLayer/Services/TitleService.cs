@@ -37,6 +37,21 @@ public class TitleService: ITitleService
     }
 
 
+    public PagedResultDto<TitleSummaryDto> GetTitlesBySearch(string search, int page = 0, int pageSize = 10)
+    {
+        var query = _dbContext.TitleReadDtos.FromSqlInterpolated($"SELECT * FROM best_match_variadic(VARIADIC {search.Split(' ')})");
+        var items = query.Skip(page * pageSize)
+                         .Take(pageSize)
+                         .Select(t => t.Adapt<TitleSummaryDto>()).ToList();
+
+        return new PagedResultDto<TitleSummaryDto>
+        {
+            Items = items,
+            TotalNumberOfItems = query.Count()
+        };
+    }
+
+
     public PagedResultDto<TitleSummaryDto> GetTitlesByName(string search, int page = 0, int pageSize = 10)
     {
 
@@ -59,7 +74,7 @@ public class TitleService: ITitleService
 
 
 
-    public PagedResultDto<TitleSummaryDto>? GetTitlesByGenre(string genreId, int page = 0, int pageSize = 10)
+    public PagedResultDto<TitleSummaryDto> GetTitlesByGenre(string genreId, int page = 0, int pageSize = 10)
     {
         var query = _dbContext.Titles.Where(t => t.Genres.Any(g => EF.Functions.ILike(g.Id, $"{genreId}")));
 
@@ -124,39 +139,6 @@ public class TitleService: ITitleService
             }
                                 }).AsSplitQuery()
                                   .FirstOrDefault(t => t.Id == id).Adapt<TitleDto>();
-    }
-
-
-
-    public TitleSummaryDto? GetTitleSummary(string id)
-    {
-        return _dbContext.Titles.FirstOrDefault(t => t.Id == id).Adapt<TitleSummaryDto>();
-    }
-
-    public PagedResultDto<TitleSummaryDto>? GetAkas(string id)
-    {
-        //return _dbContext.Titles.FirstOrDefault(t => t.Id == id).Akas
-        //                        .Select(ta => new TitleAkaSummaryDto
-        //                        {
-        //                            Title = ta.TitleName;
-        //                        };
-
-        return null;
-    }
-
-
-    public PagedResultDto<TitleSummaryDto> GetTitlesBySearch(string search, int page = 0, int pageSize = 10)
-    {
-        var query = _dbContext.TitleReadDtos.FromSqlInterpolated($"SELECT * FROM best_match_variadic(VARIADIC {search.Split(' ')})");
-        var items = query.Skip(page * pageSize)
-                         .Take(pageSize)
-                         .Select(t => t.Adapt<TitleSummaryDto>()).ToList();
-
-        return new PagedResultDto<TitleSummaryDto>
-        {
-            Items = items,
-            TotalNumberOfItems = query.Count()
-        };
     }
 
 

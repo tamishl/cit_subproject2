@@ -8,7 +8,7 @@ namespace WebServiceLayer.Services
 {
     public class Mapper
     {
-        private  IMapper _mapper;
+        private IMapper _mapper;
         private LinkGenerator _linkGenerator;
         private IHttpContextAccessor _httpContextAccessor;
 

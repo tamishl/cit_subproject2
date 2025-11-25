@@ -68,8 +68,6 @@ public class BaseController: ControllerBase
         };
     }
 
-
-    // values of type object to allow anonymous types
     protected string? GetUrl(string endpointName, RouteValueDictionary values)
     {
         return _linkGenerator.GetUriByName(HttpContext, endpointName, values);
