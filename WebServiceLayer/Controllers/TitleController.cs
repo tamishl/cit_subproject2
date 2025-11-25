@@ -77,7 +77,7 @@ public class TitleController : BaseController
     {
         var result = _titleService.GetTitle(id);
 
-        return result is not null ? Ok(result) : NotFound("Title does not exist");
+        return result is not null ? Ok(result) : NotFound();
     }
 
 

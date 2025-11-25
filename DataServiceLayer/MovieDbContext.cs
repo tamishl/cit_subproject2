@@ -96,7 +96,7 @@ public class MovieDbContext : DbContext
                     .HasMany(p => p.KnownForTitles)
                     .WithMany(t => t.KnownForPersons)
                     .UsingEntity<Dictionary<string, object>>(       // shadow entity for person_notable_title so we don't have to create a class
-                     "person_notable_title",                        // strings for table and FKs, because there's no class (nor navigation properties)
+                     "person_notable_title",                        // strings to define table and FKs, because there's no class (nor navigation properties)
                      r => r.HasOne<Title>()                         // map the relationships for each row
                            .WithMany()
                            .HasForeignKey("title_id"),

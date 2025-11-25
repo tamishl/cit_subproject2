@@ -55,9 +55,14 @@ public class DataLayerTests
     public void GetTitle_Valid_ReturnsTitle()
     {
         var titleService = new TitleService();
-        var result = titleService.GetTitle("tt0063929");
-        Assert.Equal("Monty Python's Flying Circus", result.PrimaryTitle);
-        Assert.Equal("1969", result.StartYear);
+        var result = titleService.GetTitle("tt7311010");
+        Assert.Equal("Returning the Favor", result.PrimaryTitle);
+        Assert.Equal("2017", result.StartYear);
+        Assert.NotNull(result.Poster);
+        Assert.Equal(462, result.TitleRating.Votes);
+        Assert.Equal(8.5, result.TitleRating.AverageRating);
+        Assert.Equal(24, result.Cast.Count);
+        Assert.Contains("Adventure", result.Genres);
     }
 
     [Fact]
@@ -67,6 +72,55 @@ public class DataLayerTests
         var result = titleService.GetTitle("ttmadeup");
         Assert.Null(result);
     }
+
+
+
+
+    /////////////////////////////////////////////////////////
+    ///                        PERSON                     ///                   
+    /////////////////////////////////////////////////////////
+
+    [Fact]
+    public void GetPerson_Valid_ReturnsPersonDetails()
+    {
+        var personService = new PersonService();
+        var result = personService.GetPerson("nm0000138");
+
+        Assert.NotNull(result);
+        Assert.Equal("Leonardo DiCaprio", result.Name);
+        Assert.Equal("1974", result.BirthYear);
+        Assert.NotNull(result.KnownForTitles);
+        Assert.Contains("Inception", result.KnownForTitles);
+    }
+
+    [Fact]
+    public void GetPersonsByName_Valid_ReturnsPersons()
+    {
+        var personService = new PersonService();
+        var result = personService.GetPersonsByName("Leonardo", 0, 10);
+
+        Assert.NotNull(result);
+        Assert.Equal(10, result.Items.Count);
+        Assert.Equal(198, result.TotalNumberOfItems);
+        Assert.Equal("Leonardo DiCaprio", result.Items[0].Name);
+    }
+
+    [Fact]
+    public void GetPeopleByName_InValid_ReturnsNoPeople()
+    {
+        var personService = new PersonService();
+        var result = personService.GetPersonsByName("aaaaaaaa", 0, 10);
+        Assert.Empty(result.Items);
+        Assert.Equal(0, result.TotalNumberOfItems);
+    }
+
+
+
+
+    /////////////////////////////////////////////////////////
+    ///                       TITLE                       ///                   
+    /////////////////////////////////////////////////////////
+
 
 
 
@@ -84,7 +138,7 @@ public class DataLayerTests
                                              password: "etpassword",
                                              salt: "saltmedmeresalt");
         Assert.Equal("Blommo", newUser.Username);
-        Assert.True(newUser.Email != null);
+        Assert.NotNull(newUser.Email);
 
         userService.DeleteUser(newUser);
     }
@@ -103,7 +157,7 @@ public class DataLayerTests
 
         var user = userService.GetUser("Blommo");
         Assert.Equal("minMail@hotmail.com", user.Email);
-        Assert.True(user.Password != null);
+        Assert.NotNull(user.Password);
 
         userService.DeleteUser(user);
     }
@@ -127,7 +181,7 @@ public class DataLayerTests
                               salt: "saltmedmeresaltmedendnumeresalt");
 
         var users = userService.GetAllUsers();
-        Assert.Equal(users.Items.Count, 2);
+        Assert.Equal(2, users.Items.Count);
         Assert.Equal("Jalte", users.Items[1].Username);
 
         userService.DeleteUser("Blommo");
@@ -201,46 +255,6 @@ public class DataLayerTests
         // Assert
         Assert.False(result);
     }
-
-
-    /////////////////////////////////////////////////////////
-    ///                        PERSON                     ///                   
-    /////////////////////////////////////////////////////////
-
-    [Fact]
-    public void GetPerson_Valid_ReturnsPersonDetails()
-    {
-        var personService = new PersonService();
-        var result = personService.GetPerson("nm0000138");
-
-        Assert.NotNull(result);
-        Assert.Equal("Leonardo DiCaprio", result.Name);
-        Assert.Equal("1974", result.BirthYear);
-        Assert.NotNull(result.KnownForTitles); 
-        Assert.Contains("Inception", result.KnownForTitles);
-    }
-
-    [Fact]
-    public void GetPersonsByName_Valid_ReturnsPersons()
-    {
-        var personService = new PersonService();
-        var result = personService.GetPersonsByName("Leonardo", 0, 10);
-
-        Assert.NotNull(result);
-        Assert.Equal(10, result.Items.Count);
-        Assert.Equal(198, result.TotalNumberOfItems);
-        Assert.Equal("Leonardo DiCaprio", result.Items[0].Name);
-    }
-    
-    [Fact]
-    public void GetPeopleByName_InValid_ReturnsNoPeople()
-   {
-       var personService = new PersonService();
-       var result = personService.GetPersonsByName("aaaaaaaa", 0, 10);
-       Assert.Empty(result.Items);    
-       Assert.Equal(0, result.TotalNumberOfItems);
-    }
-
 
 
 

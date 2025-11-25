@@ -22,7 +22,7 @@ public class WebServiceTests
 
 
     [Fact]
-    public void TitlesApi_GetWithNoArguments_OkAndTitles()
+    public void TitlesApi_GetTitleWithNoArguments_OkAndTitles()
     {
         var (data, statusCode) = GetArray(TitlesApi);
 
@@ -32,12 +32,25 @@ public class WebServiceTests
     }
 
 
-    //public void TitlesApi_GetTitleValidArgs_OkAndTitle()
-    //{
-    //    string title = "tt37976775";
-    //    var (data, statusCode) = GetObject($"{TitlesApi}/")
+    [Fact]
+    public void TitlesApi_GetTitleWithValidArgument_OkAndTitle()
+    {
+        string title = "tt0795176";
+        var (data, statusCode) = GetObject($"{TitlesApi}/{title}");
+        Assert.Equal(HttpStatusCode.OK, statusCode);
+        Assert.Equal("Planet Earth", data["primaryTitle"]);
+        Assert.NotNull(data["poster"]);
+    }
 
-    //}
+
+    [Fact]
+    public void TitlesApi_GetTitleWithInValidArgument_NotFound()
+    {
+        string title = "ttmadeup";
+        var (data, statusCode) = GetObject($"{TitlesApi}/{title}");
+        Assert.Equal(HttpStatusCode.NotFound, statusCode);
+        Assert.Equal("Not Found", data["title"]);
+    }
 
 
 
@@ -66,19 +79,13 @@ public class WebServiceTests
     // Debug line: //Console.WriteLine($"---DATA IN <method>{data}---");
 
     (JArray, HttpStatusCode) GetArray(string url)
-    {
-        
+    {  
+        var response = _client.GetAsync(url).Result;                // HttpResponseMessage: statuscode, headers, content
 
-        // HttpResponseMessage: statuscode, headers and content
-        var response = _client.GetAsync(url).Result;
+        var result = response.Content.ReadAsStringAsync().Result;   // Read body as string: raw JSON text
 
-        // Read body as string: raw JSON text
-        var result = response.Content.ReadAsStringAsync().Result;
-
-        // Convert JSON string to JObject so it has an indexer (plain objects don't)
-        // Cast to JSON Array
-        var jObj = JsonConvert.DeserializeObject<JObject>(result);
-        var data = (JArray)jObj["items"];
+        var jObj = JsonConvert.DeserializeObject<JObject>(result);  // Convert JSON string to JObject so it has an indexer (plain objects don't)
+        var data = (JArray)jObj["items"];                           // Cast items to JSON Array
 
 
         return (data, response.StatusCode);
