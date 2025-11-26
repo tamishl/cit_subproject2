@@ -37,9 +37,9 @@ public class TitleService: ITitleService
     }
 
 
-    public PagedResultDto<TitleSummaryDto> GetTitlesBySearch(string search, int page = 0, int pageSize = 10)
+    public PagedResultDto<TitleSummaryDto> GetTitlesBySearch(string search, int page = 0, int pageSize = 10, string title_type="all")
     {
-        var query = _dbContext.TitleReadDtos.FromSqlInterpolated($"SELECT * FROM best_match_variadic(VARIADIC {search.Split(' ')})");
+        var query = _dbContext.TitleReadDtos.FromSqlInterpolated($"SELECT * FROM best_match_variadic({title_type}, VARIADIC {search.Split(' ')})");
         var items = query.Skip(page * pageSize)
                          .Take(pageSize)
                          .Select(t => t.Adapt<TitleSummaryDto>()).ToList();

@@ -29,6 +29,26 @@ public class DataLayerTests
         Assert.Equal("Lego Harry Potter and the Philosopher's Stone", result.Items[9].PrimaryTitle);
     }
 
+    [Fact]
+    public void GetTitlesBySearch_ValidWithType_ReturnsTitles()
+    {
+        var titleService = new TitleService();
+        var result = titleService.GetTitlesBySearch("Harry Potter", 0, 100, "tvEpisode");
+        Assert.Equal("The Potions Master", result.Items[0].PrimaryTitle);
+        Assert.Equal(341, result.TotalNumberOfItems);
+    }
+
+
+
+    [Fact]
+    public void GetTitlesBySearch_ValidWithoutType_ReturnsTitles()
+    {
+        var titleService = new TitleService();
+        var result = titleService.GetTitlesBySearch("Harry Potter", 0, 100);
+        Assert.Equal(1250, result.TotalNumberOfItems);
+        Assert.Equal("Sampiyonluk Maçi City vs Liverpool, Lakers Balonu, Maskot Casper, Harry Potter", result.Items[0].PrimaryTitle);
+    }
+
 
     [Fact]
     public void GetTitlesByName_InValid_ReturnsNoTitles()
