@@ -50,13 +50,38 @@ namespace DataServiceLayer.Services
             _dbContext.SaveChanges();
             return bookmark;
         }
+
+        public BookmarkTitleDto GetBookmarkedTitle(string username, string titleId)
+        {
+            var bookmark = _dbContext.BookmarkTitles.FirstOrDefault(bt => bt.Username == username && bt.TitleId == titleId);
+
+            if (bookmark == null)
+            {
+                throw new ArgumentException("Bookmark does not exist");
+            }
+
+            var bookmarkTitleDto = new BookmarkTitleDto
+            {
+                TitleId = titleId,
+                PrimaryTitle = bookmark.Title.PrimaryTitle,
+                Username = username,
+                Plot = bookmark.Title.Plot,
+                Poster = bookmark.Title.Poster,
+                CreatedAt = bookmark.CreatedAt,
+            };
+
+            return bookmarkTitleDto;
+        }
+
         public PagedResultDto<BookmarkTitleDto> GetBookmarkedTitles(string username, int page = 0, int pageSize = 10)
         {
             var query = _dbContext.BookmarkTitles.Where(bt => bt.Username == username)
                                                  .Select(bt => new BookmarkTitleDto
                                                  {
                                                      PrimaryTitle = bt.Title.PrimaryTitle,
-                                                     Username = username,
+                                                     Username = bt.Username,
+                                                     Note = bt.Note,
+                                                     TitleId = bt.TitleId,
                                                      Plot = bt.Title.Plot,
                                                      Poster = bt.Title.Poster,
                                                      CreatedAt = bt.CreatedAt
@@ -79,6 +104,8 @@ namespace DataServiceLayer.Services
                                                  {
                                                      PrimaryTitle = bt.Title.PrimaryTitle,
                                                      Username = bt.Username,
+                                                     Note = bt.Note,
+                                                     TitleId = bt.TitleId,
                                                      Plot = bt.Title.Plot,
                                                      Poster = bt.Title.Poster,
                                                      CreatedAt = bt.CreatedAt
@@ -155,13 +182,38 @@ namespace DataServiceLayer.Services
             return bookmark;
         }
 
+
+        public BookmarkPersonDto GetBookmarkedPerson(string username, string personId)
+        {
+            var bookmark = _dbContext.BookmarkPersons.FirstOrDefault(bp => bp.Username == username && bp.PersonId == personId);
+
+            if (bookmark == null)
+            {
+                throw new ArgumentException("Bookmark does not exist");
+            }
+
+            var bookmarkPersonDto = new BookmarkPersonDto
+            {
+                PersonId = personId,
+                Username = username,
+                Name = bookmark.Person.Name,
+                Note = bookmark.Note,
+                CreatedAt = bookmark.CreatedAt,
+            };
+
+            return bookmarkPersonDto;
+
+        }
+
         public PagedResultDto<BookmarkPersonDto> GetBookmarkPersons(string username, int page = 0, int pageSize = 10)
         {
             var query = _dbContext.BookmarkPersons.Where(bp => bp.Username == username)
                                                   .Select(bp => new BookmarkPersonDto
                                                   {
                                                      Username = username,
+                                                     PersonId = bp.PersonId,
                                                      Name = bp.Person.Name,
+                                                     Note = bp.Note,
                                                      CreatedAt = bp.CreatedAt
                                                   });
             var items = query.OrderByDescending(bt => bt.CreatedAt)
@@ -181,7 +233,9 @@ namespace DataServiceLayer.Services
             var query = _dbContext.BookmarkPersons.Select(bp => new BookmarkPersonDto
             {
                 Username = bp.Username,
+                PersonId = bp.PersonId,
                 Name = bp.Person.Name,
+                Note = bp.Note,
                 CreatedAt = bp.CreatedAt
             });
             var items = query.OrderByDescending(bt => bt.CreatedAt)
