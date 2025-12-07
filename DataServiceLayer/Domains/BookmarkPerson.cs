@@ -13,6 +13,6 @@ namespace DataServiceLayer.Domains
         public User User { get; set; }
         public string Username { get; set; }
         public DateTime CreatedAt { get; set; }
-        public string Note { get; set; }
+        public string? Note { get; set; }
     }
 }

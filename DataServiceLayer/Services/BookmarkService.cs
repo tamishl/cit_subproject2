@@ -41,10 +41,10 @@ namespace DataServiceLayer.Services
 
             var bookmark = new BookmarkTitle
             {
-                TitleId = titleId,
-                Username = username,
+                TitleId = titleId.Trim(),
+                Username = username.Trim(),
                 CreatedAt = DateTime.UtcNow,
-                Note = note
+                Note = note?.Trim()
             };
             _dbContext.BookmarkTitles.Add(bookmark);
             _dbContext.SaveChanges();

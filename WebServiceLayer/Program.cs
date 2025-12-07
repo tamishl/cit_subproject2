@@ -15,6 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<ITitleService, TitleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
+builder.Services.AddScoped<IBookmarkService, BookmarkService>();
 builder.Services.AddSingleton(new Hashing());
 
 var secret = builder.Configuration.GetSection("Auth:Secret").Value;

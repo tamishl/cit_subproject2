@@ -37,7 +37,7 @@ Accept: application/json
 ###
 
 
-GET {{WebServiceLayer_HostAddress}}/api/titles/tt0081912 
+GET {{WebServiceLayer_HostAddress}}/api/titles/tt0081912
 Accept: application/json
 
 ###
@@ -92,4 +92,18 @@ Authorization: Bearer
 ###
 
 GET {{WebServiceLayer_HostAddress}}/api/users/testuser/ratings
+Accept: application/json
+
+
+#######################################
+############# BOOKMARKS ###############
+#######################################
+
+
+###
+POST {{WebServiceLayer_HostAddress}}/api/users/testuser/bookmarks/titles/tt0081912
+Accept: application/json
+
+###
+GET {{WebServiceLayer_HostAddress}}/api/users/testuser/bookmarks/titles
 Accept: application/json
