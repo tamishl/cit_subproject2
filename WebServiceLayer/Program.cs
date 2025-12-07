@@ -9,7 +9,13 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using WebServiceLayer.Services;
 
+
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins"; // name policy for Cross-Origin Resource Sharing
+
 var builder = WebApplication.CreateBuilder(args);
+
+
+
 
 // Add services to the container
 builder.Services.AddScoped<ITitleService, TitleService>();
@@ -18,8 +24,22 @@ builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IBookmarkService, BookmarkService>();
 builder.Services.AddSingleton(new Hashing());
 
-var secret = builder.Configuration.GetSection("Auth:Secret").Value;
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:5173")
+                          .AllowAnyHeader();
+                      });
 
+});
+
+
+
+
+// Authentication
+var secret = builder.Configuration.GetSection("Auth:Secret").Value;
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
         opt.TokenValidationParameters = new TokenValidationParameters
@@ -34,6 +54,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddControllers();
 
+// Make HttpContext accessible
 builder.Services.AddHttpContextAccessor();
 
 // Register Mapper service for dependency injection
@@ -43,6 +64,9 @@ builder.Services.AddMapster();
 // Create the app
 var app = builder.Build();
 
+app.UseCors(MyAllowSpecificOrigins); // add CORS middleware
+
+// Note: UseCors must be placed before UseAuthorization (request has to be run before authentication).
 // Configure the HTTP request pipeline: sequence of components that each HTTP request passes through
 app.UseAuthorization();
 
@@ -51,17 +75,3 @@ app.MapControllers();
 
 // Start the server to listen for incoming HTTP requests
 app.Run();
-
-
-
-
-// optional code that was added automatically
-//// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-//builder.Services.AddOpenApi();
-
-//if (app.Environment.IsDevelopment())
-//{
-//    app.MapOpenApi();
-//}
-
-//app.UseHttpsRedirection();

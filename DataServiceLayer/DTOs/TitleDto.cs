@@ -2,6 +2,7 @@
 
 public class TitleDto
 {
+    public string Id { get; set; }
     public string PrimaryTitle { get; set; }
     public string OriginalTitle { get; set; }
     public bool IsAdult { get; set; }
