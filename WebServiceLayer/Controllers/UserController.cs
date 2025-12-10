@@ -1,4 +1,5 @@
-﻿using DataServiceLayer.Domains;
+﻿using DataAccesLayer.DTOs;
+using DataServiceLayer.Domains;
 using DataServiceLayer.Services;
 using DataServiceLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -20,84 +21,68 @@ public class UserController : BaseController
 {
 
     private IUserService _userService;
-    private Hashing _hashing;
     private Mapper _mapper;
-    private IConfiguration _configuration;
 
-    public UserController(IUserService userService, LinkGenerator linkGenerator, Hashing hashing, Mapper mapper, IConfiguration configuration)
+    public UserController(IUserService userService, LinkGenerator linkGenerator, Mapper mapper)
         : base(linkGenerator)
     {
         _userService = userService;
-        _hashing = hashing;
         _mapper = mapper;
-        _configuration = configuration;
     }
 
     [HttpPost]
     public IActionResult CreateUser([FromBody] CreateUser userDto)
     {
-        Console.WriteLine($"Username: {userDto.Username}, Password: {userDto.Password}");
-
-        var user = _userService.GetUser(userDto.Username);
-
-        if (user != null)
+        try
         {
-            return BadRequest("Username already exists");
-        }
+            var newUser = _userService.CreateUser(userDto.Username, userDto.Password, userDto?.FirstName, userDto?.LastName, userDto.Email);
 
-        if (string.IsNullOrWhiteSpace(userDto.Password))
+            var createdUserDto = _mapper.CreateUserDto(newUser);
+
+            return CreatedAtAction(nameof(GetUser), new { username = createdUserDto.Username }, createdUserDto);
+        }
+        catch(ArgumentException ex)
         {
-            return BadRequest("Password cannot be empty");
+            return BadRequest(ex.Message);
         }
-
-        (var hashPassword, var salt) = _hashing.Hash(userDto.Password);
-
-        Console.WriteLine($"Username: {userDto.Username}, Password: {userDto.Password}, Hashpassword: {hashPassword}, firstname: {userDto.FirstName}");
-
-        var newUser = _userService.CreateUser(userDto.Username, hashPassword, userDto.FirstName, userDto.LastName, userDto.Email, salt);
-
-        var createdUserDto = _mapper.CreateUserDto(newUser);
-
-        return CreatedAtAction(nameof(GetUser), new { username = createdUserDto.Username }, createdUserDto);
+        catch(Exception)
+        {
+            return BadRequest("User could not be created");
+        }
     }
 
-    [HttpPut("login")]
+    [HttpPost("signin")]
     public IActionResult Login([FromBody] LoginUser loginDto)
     {
-        Console.WriteLine($"Username: {loginDto.Username}, Password: {loginDto.Password}");
-
-        var user = _userService.GetUser(loginDto.Username);
-
-        if (user == null)
+        try
         {
-            return BadRequest("No user with that name");
+            var loginToken = _userService.Login(loginDto.Username, loginDto.Password);
+
+            return Ok(new { username = loginDto.Username, token = loginToken });
         }
-
-        if (!_hashing.Verify(loginDto.Password, user.Password, user.Salt))
+        catch (ArgumentException ex)
         {
-            return BadRequest();
+            return BadRequest(ex.Message);
         }
-
-        var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, user.Username),
-            //new Claim(ClaimTypes.Role, user.Role)
-        };
-
-        var secret = _configuration.GetSection("Auth:Secret").Value;
-        var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(secret));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
-        var token = new JwtSecurityToken(
-            claims: claims,
-            expires: DateTime.Now.AddMinutes(30),
-            signingCredentials: creds
-            );
-
-        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-        return Ok(new { username = user.Username, token = jwt });
     }
 
+    [HttpPut("me/changepassword")]
+    [Authorize]
+    public IActionResult ChangePassword([FromBody] ChangePasswordDto dto)
+    {
+        var username = HttpContext.User.Identity.Name;
+
+        try
+        {
+            _userService.ChangePassword(username, dto.OldPassword, dto.NewPassword, dto.ConfirmNewPassword);
+
+            return Ok("Password updated successfully.");
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 
     [HttpDelete("me")]
     [Authorize]
@@ -151,24 +136,18 @@ public class UserController : BaseController
 
     [HttpPut("me")]
     [Authorize]
-    public IActionResult UpdateUser()
+    public IActionResult UpdateUser([FromBody] UpdateUserDto dto)
     {
         var username = HttpContext.User.Identity.Name;
+
         var user = _userService.GetUser(username);
-
-        if(user == null)
+        try
         {
-            return NotFound("No user found");
+            var userUpdated = _userService.UpdateUser(username, dto);
+            return Ok("User informatipon have been updated");
         }
-
-        var updatedUser = _userService.UpdateUser(user);
-
-        return Ok(updatedUser);
+        catch (Exception ex) {
+            return BadRequest(ex.Message);
+        }
     }
-
-
-
-
-
-
 }

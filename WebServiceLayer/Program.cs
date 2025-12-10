@@ -1,5 +1,6 @@
 
 // Starting point for configuring web application
+using DataServiceLayer;
 using DataServiceLayer.Services;
 using DataServiceLayer.Services.Interfaces;
 using Mapster;
@@ -22,7 +23,8 @@ builder.Services.AddScoped<ITitleService, TitleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IBookmarkService, BookmarkService>();
-builder.Services.AddSingleton(new Hashing());
+builder.Services.AddScoped<Hashing>();
+builder.Services.AddDbContext<MovieDbContext>();
 
 builder.Services.AddCors(options =>
 {
