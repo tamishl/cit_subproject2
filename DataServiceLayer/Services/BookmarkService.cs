@@ -53,24 +53,27 @@ namespace DataServiceLayer.Services
 
         public BookmarkTitleDto GetBookmarkedTitle(string username, string titleId)
         {
-            var bookmark = _dbContext.BookmarkTitles.FirstOrDefault(bt => bt.Username == username && bt.TitleId == titleId);
+            var bookmarkDto = _dbContext.BookmarkTitles
+                         .Where(bt => bt.Username == username && bt.TitleId == titleId)
+                         .Select(bt => new BookmarkTitleDto
+                         {
+                             PrimaryTitle = bt.Title.PrimaryTitle,
+                             Username = bt.Username,
+                             Note = bt.Note,
+                             TitleId = bt.TitleId,
+                             Plot = bt.Title.Plot,
+                             Poster = bt.Title.Poster,
+                             CreatedAt = bt.CreatedAt
+                         })
+                         .FirstOrDefault();
 
-            if (bookmark == null)
+            if (bookmarkDto == null)
             {
                 throw new ArgumentException("Bookmark does not exist");
             }
 
-            var bookmarkTitleDto = new BookmarkTitleDto
-            {
-                TitleId = titleId,
-                PrimaryTitle = bookmark.Title.PrimaryTitle,
-                Username = username,
-                Plot = bookmark.Title.Plot,
-                Poster = bookmark.Title.Poster,
-                CreatedAt = bookmark.CreatedAt,
-            };
+            return bookmarkDto;
 
-            return bookmarkTitleDto;
         }
 
         public PagedResultDto<BookmarkTitleDto> GetBookmarkedTitles(string username, int page = 0, int pageSize = 10)
@@ -124,14 +127,15 @@ namespace DataServiceLayer.Services
 
         public BookmarkTitle? DeleteBookmarkTitle(string titleId, string username)
         {
-            var bookmark = _dbContext.BookmarkTitles.FirstOrDefault(bt => bt.TitleId == titleId && bt.Username == username);
+            var bookmark = _dbContext.BookmarkTitles
+                .FirstOrDefault(bt => bt.TitleId == titleId && bt.Username == username);
 
-            if (bookmark != null)
-            {
-                _dbContext.BookmarkTitles.Remove(bookmark);
-                _dbContext.SaveChanges();
-                return bookmark;
-            }
+            if (bookmark == null)
+                return null;
+
+            _dbContext.BookmarkTitles.Remove(bookmark);
+            _dbContext.SaveChanges();
+
             return bookmark;
         }
 
@@ -185,23 +189,22 @@ namespace DataServiceLayer.Services
 
         public BookmarkPersonDto GetBookmarkedPerson(string username, string personId)
         {
-            var bookmark = _dbContext.BookmarkPersons.FirstOrDefault(bp => bp.Username == username && bp.PersonId == personId);
+            var bookmarkDto = _dbContext.BookmarkPersons
+                            .Where(bp => bp.Username == username && bp.PersonId == personId)
+                            .Select(bp => new BookmarkPersonDto
+                            {
+                                Username = bp.Username,
+                                PersonId = bp.PersonId,
+                                Name = bp.Person.Name,
+                                Note = bp.Note,
+                                CreatedAt = bp.CreatedAt
+                            })
+                            .FirstOrDefault();
 
-            if (bookmark == null)
-            {
+            if (bookmarkDto == null)
                 throw new ArgumentException("Bookmark does not exist");
-            }
 
-            var bookmarkPersonDto = new BookmarkPersonDto
-            {
-                PersonId = personId,
-                Username = username,
-                Name = bookmark.Person.Name,
-                Note = bookmark.Note,
-                CreatedAt = bookmark.CreatedAt,
-            };
-
-            return bookmarkPersonDto;
+            return bookmarkDto;
 
         }
 

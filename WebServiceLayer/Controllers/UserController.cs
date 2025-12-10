@@ -51,7 +51,7 @@ public class UserController : BaseController
         }
     }
 
-    [HttpPost("signin")]
+    [HttpPost("login")]
     public IActionResult Login([FromBody] LoginUser loginDto)
     {
         try
@@ -104,6 +104,7 @@ public class UserController : BaseController
     public IActionResult GetUser()
     {
         var username = HttpContext.User.Identity.Name;
+
         var user = _userService.GetUser(username);
         if (user == null)
         {
@@ -136,7 +137,7 @@ public class UserController : BaseController
 
     [HttpPut("me")]
     [Authorize]
-    public IActionResult UpdateUser([FromBody] UpdateUserDto dto)
+    public IActionResult UpdateUser([FromBody] UpdateUserDto? dto)
     {
         var username = HttpContext.User.Identity.Name;
 

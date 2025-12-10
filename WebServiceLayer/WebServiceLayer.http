@@ -1,5 +1,6 @@
 @WebServiceLayer_HostAddress = https://localhost:5555
 
+
 GET {{WebServiceLayer_HostAddress}}/api/titles/
 Accept: application/json
 
@@ -57,37 +58,54 @@ Accept: application/json
 Content-Type: application/json
 { 
   "username": "testuser",
-  "password": "testMig",
+  "password": "testMig1",
   "firstName": "Test",
-  "lastName": "User",
   "email": "test@email.com"
 }
 
 ###
-
-PUT {{WebServiceLayer_HostAddress}}/api/users
+Post {{WebServiceLayer_HostAddress}}/api/users/login
 Accept: application/json
 Content-Type: application/json
 { 
   "username": "testuser",
-  "password": "testMig"
+  "password": "testMig1"
 }
 
 ###
-
-GET {{WebServiceLayer_HostAddress}}/api/users/testuser
+GET {{WebServiceLayer_HostAddress}}/api/users/me
 Accept: application/json
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU0MDAzNDV9.kmavr-rUJOGPw3WMbFFZIP1dMM5Nkqkp9-04L-6rtH4
 
 ###
+PUT {{WebServiceLayer_HostAddress}}/api/users/me/changepassword
+Accept: application/json
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU0MDAzNDV9.kmavr-rUJOGPw3WMbFFZIP1dMM5Nkqkp9-04L-6rtH4
+{ 
+  "oldPassword": "testMig1",
+  "newPassword": "abcdefg1",
+  "confirmNewPassword": "abcdefg1"
+}
 
+###
+PUT {{WebServiceLayer_HostAddress}}/api/users/me
+Accept: application/json
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU0MDAzNDV9.kmavr-rUJOGPw3WMbFFZIP1dMM5Nkqkp9-04L-6rtH4
+{
+  "firstName": "opdateret"
+}
+###
 GET {{WebServiceLayer_HostAddress}}/api/users
 Accept: application/json
 
 
 ###
-DELETE {{WebServiceLayer_HostAddress}}/api/users/testuser
+DELETE {{WebServiceLayer_HostAddress}}/api/users/me
 Accept: application/json
-Authorization: Bearer
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU0MDAzNDV9.kmavr-rUJOGPw3WMbFFZIP1dMM5Nkqkp9-04L-6rtH4
+
 
 ###
 
@@ -99,11 +117,51 @@ Accept: application/json
 ############# BOOKMARKS ###############
 #######################################
 
+###### Titles ######
+
+POST {{WebServiceLayer_HostAddress}}/api/users/me/bookmarks/titles/tt0081912
+Accept: application/json
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjUzODU4Mjd9.LZ4R1GPYVIdChDx6FldFy7vsDVao1WUwImuTFk84vWg
 
 ###
-POST {{WebServiceLayer_HostAddress}}/api/users/testuser/bookmarks/titles/tt0081912
+Put {{WebServiceLayer_HostAddress}}/api/users/me/bookmarks/titles/tt0081912
 Accept: application/json
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjUzODU4Mjd9.LZ4R1GPYVIdChDx6FldFy7vsDVao1WUwImuTFk84vWg
+
+ {
+  "note": "Den her film SKAL ses + alle de andre"
+ }
 
 ###
-GET {{WebServiceLayer_HostAddress}}/api/users/testuser/bookmarks/titles
+GET {{WebServiceLayer_HostAddress}}/api/users/me/bookmarks/titles
 Accept: application/json
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjUzODU4Mjd9.LZ4R1GPYVIdChDx6FldFy7vsDVao1WUwImuTFk84vWg
+
+##### Persons #####
+
+###
+POST {{WebServiceLayer_HostAddress}}/api/users/me/bookmarks/persons/nm3617946
+Accept: application/json
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjUzODU4Mjd9.LZ4R1GPYVIdChDx6FldFy7vsDVao1WUwImuTFk84vWg
+
+###
+Put {{WebServiceLayer_HostAddress}}/api/users/me/bookmarks/persons/nm3617946
+Accept: application/json
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjUzODU4Mjd9.LZ4R1GPYVIdChDx6FldFy7vsDVao1WUwImuTFk84vWg
+ {
+  "note": "kæft en god skuespiller"
+ }
+
+###
+GET {{WebServiceLayer_HostAddress}}/api/users/me/bookmarks/persons
+Accept: application/json
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjUzODM5NDd9.2eJiN7N5VnJO7U9p0JxfqEfq-2CXDz4Q5VE6dyH_u6Q
+
+###
+DELETE {{WebServiceLayer_HostAddress}}/api/users/me/bookmarks/persons/nm3617946
+Accept: application/json
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjUzODM5NDd9.2eJiN7N5VnJO7U9p0JxfqEfq-2CXDz4Q5VE6dyH_u6Q

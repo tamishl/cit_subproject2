@@ -36,13 +36,15 @@ public class BookmarkController : BaseController
     // TITLE BOOKMARKS //
 
     [HttpPost("titles/{titleId}", Name = nameof(CreateBookmarkTitle))]
-    public IActionResult CreateBookmarkTitle(string titleId)
+    [Authorize]
+    public IActionResult CreateBookmarkTitle(string titleId, [FromBody] UpdateBookmarkDto? dto)
     {
+        var username = HttpContext.User.Identity.Name;
+        var note = dto?.Note;
+        
         try
         {
-            var username = HttpContext.User.Identity.Name;
-
-            var bookmark = _bookmarkService.CreateBookmarkTitle(titleId, username, null);
+            var bookmark = _bookmarkService.CreateBookmarkTitle(titleId, username, note);
 
             var createdBookmarkDto = _mapper.CreateBookmarkTitleDto(bookmark);
 
@@ -57,6 +59,7 @@ public class BookmarkController : BaseController
     }
 
     [HttpGet("titles", Name = nameof(GetBookmarkedTitlesUser))]
+    [Authorize]
 
     public IActionResult GetBookmarkedTitlesUser([FromQuery] PageSettings pageSettings)
     {
@@ -79,6 +82,7 @@ public class BookmarkController : BaseController
     }
 
     [HttpDelete("titles/{titleId}")]
+    [Authorize]
 
     public IActionResult DeleteBookmarkTitle(string titleId)
     {
@@ -90,22 +94,26 @@ public class BookmarkController : BaseController
             return NotFound("No bookmark found");
         }
 
-        return Ok(deletedBookmark);
+        return Ok("Bookmark deleted");
     }
 
 
     [HttpPut("titles/{titleId}")]
+    [Authorize]
 
-    public IActionResult UpdateBookmarkTitle(string titleId, string note = null)
+    public IActionResult UpdateBookmarkTitle(string titleId, [FromBody] UpdateBookmarkDto? dto)
     {
         var username = HttpContext.User.Identity.Name;
+        var note = dto?.Note;
         var bookmarkedUpdated = _bookmarkService.UpdateBookmarkTitle(titleId, username, note);
 
         if (bookmarkedUpdated)
         {
             var updatedBookmark = _bookmarkService.GetBookmarkedTitle(username, titleId);
 
-            return Ok(updatedBookmark);
+            var result = _mapper.BookmarkTitleDto(updatedBookmark);
+
+            return Ok(result);
         }
 
         return NotFound("No bookmark found");
@@ -115,13 +123,15 @@ public class BookmarkController : BaseController
     // PERSON BOOKMARKS //
 
     [HttpPost("persons/{personId}", Name = nameof(CreateBookmarkPerson))]
+    [Authorize]
 
-    public IActionResult CreateBookmarkPerson(string personId, string note = null)
+    public IActionResult CreateBookmarkPerson(string personId, [FromBody] UpdateBookmarkDto? dto)
     {
+        var username = HttpContext.User.Identity.Name;
+        var note = dto?.Note;
        
         try
         {
-            var username = HttpContext.User.Identity.Name;
             var bookmark = _bookmarkService.CreateBookmarkPerson(personId, username, note);
             var createdBookmarkDto = _mapper.CreateBookmarkPersonDto(bookmark);
 
@@ -134,45 +144,55 @@ public class BookmarkController : BaseController
     }
 
     [HttpGet("persons", Name = nameof(GetBookmarkedPersonsUser))]
+    [Authorize]
 
-    public IActionResult GetBookmarkedPersonsUser(PageSettings pagesettings)
+    public IActionResult GetBookmarkedPersonsUser([FromQuery]  PageSettings pagesettings)
     {
         var username = HttpContext.User.Identity.Name;
+
         var bookmarks = _bookmarkService.GetBookmarkPersons(username, pagesettings.Page, pagesettings.PageSize);
 
-        if (bookmarks == null)
+        if (bookmarks.TotalNumberOfItems == 0)
         {
-            return NotFound("no bookmarks for persons)");
+            return NotFound("No bookmarks found");
         }
 
         var bookmarkDto = bookmarks.Items?.Select(bp => _mapper.BookmarkPersonDto(bp)).ToList();
 
-        var result = CreatePaging(nameof(GetBookmarkedPersonsUser), bookmarks.Items, bookmarks.TotalNumberOfItems.Value, pagesettings);
+        var result = CreatePaging(nameof(GetBookmarkedPersonsUser), bookmarkDto, bookmarks.TotalNumberOfItems.Value, pagesettings);
 
         return Ok(result);
     }
 
-    [HttpDelete("persons/{personId}")]
+    [HttpPut("persons/{personId}")]
+    [Authorize]
 
-    public IActionResult UpdateBookmarkPerson(string personId, string note = null)
+    public IActionResult UpdateBookmarkPerson(string personId, [FromBody] UpdateBookmarkDto? dto)
     {
         var username = HttpContext.User.Identity.Name;
-        var bookmarkUpdated = _bookmarkService.UpdateBookmarkPerson(username, personId, note);
+        var note = dto?.Note;
+
+        var bookmarkUpdated = _bookmarkService.UpdateBookmarkPerson(personId, username, note);
 
         if (bookmarkUpdated)
         {
             var updatedBookmark = _bookmarkService.GetBookmarkedPerson(username, personId);
-            return Ok(updatedBookmark);
+
+            var result = _mapper.BookmarkPersonDto(updatedBookmark);    
+
+            return Ok(result);
         }
 
         return NotFound("Bookmark not found");
     }
 
-    [HttpPut("persons/{personId}")]
+    [HttpDelete("persons/{personId}")]
+    [Authorize]
 
     public IActionResult DeleteBookmarkPerson(string personId)
     {
         var username = HttpContext.User.Identity.Name;
+
         var deletedBookmark = _bookmarkService.DeleteBookmarkPerson(personId, username);
 
         if (deletedBookmark == null)
@@ -180,7 +200,7 @@ public class BookmarkController : BaseController
             return NotFound("Bookmark not Found");
         }
 
-        return Ok(deletedBookmark);
+        return Ok("Bookmark deleted");
     }
 
 }

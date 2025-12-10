@@ -94,7 +94,7 @@ namespace DataServiceLayer.Services
 
             if (newPassword != checkNewPassword)
             {
-                throw new ArgumentException("Passwordd do not match");
+                throw new ArgumentException("Password do not match");
             }
 
             if (!passwordIsOK(newPassword, username))
@@ -154,16 +154,27 @@ namespace DataServiceLayer.Services
                 throw new ArgumentException("User not found.");
             }
 
-            if (_dbContext.Users.Any(u => EF.Functions.ILike(u.Email, updatedUser.Email)
-                                  && u.Username != username))
+            if (!string.IsNullOrWhiteSpace(updatedUser.Email) && 
+                _dbContext.Users.Any(u => EF.Functions.ILike(u.Email, updatedUser.Email)
+                                          && u.Username != username))
             {
                 throw new ArgumentException("Email is already registered");
             }
 
-      
-            existingUser.Email = updatedUser.Email;
-            existingUser.FirstName = updatedUser.FirstName;
-            existingUser.LastName = updatedUser.LastName;
+            if(!string.IsNullOrWhiteSpace(updatedUser.Email))
+            {
+                existingUser.Email = updatedUser.Email;
+            }
+
+            if (!string.IsNullOrWhiteSpace(updatedUser.FirstName))
+            {
+                existingUser.FirstName = updatedUser.FirstName;
+            }
+
+            if (!string.IsNullOrWhiteSpace(updatedUser.LastName))
+            {
+                existingUser.LastName = updatedUser.LastName;
+            }
 
             _dbContext.SaveChanges();
             return true;

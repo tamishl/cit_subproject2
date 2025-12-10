@@ -92,8 +92,8 @@ namespace WebServiceLayer.Services
             }
             var result = _mapper.Map<BookmarkTitleDtoWsl>(dto);
 
-            result.TitleUrl = GetUrl(nameof(TitleController.GetTitle), new { id = dto.TitleId});
-            result.BookmarkUrl = GetUrl(nameof(BookmarkController.CreateBookmarkTitle), new { username = dto.Username, titleId = dto.TitleId});
+            result.TitleUrl = GetUrl(nameof(TitleController.GetTitle), new { Id = dto.TitleId});
+            result.BookmarkUrl = GetUrl(nameof(BookmarkController.CreateBookmarkTitle), new {titleId = dto.TitleId});
 
             return result;
         }
@@ -107,7 +107,7 @@ namespace WebServiceLayer.Services
 
             var result = _mapper.Map<CreateBookmarkTitle>(bookmark);
 
-            result.BookmarkUrl = GetUrl(nameof(BookmarkController.CreateBookmarkTitle), new { username = bookmark.Username, titleId = bookmark.TitleId});
+            result.BookmarkUrl = GetUrl(nameof(BookmarkController.CreateBookmarkTitle), new {titleId = bookmark.TitleId});
 
             return result;
         }
@@ -121,8 +121,8 @@ namespace WebServiceLayer.Services
             }
             var result = _mapper.Map<BookmarkPersonDtoWsl>(dto);
 
-            result.PersonUrl = GetUrl(nameof(PersonController.GetPerson), new { person = dto.PersonId });
-            result.BookmarkUrl = GetUrl(nameof(BookmarkController.CreateBookmarkPerson), new { username = dto.Username, personId = dto.PersonId});
+            result.PersonUrl = GetUrl(nameof(PersonController.GetPerson), new { Id = dto.PersonId });
+            result.BookmarkUrl = GetUrl(nameof(BookmarkController.CreateBookmarkPerson), new {personId = dto.PersonId});
 
             return result;
         }
@@ -136,7 +136,7 @@ namespace WebServiceLayer.Services
 
             var result = _mapper.Map<CreateBookmarkPerson>(bookmark);
 
-            result.BookmarkUrl = GetUrl(nameof(BookmarkController.CreateBookmarkPerson), new { username = bookmark.Username, personId = bookmark.PersonId});
+            result.BookmarkUrl = GetUrl(nameof(BookmarkController.CreateBookmarkPerson), new {personId = bookmark.PersonId});
 
             return result;
         }
