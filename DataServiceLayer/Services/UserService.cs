@@ -98,7 +98,6 @@ namespace DataServiceLayer.Services
             existingUser.Email = updatedUser.Email;
             existingUser.FirstName = updatedUser.FirstName;
             existingUser.LastName = updatedUser.LastName;
-            existingUser.Password = updatedUser.Password; // need to do something with password
 
             _dbContext.SaveChanges();
             return true;

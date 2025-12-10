@@ -61,7 +61,7 @@ public class UserController : BaseController
         return CreatedAtAction(nameof(GetUser), new { username = createdUserDto.Username }, createdUserDto);
     }
 
-    [HttpPut]
+    [HttpPut("login")]
     public IActionResult Login([FromBody] LoginUser loginDto)
     {
         Console.WriteLine($"Username: {loginDto.Username}, Password: {loginDto.Password}");
@@ -86,10 +86,10 @@ public class UserController : BaseController
 
         var secret = _configuration.GetSection("Auth:Secret").Value;
         var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(secret));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
         var token = new JwtSecurityToken(
             claims: claims,
-            expires: DateTime.Now.AddMinutes(20),
+            expires: DateTime.Now.AddMinutes(30),
             signingCredentials: creds
             );
 
@@ -99,10 +99,11 @@ public class UserController : BaseController
     }
 
 
-    [HttpDelete("{username}")]
+    [HttpDelete("me")]
     [Authorize]
-    public IActionResult DeleteUser(string username)
+    public IActionResult DeleteUser()
     {
+        var username = HttpContext.User.Identity.Name;
         var user = _userService.GetUser(username);
         if (user == null)
         {
@@ -113,9 +114,11 @@ public class UserController : BaseController
         return Ok("User deleted successfully");
     }
 
-    [HttpGet("{username}", Name = nameof(GetUser))]
-    public IActionResult GetUser(string username)
+    [HttpGet("me", Name = nameof(GetUser))]
+    [Authorize] 
+    public IActionResult GetUser()
     {
+        var username = HttpContext.User.Identity.Name;
         var user = _userService.GetUser(username);
         if (user == null)
         {
@@ -146,10 +149,11 @@ public class UserController : BaseController
         return Ok(result);
     }
 
-    [HttpPut("{username}")]
-
-    public IActionResult UpdateUser(string username)
+    [HttpPut("me")]
+    [Authorize]
+    public IActionResult UpdateUser()
     {
+        var username = HttpContext.User.Identity.Name;
         var user = _userService.GetUser(username);
 
         if(user == null)

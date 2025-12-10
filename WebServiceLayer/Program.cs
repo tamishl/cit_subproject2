@@ -40,6 +40,7 @@ builder.Services.AddCors(options =>
 
 // Authentication
 var secret = builder.Configuration.GetSection("Auth:Secret").Value;
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
         opt.TokenValidationParameters = new TokenValidationParameters
@@ -68,6 +69,7 @@ app.UseCors(MyAllowSpecificOrigins); // add CORS middleware
 
 // Note: UseCors must be placed before UseAuthorization (request has to be run before authentication).
 // Configure the HTTP request pipeline: sequence of components that each HTTP request passes through
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Map incoming HTTP requests to controller actions through routing/endpoints

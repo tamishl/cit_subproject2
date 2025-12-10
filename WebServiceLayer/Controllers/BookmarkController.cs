@@ -16,7 +16,7 @@ using WebServiceLayer.Services;
 
 namespace WebServiceLayer.Controllers;
 
-[Route("api/users/{username}/bookmarks")]
+[Route("api/users/me/bookmarks")]
 [ApiController]
 
 public class BookmarkController : BaseController
@@ -36,10 +36,12 @@ public class BookmarkController : BaseController
     // TITLE BOOKMARKS //
 
     [HttpPost("titles/{titleId}", Name = nameof(CreateBookmarkTitle))]
-    public IActionResult CreateBookmarkTitle(string username, string titleId)
+    public IActionResult CreateBookmarkTitle(string titleId)
     {
         try
         {
+            var username = HttpContext.User.Identity.Name;
+
             var bookmark = _bookmarkService.CreateBookmarkTitle(titleId, username, null);
 
             var createdBookmarkDto = _mapper.CreateBookmarkTitleDto(bookmark);
@@ -56,8 +58,9 @@ public class BookmarkController : BaseController
 
     [HttpGet("titles", Name = nameof(GetBookmarkedTitlesUser))]
 
-    public IActionResult GetBookmarkedTitlesUser(string username, [FromQuery] PageSettings pageSettings)
+    public IActionResult GetBookmarkedTitlesUser([FromQuery] PageSettings pageSettings)
     {
+        var username = HttpContext.User.Identity.Name;
 
         var bookmarks = _bookmarkService.GetBookmarkedTitles(username, pageSettings.Page, pageSettings.PageSize);
 
@@ -77,8 +80,9 @@ public class BookmarkController : BaseController
 
     [HttpDelete("titles/{titleId}")]
 
-    public IActionResult DeleteBookmarkTitle(string username, string titleId)
+    public IActionResult DeleteBookmarkTitle(string titleId)
     {
+        var username = HttpContext.User.Identity.Name;
         var deletedBookmark = _bookmarkService.DeleteBookmarkTitle(titleId, username);
 
         if (deletedBookmark == null)
@@ -92,8 +96,9 @@ public class BookmarkController : BaseController
 
     [HttpPut("titles/{titleId}")]
 
-    public IActionResult UpdateBookmarkTitle(string username, string titleId, string note = null)
+    public IActionResult UpdateBookmarkTitle(string titleId, string note = null)
     {
+        var username = HttpContext.User.Identity.Name;
         var bookmarkedUpdated = _bookmarkService.UpdateBookmarkTitle(titleId, username, note);
 
         if (bookmarkedUpdated)
@@ -111,12 +116,13 @@ public class BookmarkController : BaseController
 
     [HttpPost("persons/{personId}", Name = nameof(CreateBookmarkPerson))]
 
-    public IActionResult CreateBookmarkPerson(string username, string personId, string note = null)
+    public IActionResult CreateBookmarkPerson(string personId, string note = null)
     {
+       
         try
         {
+            var username = HttpContext.User.Identity.Name;
             var bookmark = _bookmarkService.CreateBookmarkPerson(personId, username, note);
-
             var createdBookmarkDto = _mapper.CreateBookmarkPersonDto(bookmark);
 
             return Created(createdBookmarkDto.BookmarkUrl, createdBookmarkDto);
@@ -129,8 +135,9 @@ public class BookmarkController : BaseController
 
     [HttpGet("persons", Name = nameof(GetBookmarkedPersonsUser))]
 
-    public IActionResult GetBookmarkedPersonsUser(string username, PageSettings pagesettings)
+    public IActionResult GetBookmarkedPersonsUser(PageSettings pagesettings)
     {
+        var username = HttpContext.User.Identity.Name;
         var bookmarks = _bookmarkService.GetBookmarkPersons(username, pagesettings.Page, pagesettings.PageSize);
 
         if (bookmarks == null)
@@ -147,8 +154,9 @@ public class BookmarkController : BaseController
 
     [HttpDelete("persons/{personId}")]
 
-    public IActionResult UpdateBookmarkPerson(string username, string personId, string note = null)
+    public IActionResult UpdateBookmarkPerson(string personId, string note = null)
     {
+        var username = HttpContext.User.Identity.Name;
         var bookmarkUpdated = _bookmarkService.UpdateBookmarkPerson(username, personId, note);
 
         if (bookmarkUpdated)
@@ -162,8 +170,9 @@ public class BookmarkController : BaseController
 
     [HttpPut("persons/{personId}")]
 
-    public IActionResult DeleteBookmarkPerson(string username, string personId)
+    public IActionResult DeleteBookmarkPerson(string personId)
     {
+        var username = HttpContext.User.Identity.Name;
         var deletedBookmark = _bookmarkService.DeleteBookmarkPerson(personId, username);
 
         if (deletedBookmark == null)
