@@ -30,6 +30,7 @@ public class MovieDbContext : DbContext
 
     public DbSet<TitleReadDto> TitleReadDtos { get; set; }
     public DbSet<PersonReadDto> PersonReadDtos { get; set; }
+    public DbSet<RatingByGroupDto> RatingByGroupDtos{ get; set; }
 
 
     // connect to db
@@ -255,11 +256,10 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<TitleRating>().Property(tr => tr.Votes).HasColumnName("votes");
         modelBuilder.Entity<TitleRating>().HasKey(tr => tr.TitleId);
 
-        // map PersonRating to person_title_rating
-        modelBuilder.Entity<PersonRating>().ToTable("person_title_rating");
+        // map PersonRating to name_ratings
+        modelBuilder.Entity<PersonRating>().ToTable("name_ratings");
         modelBuilder.Entity<PersonRating>().Property(pr => pr.PersonId).HasColumnName("person_id");
-        modelBuilder.Entity<PersonRating>().Property(pr => pr.AverageRating).HasColumnName("average_rating");
-        modelBuilder.Entity<PersonRating>().Property(pr => pr.Votes).HasColumnName("votes");
+        modelBuilder.Entity<PersonRating>().Property(pr => pr.AverageRating).HasColumnName("avg_rating");
         modelBuilder.Entity<PersonRating>().HasKey(pr => pr.PersonId);
 
         // map TitleReadDto to output best_match_variadic()
@@ -280,6 +280,12 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<PersonReadDto>().HasNoKey();
         modelBuilder.Entity<PersonReadDto>().Property(p => p.Id).HasColumnName("match_person_id");
         modelBuilder.Entity<PersonReadDto>().Property(p => p.Name).HasColumnName("match_name");
+
+        //map RatingByGroupDto to output get_rating_by_group()
+        modelBuilder.Entity<RatingByGroupDto>().HasNoKey();
+        modelBuilder.Entity<RatingByGroupDto>().Property(rg => rg.RatingValueGroup).HasColumnName("rating_value_group");
+        modelBuilder.Entity<RatingByGroupDto>().Property(rg => rg.NumVotes).HasColumnName("vote_count");
+        modelBuilder.Entity<RatingByGroupDto>().Property(rg => rg.PercentageVotes).HasColumnName("percentage_of_votes");
 
 
         /////////////////////////////////////////////////////////

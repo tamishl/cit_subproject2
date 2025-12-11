@@ -1,4 +1,6 @@
-﻿using DataServiceLayer.Domains;
+﻿using DataAccesLayer.DTOs;
+using DataAccesLayer.ReadDTOs;
+using DataServiceLayer.Domains;
 using DataServiceLayer.DTOs;
 using MapsterMapper;
 using WebServiceLayer.Controllers;
@@ -137,6 +139,45 @@ namespace WebServiceLayer.Services
             var result = _mapper.Map<CreateBookmarkPerson>(bookmark);
 
             result.BookmarkUrl = GetUrl(nameof(BookmarkController.CreateBookmarkPerson), new {personId = bookmark.PersonId});
+
+            return result;
+        }
+
+
+        public GetTitleRatingByGroupDto TitleRatingByGroupDto(List<RatingByGroupDto> groups, string titleId)
+        {
+            return new GetTitleRatingByGroupDto
+            {
+                TitleId = titleId,
+                Url = GetUrl(nameof(TitleRatingController.GetTitleRatingsByGroup), new {titleId}),
+                RatingGroups = groups
+            };
+        }
+
+        public GetTitleRatingDto TitleRatingDto(TitleRatingDto dto)
+        {
+            if (dto == null)
+            {
+                return null;
+            }
+
+            var result = _mapper.Map<GetTitleRatingDto>(dto);
+
+            result.Url = GetUrl(nameof(TitleRatingController.GetTitleRating), new { titleId = dto.TitleId });
+
+            return result;
+        }
+
+        public GetPersonRatingDto PersonRatingDto(PersonRatingDto dto)
+        {
+            if (dto == null)
+            {
+                return null;
+            }
+
+            var result = _mapper.Map<GetPersonRatingDto>(dto);
+
+            result.Url = GetUrl(nameof(PersonRatingController.GetPersonRating), new { personId = dto.PersonId });
 
             return result;
         }
