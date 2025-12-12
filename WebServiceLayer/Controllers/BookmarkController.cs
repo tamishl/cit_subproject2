@@ -72,7 +72,6 @@ public class BookmarkController : BaseController
             return NotFound("No bookmarks found");
         }
 
-
         var bookmarkDto = bookmarks.Items?.Select(b => _mapper.BookmarkTitleDto(b)).ToList();
 
         var result = CreatePaging(nameof(GetBookmarkedTitlesUser), bookmarkDto, bookmarks.TotalNumberOfItems.Value, pageSettings);

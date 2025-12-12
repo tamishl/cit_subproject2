@@ -30,11 +30,16 @@ public class UserController : BaseController
         _mapper = mapper;
     }
 
-    [HttpPost]
+    [HttpPost("create")]
     public IActionResult CreateUser([FromBody] CreateUser userDto)
     {
         try
         {
+            if (userDto.Password != userDto.ConfirmPassword)
+            {
+                return BadRequest("Passwords do not match");
+            }
+
             var newUser = _userService.CreateUser(userDto.Username, userDto.Password, userDto?.FirstName, userDto?.LastName, userDto.Email);
 
             var createdUserDto = _mapper.CreateUserDto(newUser);

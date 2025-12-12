@@ -53,7 +53,7 @@ Accept: application/json
 ############# USER ###############
 ##################################
 
-Post {{WebServiceLayer_HostAddress}}/api/users
+Post {{WebServiceLayer_HostAddress}}/api/users/create
 Accept: application/json
 Content-Type: application/json
 { 
