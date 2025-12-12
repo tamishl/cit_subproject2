@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace WebServiceLayer.Services
+namespace DataServiceLayer.Services
 {
     public class Hashing
     {
@@ -27,8 +27,6 @@ namespace WebServiceLayer.Services
             return (hash, saltString);
         }
 
-        // verify(string login_password, string hashed_registered_password, string saltstring)
-        // is called from Authenticator.login()
 
         public bool Verify(string loginPassword, string hashedRegisteredPassword, string saltString)
         {
@@ -39,10 +37,21 @@ namespace WebServiceLayer.Services
 
         // hashSHA256 is the "workhorse" --- the actual hashing
 
+        public byte[] ComputeIteratedHash(byte[] data, int reps)
+        {
+            byte[] hashedData = data;
+            for (int i = 0; i < reps; i++)
+            {
+                hashedData = sha256.ComputeHash(hashedData);
+            }
+            return hashedData;
+        }
+
+
         private string HashSHA256(string password, string saltString)
         {
-            byte[] hashInput = Encoding.UTF8.GetBytes(saltString + password); // perhaps encode only the password part?
-            byte[] hashOutput = sha256.ComputeHash(hashInput);
+            byte[] hashInput = Encoding.UTF8.GetBytes(saltString + password);
+            byte[] hashOutput = ComputeIteratedHash(hashInput, 1000000);
             return Convert.ToHexString(hashOutput);
         }
     }

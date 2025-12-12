@@ -2,6 +2,7 @@
 using DataServiceLayer.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using NpgsqlTypes;
 using WebServiceLayer.DTOs;
 
 namespace WebServiceLayer.Controllers;
@@ -72,7 +73,7 @@ public class TitleController : BaseController
     }
 
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}", Name = nameof(GetTitle))]
     public IActionResult GetTitle(string id)
     {
         var result = _titleService.GetTitle(id);

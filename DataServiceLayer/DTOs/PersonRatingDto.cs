@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataServiceLayer.Domains
+namespace DataAccesLayer.DTOs
 {
-    public class PersonRating
+    public class PersonRatingDto
     {
-        public Person Person { get; set; }
         public string PersonId { get; set; }
         public double AverageRating { get; set; }
     }

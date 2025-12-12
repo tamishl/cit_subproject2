@@ -16,7 +16,7 @@ namespace WebServiceLayer.Controllers
         }
 
         // Get detailed information about a person
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = nameof(GetPerson))]
         public IActionResult GetPerson(string id)
         {
             var personDetails = _personService.GetPerson(id);
