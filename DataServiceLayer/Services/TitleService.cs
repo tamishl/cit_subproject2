@@ -23,7 +23,8 @@ public class TitleService: ITitleService
     public PagedResultDto<TitleSummaryDto> GetTitles(int page = 0, int pageSize = 10)
     {
         var query = _dbContext.Titles;
-        var items = query.OrderBy(t => t.Id)
+        var items = query.Include(t => t.TitleRating)
+                         .OrderBy(t => t.Id)
                          .Skip(page * pageSize)
                          .Take(pageSize)
                          .Select(t => t.Adapt<TitleSummaryDto>())
