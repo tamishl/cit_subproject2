@@ -15,11 +15,6 @@ public class TitleService: ITitleService
         _dbContext = new MovieDbContext();
     }
 
-
- // improve getting count by using window functions >> get total count in the same query as the query that gets result
-
-
-
     public PagedResultDto<TitleSummaryDto> GetTitles(int page = 0, int pageSize = 10)
     {
         var query = _dbContext.Titles;
@@ -40,7 +35,7 @@ public class TitleService: ITitleService
 
     public PagedResultDto<TitleSummaryDto> GetTitlesBySearch(string search, int page = 0, int pageSize = 10, string title_type="all")
     {
-        var query = _dbContext.TitleReadDtos.FromSqlInterpolated($"SELECT * FROM best_match_variadic({title_type}, VARIADIC {search.Split(' ')})");
+        var query = _dbContext.TitleReadDtos.FromSqlInterpolated($"SELECT * FROM best_match_variadic_fieldrank({title_type}, VARIADIC {search.Split(' ')})");
         var items = query.Skip(page * pageSize)
                          .Take(pageSize)
                          .Select(t => t.Adapt<TitleSummaryDto>()).ToList();

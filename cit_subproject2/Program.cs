@@ -10,10 +10,14 @@ Console.WriteLine($" this is my password: {password}");
 
 var titleService = new TitleService();
 var bookmarkService = new BookmarkService();
-var userService = new UserService();
+//var userService = new UserService();
 
 Console.WriteLine("-----------------");
-var result = titleService.GetTitle("tt0063929");
+
+var result = titleService.GetTitlesBySearch("Harry Potter", 0, 10, "tvEpisode");
+Console.WriteLine("---------------------------------");
+foreach(var item in result.Items)
+    {Console.WriteLine(item); };
 
 //var result= titleService.GetTitlesBySearch("potter radcliff");
 //var personService = new PersonService();
