@@ -14,7 +14,7 @@ namespace DataServiceLayer.Services.Interfaces
     {
 
         // Dataservice Ratings
-        public RatingDto Rate(string titleId, string username, int rating);
+        public RatingValueDto Rate(string titleId, string username, int rating);
         public RatingValueDto? GetUserRatingTitle(string username, string titleId);
         public TitleRatingDto? GetTitleRating(string titleId);
         public PersonRatingDto? GetPersonRating(string personId);

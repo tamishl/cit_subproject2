@@ -71,7 +71,7 @@ public class UserController : BaseController
         }
     }
 
-    [HttpPut("me/changepassword")]
+    [HttpPut("me/change-password")]
     [Authorize]
     public IActionResult ChangePassword([FromBody] ChangePasswordDto dto)
     {
@@ -81,7 +81,7 @@ public class UserController : BaseController
         {
             _userService.ChangePassword(username, dto.OldPassword, dto.NewPassword, dto.ConfirmNewPassword);
 
-            return Ok("Password updated successfully.");
+            return Ok(new { message = "Password updated" });
         }
         catch (ArgumentException ex)
         {
@@ -150,7 +150,7 @@ public class UserController : BaseController
         try
         {
             var userUpdated = _userService.UpdateUser(username, dto);
-            return Ok("User informatipon have been updated");
+            return Ok(new { message = "User info updated" } );
         }
         catch (Exception ex) {
             return BadRequest(ex.Message);
