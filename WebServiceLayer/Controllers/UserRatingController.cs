@@ -37,10 +37,12 @@ public class UserRatingController : BaseController
     {
         var username = HttpContext.User.Identity.Name;
         var rating = dto.Rating;
+ 
         try
         {
             var ratingDto = _ratingService.Rate(titleId, username, rating);
-            return Ok(_mapper.RatingDto(ratingDto));
+
+            return Ok(_mapper.CreateRatingDto(ratingDto, titleId));
         }
         catch (Exception ex)
         {

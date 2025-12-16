@@ -3,6 +3,7 @@ using DataAccesLayer.ReadDTOs;
 using DataServiceLayer.Domains;
 using DataServiceLayer.DTOs;
 using MapsterMapper;
+using System.Globalization;
 using WebServiceLayer.Controllers;
 using WebServiceLayer.DTOs;
 
@@ -80,7 +81,20 @@ namespace WebServiceLayer.Services
                 return null;
             }
             var result = _mapper.Map<UserRatingDto>(ratingDto);
-            result.TitleUrl = GetUrl(nameof(TitleController.GetTitle), new { title = ratingDto.TitleId});
+            result.TitleUrl = GetUrl(nameof(TitleController.GetTitle), new { Id = ratingDto.TitleId});
+
+            return result;
+        }
+
+        public CreateRating? CreateRatingDto(RatingValueDto dto, string titleId)
+        {
+            if (dto == null)
+            {
+                return null;
+            }
+            var result = _mapper.Map<CreateRating>(dto);
+
+            result.TitleUrl = GetUrl(nameof(TitleController.GetTitle), new { Id = titleId });
 
             return result;
         }

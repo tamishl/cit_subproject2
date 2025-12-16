@@ -13,5 +13,7 @@ namespace DataServiceLayer.DTOs
         public string? Poster { get; set; }
         public string? Plot { get; set; }
         public int RatingValue { get; set; }
+        public double AverageRating { get; set; }
+        public int Votes { get; set; }
     }
 }

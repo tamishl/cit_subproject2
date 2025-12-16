@@ -84,7 +84,7 @@ Accept: application/json
 Content-Type: application/json
 { 
   "username": "testuser",
-  "password": "testMig1"
+  "password": "12345678"
 }
 
 ###
@@ -98,7 +98,7 @@ Accept: application/json
 Content-Type: application/json
 Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU0MDAzNDV9.kmavr-rUJOGPw3WMbFFZIP1dMM5Nkqkp9-04L-6rtH4
 { 
-  "oldPassword": "testMig1",
+  "oldPassword": "testMig2",
   "newPassword": "abcdefg1",
   "confirmNewPassword": "abcdefg1"
 }
@@ -134,10 +134,10 @@ Accept: application/json
 
 ###### Titles ######
 
-POST {{WebServiceLayer_HostAddress}}/api/users/me/bookmarks/titles/tt0081912
+POST {{WebServiceLayer_HostAddress}}/api/users/me/bookmarks/titles/tt0052520
 Accept: application/json
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjUzODU4Mjd9.LZ4R1GPYVIdChDx6FldFy7vsDVao1WUwImuTFk84vWg
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU5MDEzNjF9.PUWe3EmV3gEO0xXEYUjBqW2gl3BtlS2y3zrJO37Ry-Q
 
 ###
 Put {{WebServiceLayer_HostAddress}}/api/users/me/bookmarks/titles/tt0081912
@@ -152,7 +152,7 @@ Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW
 ###
 GET {{WebServiceLayer_HostAddress}}/api/users/me/bookmarks/titles
 Accept: application/json
-Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjUzODU4Mjd9.LZ4R1GPYVIdChDx6FldFy7vsDVao1WUwImuTFk84vWg
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU5MDIwNzZ9.zwV8nkdUGeCv1Lq75fhYz02BdUOg3h8nfXzxK-S50Xg
 
 ##### Persons #####
 
@@ -160,7 +160,7 @@ Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW
 POST {{WebServiceLayer_HostAddress}}/api/users/me/bookmarks/persons/nm3617946
 Accept: application/json
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjUzODU4Mjd9.LZ4R1GPYVIdChDx6FldFy7vsDVao1WUwImuTFk84vWg
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU4OTg2MTF9.PWZ1Q3-DVhM8k4eVKKkMoZ8HHgOCuF6l5re0cjua2Tk
 
 ###
 Put {{WebServiceLayer_HostAddress}}/api/users/me/bookmarks/persons/nm3617946
@@ -174,7 +174,7 @@ Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW
 ###
 GET {{WebServiceLayer_HostAddress}}/api/users/me/bookmarks/persons
 Accept: application/json
-Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjUzODM5NDd9.2eJiN7N5VnJO7U9p0JxfqEfq-2CXDz4Q5VE6dyH_u6Q
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU4OTg2MTF9.PWZ1Q3-DVhM8k4eVKKkMoZ8HHgOCuF6l5re0cjua2Tk
 
 ###
 DELETE {{WebServiceLayer_HostAddress}}/api/users/me/bookmarks/persons/nm3617946
@@ -189,27 +189,27 @@ Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW
 ### User Ratings ###
 
 ###
-POST {{WebServiceLayer_HostAddress}}/api/users/me/ratings/tt0081912
+POST {{WebServiceLayer_HostAddress}}/api/users/me/ratings/tt0063929
 Accept: application/json
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU0NTA0OTZ9.w2jmUqPsnN1Sw5seZKS0l8My-RuzsFRfKFTdH34p3T0
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU5MDM2Njl9.WH-Wd32EXEAcbKNU5Tb96kJUxkwwzk3GE9c1xSu80i4
 {
-  "rating": 7
+  "rating": 9
 }
 ###
 GET {{WebServiceLayer_HostAddress}}/api/users/me/ratings/tt0081912
 Accept: application/json
-Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU0NTA0OTZ9.w2jmUqPsnN1Sw5seZKS0l8My-RuzsFRfKFTdH34p3T0
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU5MDM2Njl9.WH-Wd32EXEAcbKNU5Tb96kJUxkwwzk3GE9c1xSu80i4
 
 ###
-GET {{WebServiceLayer_HostAddress}}/api/users/me/ratings
+GET {{WebServiceLayer_HostAddress}}/api/users/me/ratings?page=0&pageSize=8
 Accept: application/json
-Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU0NTA0OTZ9.w2jmUqPsnN1Sw5seZKS0l8My-RuzsFRfKFTdH34p3T0
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU5MDM2Njl9.WH-Wd32EXEAcbKNU5Tb96kJUxkwwzk3GE9c1xSu80i4
 
 ###
 DELETE {{WebServiceLayer_HostAddress}}/api/users/me/ratings/tt0081912
 Accept: application/json
-Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU0NTA0OTZ9.w2jmUqPsnN1Sw5seZKS0l8My-RuzsFRfKFTdH34p3T0
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU5MDM2Njl9.WH-Wd32EXEAcbKNU5Tb96kJUxkwwzk3GE9c1xSu80i4
 
 
 ### Title ####

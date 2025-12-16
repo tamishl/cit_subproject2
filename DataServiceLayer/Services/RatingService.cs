@@ -23,7 +23,7 @@ namespace DataServiceLayer.Services
             _dbContext = new MovieDbContext();
         }
 
-        public RatingDto Rate(string titleId, string username, int rating)
+        public RatingValueDto Rate(string titleId, string username, int rating)
         {
             
             if (_dbContext.Titles.FirstOrDefault(t => t.Id == titleId) == null)
@@ -53,13 +53,10 @@ namespace DataServiceLayer.Services
                 throw new InvalidOperationException("Rating was not saved correctly");
             }
 
-            return new RatingDto
+            return new RatingValueDto
             {
-                TitleId = latestRating.TitleId,
-                TitleName = latestRating.Title.PrimaryTitle,
-                Poster = latestRating.Title.Poster,
-                Plot = latestRating.Title.Plot,
-                RatingValue = latestRating.RatingValue
+
+                Rating = latestRating.RatingValue
             };
         }
 
@@ -115,6 +112,7 @@ namespace DataServiceLayer.Services
         public PagedResultDto<RatingDto> GetUserRatings(string username, int page = 0, int pageSize = 10)
         {
             var query = _dbContext.Ratings.Include(r => r.Title)
+                                            .ThenInclude(t => t.TitleRating)
                                           .Where(r => r.Username == username)
                                           .ToList()
                                           .GroupBy(r => r.TitleId)
@@ -125,7 +123,9 @@ namespace DataServiceLayer.Services
                                               TitleName = r.Title.PrimaryTitle,
                                               Poster = r.Title.Poster,
                                               Plot = r.Title.Plot,
-                                              RatingValue = r.RatingValue
+                                              RatingValue = r.RatingValue,
+                                              AverageRating = r.Title.TitleRating != null ? r.Title.TitleRating.AverageRating : 0,
+                                              Votes = r.Title.TitleRating != null ? r.Title.TitleRating.Votes : 0
                                           });
 
             var items = query.Skip(page * pageSize)
