@@ -124,6 +124,7 @@ public class TitleService: ITitleService
             Directors = t.Directors == null ? null : t.Directors.Select(d => d.Name),
             Cast = t.Cast == null ? null : t.Cast.Select(c => new PersonCastDto
             {
+                Id = c.PersonId,
                 Name = c.Person.Name,
                 ProfessionId = c.Profession.Id
             }),

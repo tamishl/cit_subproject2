@@ -8,6 +8,7 @@ namespace DataServiceLayer.DTOs;
 
 public class PersonCastDto
 {
+    public string Id { get; set; }
     public string Name { get; set; }
     public string ProfessionId { get; set; }
 }

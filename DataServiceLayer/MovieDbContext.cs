@@ -77,8 +77,12 @@ public class MovieDbContext : DbContext
         modelBuilder.Entity<Person>().ToTable("person");
         modelBuilder.Entity<Person>().Property(p => p.Id).HasColumnName("person_id");
         modelBuilder.Entity<Person>().Property(p => p.Name).HasColumnName("name");
-        modelBuilder.Entity<Person>().Property(p => p.BirthYear).HasColumnName("birth_year");
-        modelBuilder.Entity<Person>().Property(p => p.DeathYear).HasColumnName("death_year");
+        modelBuilder.Entity<Person>().Property(p => p.BirthYear).HasColumnName("birth_year")
+                                                                .HasConversion(v => string.IsNullOrWhiteSpace(v) ? null : v,   //conversion because in the db no value is "   "
+                                                                               v => string.IsNullOrWhiteSpace(v) ? null : v);
+        modelBuilder.Entity<Person>().Property(p => p.DeathYear).HasColumnName("death_year")
+                                                                .HasConversion(v => string.IsNullOrWhiteSpace(v) ? null : v,   //conversion because in the db no value is "   "
+                                                                               v => string.IsNullOrWhiteSpace(v) ? null : v);
 
         // map Person to Casting
         modelBuilder.Entity<Person>()
