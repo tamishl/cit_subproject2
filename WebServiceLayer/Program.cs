@@ -20,6 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
 builder.Services.AddScoped<ITitleService, TitleService>();
+builder.Services.AddScoped<IPersonService, PersonService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
 builder.Services.AddScoped<IBookmarkService, BookmarkService>();

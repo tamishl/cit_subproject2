@@ -1,6 +1,11 @@
 @WebServiceLayer_HostAddress = https://localhost:5555
 
 
+##################################
+############# TITLE###############
+##################################
+
+
 GET {{WebServiceLayer_HostAddress}}/api/titles/
 Accept: application/json
 
@@ -48,6 +53,16 @@ Accept: application/json
 
 
 ###
+
+
+##################################
+############# PERSON##############
+##################################
+
+GET {{WebServiceLayer_HostAddress}}/api/persons/nm3167701
+Accept: application/json
+
+
 
 ##################################
 ############# USER ###############

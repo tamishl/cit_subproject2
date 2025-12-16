@@ -51,7 +51,16 @@ public class PersonService : IPersonService
                                         p.BirthYear,
                                         p.DeathYear,
                                         Professions = p.Professions == null ? null : p.Professions.Select(pr => pr.Id),
-                                        KnownForTitles = p.KnownForTitles == null ? null : p.KnownForTitles.Select(t => t.PrimaryTitle)
+                                        KnownForTitles = p.KnownForTitles == null ? null :
+                                                         p.KnownForTitles.Select(t => new
+                                                                                {
+                                                                                    t.Id,
+                                                                                    t.PrimaryTitle,
+                                                                                    t.StartYear,
+                                                                                    t.EndYear,
+                                                                                    t.Poster,
+                                                                                    t.TitleRating
+                                                                                })
                                     })
                                  .FirstOrDefault(p => p.Id == id)
                                  .Adapt<PersonDetailsDto>();

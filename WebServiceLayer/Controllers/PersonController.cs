@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebServiceLayer.Controllers
 {
-    [Route("api/people")]
+    [Route("api/persons")]
     [ApiController]
     public class PersonController : ControllerBase
     {
-        private readonly IPersonService _personService;
+        private IPersonService _personService;
 
         public PersonController(IPersonService personService)
         {
@@ -19,14 +19,9 @@ namespace WebServiceLayer.Controllers
         [HttpGet("{id}", Name = nameof(GetPerson))]
         public IActionResult GetPerson(string id)
         {
-            var personDetails = _personService.GetPerson(id);
+            var result = _personService.GetPerson(id);
 
-            if (personDetails == null)
-            {
-                return NotFound("Person not found.");
-            }
-
-            return Ok(personDetails);  // Return the detailed person info
+            return result is not null ? Ok(result) : NotFound();
         }
 
         // Get paginated list of people by name search
