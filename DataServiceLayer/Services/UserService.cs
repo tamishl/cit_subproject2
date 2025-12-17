@@ -80,7 +80,7 @@ namespace DataServiceLayer.Services
                 var token = CreateToken(username);
                 return token;
             }
-            throw new ArgumentException("Ínvalid password");
+            throw new ArgumentException("Invalid password");
         }
 
         public void ChangePassword(string username, string oldPassword, string newPassword, string checkNewPassword)
@@ -94,7 +94,7 @@ namespace DataServiceLayer.Services
 
             if (newPassword != checkNewPassword)
             {
-                throw new ArgumentException("Password do not match");
+                throw new ArgumentException("Passwords do not match");
             }
 
             if (!passwordIsOK(newPassword, username))
