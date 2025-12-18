@@ -10,7 +10,7 @@ namespace DataServiceLayer.Domains
     {
         public Title Title { get; set; }
         public string TitleId { get; set; }
-        public float AverageRating { get; set; }
+        public double AverageRating { get; set; }
         public int Votes { get; set; }
     }
 }

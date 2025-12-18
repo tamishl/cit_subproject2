@@ -2,7 +2,7 @@
 {
     public class RatingSummaryDto
     {
-        public float AverageRating { get; set; }
+        public double AverageRating { get; set; }
         public int Votes { get; set; }
     }
 }

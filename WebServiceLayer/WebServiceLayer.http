@@ -84,7 +84,7 @@ Accept: application/json
 Content-Type: application/json
 { 
   "username": "testuser",
-  "password": "12345678"
+  "password": "123456789"
 }
 
 ###
@@ -199,12 +199,12 @@ Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW
 ###
 GET {{WebServiceLayer_HostAddress}}/api/users/me/ratings/tt0081912
 Accept: application/json
-Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU5MDM2Njl9.WH-Wd32EXEAcbKNU5Tb96kJUxkwwzk3GE9c1xSu80i4
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjYwNDUyMTR9.eBAJX_zMR8IsAzdkoNm4nALsFZUQIRz8Ek0b3r3JRkQ
 
 ###
 GET {{WebServiceLayer_HostAddress}}/api/users/me/ratings?page=0&pageSize=8
 Accept: application/json
-Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjU5MDM2Njl9.WH-Wd32EXEAcbKNU5Tb96kJUxkwwzk3GE9c1xSu80i4
+Authorization: bearer eyJhbGciOiJodHRwOi8vd3d3LnczLm9yZy8yMDAxLzA0L3htbGRzaWctbW9yZSNobWFjLXNoYTI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdHVzZXIiLCJleHAiOjE3NjYwNDUxMDZ9.ctPK4fC8pVRa2nsN3WafmQj-_TYus5bFIEJtfGb7kOo
 
 ###
 DELETE {{WebServiceLayer_HostAddress}}/api/users/me/ratings/tt0081912
