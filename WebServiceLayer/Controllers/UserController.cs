@@ -37,7 +37,7 @@ public class UserController : BaseController
         {
             if (userDto.Password != userDto.ConfirmPassword)
             {
-                return BadRequest("Passwords do not match");
+                return BadRequest(new { message = "Passwords do not match" });
             }
 
             var newUser = _userService.CreateUser(userDto.Username, userDto.Password, userDto?.FirstName, userDto?.LastName, userDto.Email);
@@ -48,11 +48,7 @@ public class UserController : BaseController
         }
         catch(ArgumentException ex)
         {
-            return BadRequest(ex.Message);
-        }
-        catch(Exception)
-        {
-            return BadRequest("User could not be created");
+            return BadRequest(new { message = ex.Message });
         }
     }
 
@@ -67,7 +63,7 @@ public class UserController : BaseController
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new { message = ex.Message });
         }
     }
 
@@ -85,7 +81,7 @@ public class UserController : BaseController
         }
         catch (ArgumentException ex)
         {
-            return BadRequest(ex.Message);
+            return BadRequest(new { message = ex.Message });
         }
     }
 
@@ -94,14 +90,16 @@ public class UserController : BaseController
     public IActionResult DeleteUser()
     {
         var username = HttpContext.User.Identity.Name;
-        var user = _userService.GetUser(username);
-        if (user == null)
+        try
         {
-            return NotFound("User does not exist");
-        }
-        _userService.DeleteUser(user);
+            var user = _userService.GetUser(username);
+            _userService.DeleteUser(user);
+            return Ok(new { message = "User deleted successfully" });
 
-        return Ok("User deleted successfully");
+        } catch (ArgumentException ex)
+        {
+            return NotFound(new {ex.Message});
+        }
     }
 
     [HttpGet("me", Name = nameof(GetUser))]
@@ -110,15 +108,17 @@ public class UserController : BaseController
     {
         var username = HttpContext.User.Identity.Name;
 
-        var user = _userService.GetUser(username);
-        if (user == null)
+        try
         {
-            return NotFound("User does not exist");
+            var user = _userService.GetUser(username);
+            var userDto = _mapper.CreateUserDto(user);
+
+            return Ok(userDto);
         }
-
-        var userDto = _mapper.CreateUserDto(user);
-
-        return Ok(userDto);
+        catch (ArgumentException ex)
+        {
+            return NotFound(new { ex.Message });
+        }
     }
 
     [HttpGet(Name = nameof(GetAllUsers))]
@@ -129,11 +129,10 @@ public class UserController : BaseController
 
         if (users.TotalNumberOfItems == 0)
         {
-            return NotFound("No users found");
+            return NotFound(new { message = "No users found" });
         }
 
         var usersDto = users.Items?.Select(u => _mapper.AllUsers(u)).ToList();
-
 
         var result = CreatePaging(nameof(GetAllUsers), usersDto, users.TotalNumberOfItems.Value, pageSettings);
         
