@@ -14,10 +14,27 @@ var bookmarkService = new BookmarkService();
 
 Console.WriteLine("-----------------");
 
-var result = titleService.GetTitlesBySearch("Harry Potter", 0, 10, "tvEpisode");
-Console.WriteLine("---------------------------------");
-foreach(var item in result.Items)
-    {Console.WriteLine(item); };
+
+var result = titleService.GetTitleGroupedCast("tt0081912");
+Console.WriteLine($"---{result}");
+foreach (var c in result?.Cast)
+{ 
+    Console.WriteLine("-----");
+    Console.WriteLine(c.PersonId);
+
+    if (c.ProfessionIds!= null)
+    { foreach (var p in c.ProfessionIds)
+        {
+            Console.WriteLine(p);
+        };
+    };
+};
+
+
+//var result = titleService.GetTitlesBySearch("Harry Potter", 0, 10, "tvEpisode");
+//Console.WriteLine("---------------------------------");
+//foreach(var item in result.Items)
+//    {Console.WriteLine(item); };
 
 //var result= titleService.GetTitlesBySearch("potter radcliff");
 //var personService = new PersonService();

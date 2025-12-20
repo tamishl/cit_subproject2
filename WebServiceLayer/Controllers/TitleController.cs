@@ -76,7 +76,8 @@ public class TitleController : BaseController
     [HttpGet("{id}", Name = nameof(GetTitle))]
     public IActionResult GetTitle(string id)
     {
-        var result = _titleService.GetTitle(id);
+        //var result = _titleService.GetTitle(id);
+        var result = _titleService.GetTitleGroupedCast(id);
 
         return result is not null ? Ok(result) : NotFound();
     }

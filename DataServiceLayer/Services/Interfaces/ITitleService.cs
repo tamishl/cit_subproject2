@@ -19,6 +19,7 @@ namespace DataServiceLayer.Services.Interfaces;
 
 
     TitleDto? GetTitle(string id);
+    TitleGrCastDto? GetTitleGroupedCast(string id);
     int GetTitleCount();
 
 

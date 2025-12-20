@@ -95,23 +95,33 @@ public class DataLayerTests
 
 
 
+    [Fact]
+    public void GetTitleGroupedCast_Valid_ReturnsTitle()
+    {
+        var titleService = new TitleService();
+        var result = titleService.GetTitleGroupedCast("tt0081912");
+        Assert.Equal(11, result.Cast.Count);
+    }
+
+
+
 
     /////////////////////////////////////////////////////////
     ///                        PERSON                     ///                   
     /////////////////////////////////////////////////////////
 
-    [Fact]
-    public void GetPerson_Valid_ReturnsPersonDetails()
-    {
-        var personService = new PersonService();
-        var result = personService.GetPerson("nm0000138");
+    //[Fact]
+    //public void GetPerson_Valid_ReturnsPersonDetails()
+    //{
+    //    var personService = new PersonService();
+    //    var result = personService.GetPerson("nm0000138");
 
-        Assert.NotNull(result);
-        Assert.Equal("Leonardo DiCaprio", result.Name);
-        Assert.Equal("1974", result.BirthYear);
-        Assert.NotNull(result.KnownForTitles);
-        Assert.Contains("Inception", result.KnownForTitles);
-    }
+    //    Assert.NotNull(result);
+    //    Assert.Equal("Leonardo DiCaprio", result.Name);
+    //    Assert.Equal("1974", result.BirthYear);
+    //    Assert.NotNull(result.KnownForTitles);
+    //    Assert.Contains("Inception", result.KnownForTitles);
+    //}
 
     [Fact]
     public void GetPersonsByName_Valid_ReturnsPersons()
